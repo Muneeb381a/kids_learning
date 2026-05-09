@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Sikho Star — Avatar</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .avatar-page {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #E3F2FD 0%, var(--bg-cream) 60%);
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 100px;
+    }
+
+    /* Preview area */
+    .preview-zone {
+      background: linear-gradient(135deg, #283593, #1565C0);
+      padding: 28px 20px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #avatar-preview {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+
+    .preview-name {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--sunny-yellow);
+    }
+
+    /* Section */
+    .option-section {
+      padding: 16px 16px 0;
+    }
+
+    .section-label {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+
+    /* Option rows — horizontal scroll */
+    .option-row {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .option-row::-webkit-scrollbar { display: none; }
+
+    .opt-item {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      padding: 12px 10px;
+      background: white;
+      border: 3px solid #E0E0E0;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      min-width: 64px;
+    }
+
+    .opt-item:hover { border-color: var(--sky-blue); transform: scale(1.06); }
+
+    .opt-item.selected {
+      border-color: var(--happy-pink);
+      background: #FFF0F5;
+      transform: scale(1.06);
+      box-shadow: 0 4px 14px rgba(240, 98, 146, 0.3);
+    }
+
+    .opt-emoji { font-size: 32px; line-height: 1; min-height: 36px; display: flex; align-items: center; }
+    .opt-label { font-family: var(--font-heading); font-size: 11px; font-weight: 600; color: var(--text-medium); text-align: center; }
+
+    /* Color swatches */
+    .color-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding-bottom: 4px;
+    }
+
+    .color-swatch {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 4px solid transparent;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .color-swatch:hover { transform: scale(1.12); }
+    .color-swatch.selected { border-color: var(--text-dark); transform: scale(1.18); }
+
+    /* Sticky save */
+    .save-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: white;
+      padding: 14px 20px;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+<div class="avatar-page fade-in">
+
+  <header class="page-header" style="background:linear-gradient(135deg,#283593,#1565C0);">
+    <button class="back-btn" style="color:white;" onclick="history.back()">←</button>
+    <span class="page-title" style="color:white;">👤 Avatar Banao</span>
+    <span style="font-size:24px;">🎨</span>
+  </header>
+
+  <!-- LIVE PREVIEW -->
+  <div class="preview-zone">
+    <div id="avatar-preview"></div>
+    <div class="preview-name" id="preview-name">Loading...</div>
+  </div>
+
+  <!-- FACE -->
+  <div class="option-section">
+    <div class="section-label">😊 Chehra chunain:</div>
+    <div class="option-row" id="row-base"></div>
+  </div>
+
+  <!-- HAT -->
+  <div class="option-section">
+    <div class="section-label">🎩 Topi / Crown:</div>
+    <div class="option-row" id="row-hat"></div>
+  </div>
+
+  <!-- BACKGROUND -->
+  <div class="option-section">
+    <div class="section-label">🎨 Background rang:</div>
+    <div class="color-row" id="row-bg"></div>
+  </div>
+
+  <!-- ACCESSORY -->
+  <div class="option-section" style="padding-bottom:20px;">
+    <div class="section-label">✨ Accessory:</div>
+    <div class="option-row" id="row-acc"></div>
+  </div>
+
+</div>
+
+<!-- STICKY SAVE BAR -->
+<div class="save-bar">
+  <button class="btn btn-secondary" onclick="history.back()" style="flex:0 0 auto;padding:12px 20px;min-height:52px;">↩ Wapas</button>
+  <button class="btn btn-primary" id="btn-save" style="flex:1;min-height:52px;">💾 Save Karein!</button>
+</div>
+
+<script src="../js/progress.js"></script>
+<script src="../js/audio.js"></script>
+<script src="../js/avatar.js"></script>
+<script>
+let config = {};
+
+function updatePreview() {
+  renderAvatar(config, document.getElementById('avatar-preview'), 100);
+}
+
+function buildRow(containerId, items, field, renderFn, defaultVal) {
+  const row = document.getElementById(containerId);
+  items.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'opt-item' + (item[field === 'bg' ? 'color' : 'emoji'] === defaultVal ? ' selected' : '');
+    el.innerHTML = renderFn(item);
+    el.addEventListener('click', () => {
+      row.querySelectorAll('.opt-item').forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+      el.classList.add('pop-anim');
+      el.addEventListener('animationend', () => el.classList.remove('pop-anim'), { once: true });
+      config[field] = field === 'bg' ? item.color : item.emoji;
+      updatePreview();
+      Audio.play('click');
+    });
+    row.appendChild(el);
+  });
+}
+
+function buildColorRow() {
+  const row = document.getElementById('row-bg');
+  AVATAR_BG.forEach(item => {
+    const sw = document.createElement('div');
+    sw.className = 'color-swatch' + (item.color === config.bg ? ' selected' : '');
+    sw.style.background = item.color;
+    sw.title = item.label;
+    sw.addEventListener('click', () => {
+      row.querySelectorAll('.color-swatch').forEach(e => e.classList.remove('selected'));
+      sw.classList.add('selected');
+      config.bg = item.color;
+      updatePreview();
+      Audio.play('click');
+    });
+    row.appendChild(sw);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  Progress.load();
+  if (!Progress.hasProfile()) { window.location.replace('../index.html'); return; }
+
+  Audio.init(Progress.data.settings);
+  config = getAvatarConfig(Progress.data.profile);
+  document.getElementById('preview-name').textContent = Progress.data.profile.name;
+  updatePreview();
+
+  buildRow('row-base', AVATAR_BASES, 'base',
+    item => `<span class="opt-emoji">${item.emoji || '⬜'}</span><span class="opt-label">${item.label}</span>`,
+    config.base
+  );
+  buildRow('row-hat', AVATAR_HATS, 'hat',
+    item => `<span class="opt-emoji">${item.emoji || '—'}</span><span class="opt-label">${item.label}</span>`,
+    config.hat
+  );
+  buildColorRow();
+  buildRow('row-acc', AVATAR_ACCESSORIES, 'accessory',
+    item => `<span class="opt-emoji">${item.emoji || '—'}</span><span class="opt-label">${item.label}</span>`,
+    config.accessory
+  );
+
+  document.getElementById('btn-save').addEventListener('click', () => {
+    Progress.data.profile.avatarConfig = { ...config };
+    Progress.save();
+    Audio.play('win');
+    const btn = document.getElementById('btn-save');
+    btn.textContent = '✅ Saved!';
+    btn.disabled = true;
+    setTimeout(() => history.back(), 800);
+  });
+});
+</script>
+</body>
+</html>

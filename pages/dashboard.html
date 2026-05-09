@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Sikho Star — Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Open+Sans:wght@400;600&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<div class="dashboard-page fade-in">
+
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <a href="avatar.html" id="kid-avatar" style="display:inline-block;text-decoration:none;" title="Avatar customize karo"></a>
+      <div class="kid-info">
+        <h2 id="kid-name">Loading...</h2>
+        <p>⭐ <span id="total-stars">0</span> Stars earned</p>
+      </div>
+    </div>
+    <div class="top-bar-right">
+      <div class="stat-pill">
+        <span class="stat-icon">🔥</span>
+        <span id="streak-count">0</span>
+      </div>
+      <button class="icon-btn" id="btn-settings" title="Settings">⚙️</button>
+    </div>
+  </header>
+
+  <!-- GREETING -->
+  <section class="greeting-section slide-in-up">
+    <span class="greeting-mascot">🤖</span>
+    <div class="greeting-bubble">
+      <div class="greeting-text" id="greeting-text">Salaam!</div>
+      <div class="greeting-sub" id="greeting-sub">Aaj kya seekhain? 📚</div>
+    </div>
+  </section>
+
+  <!-- STREAK -->
+  <section class="streak-section slide-in-up delay-1">
+    <div class="streak-card">
+      <span class="streak-fire">🔥</span>
+      <div class="streak-info">
+        <h3 id="streak-title">Aaj pehla din!</h3>
+        <p id="streak-desc">Roz aao aur apna rekord todo!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MINI-GAME BANNER -->
+  <section style="padding:0 16px 14px;">
+    <a href="minigame.html?from=dashboard.html" class="streak-card slide-in-up delay-2"
+       style="background:linear-gradient(135deg,#7B1FA2,#AB47BC); text-decoration:none; display:flex; align-items:center; gap:14px;">
+      <span style="font-size:38px; animation:float 2s ease-in-out infinite; line-height:1;">🎮</span>
+      <div style="flex:1;">
+        <div style="font-family:var(--font-heading);font-size:17px;font-weight:700;color:white;">Memory Match Khelo!</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.85);margin-top:2px;">Jori milao — fun game ⭐</div>
+      </div>
+      <span style="font-size:22px;">▶</span>
+    </a>
+  </section>
+
+  <!-- SUBJECTS -->
+  <section class="subjects-section">
+    <p class="section-title">📚 Apna subject chunain:</p>
+
+    <div class="subjects-grid">
+
+      <a href="map.html?subject=maths" class="subject-card maths slide-in-up delay-2">
+        <span class="subject-icon">⛰️</span>
+        <div>
+          <div class="subject-name">Maths</div>
+          <div class="subject-world">Maths Mountain</div>
+        </div>
+        <div class="subject-progress">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="prog-maths" style="width:0%"></div>
+          </div>
+          <div class="progress-text" id="prog-text-maths">0/10 Levels</div>
+        </div>
+      </a>
+
+      <a href="map.html?subject=science" class="subject-card science slide-in-up delay-3">
+        <span class="subject-icon">🌊</span>
+        <div>
+          <div class="subject-name">Science</div>
+          <div class="subject-world">Science Sea</div>
+        </div>
+        <div class="subject-progress">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="prog-science" style="width:0%"></div>
+          </div>
+          <div class="progress-text" id="prog-text-science">0/10 Levels</div>
+        </div>
+      </a>
+
+      <a href="map.html?subject=english" class="subject-card english slide-in-up delay-4">
+        <span class="subject-icon">🏰</span>
+        <div>
+          <div class="subject-name">English</div>
+          <div class="subject-world">English Empire</div>
+        </div>
+        <div class="subject-progress">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="prog-english" style="width:0%"></div>
+          </div>
+          <div class="progress-text" id="prog-text-english">0/10 Levels</div>
+        </div>
+      </a>
+
+      <a href="map.html?subject=urdu" class="subject-card urdu slide-in-up delay-5">
+        <span class="subject-icon">🌙</span>
+        <div>
+          <div class="subject-name" style="font-family: var(--font-urdu);" dir="rtl">اردو</div>
+          <div class="subject-world">Urdu Universe</div>
+        </div>
+        <div class="subject-progress">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="prog-urdu" style="width:0%"></div>
+          </div>
+          <div class="progress-text" id="prog-text-urdu">0/10 Levels</div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-bar">
+    <a href="dashboard.html" class="nav-item active">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Profile</span>
+    </a>
+    <a href="stickers.html" class="nav-item">
+      <span class="nav-icon">🎨</span>
+      <span class="nav-label">Stickers</span>
+    </a>
+    <a href="parent.html" class="nav-item">
+      <span class="nav-icon">👨‍👩‍👧</span>
+      <span class="nav-label">Parents</span>
+    </a>
+  </nav>
+
+</div>
+
+<!-- Settings Modal -->
+<div id="settings-modal" class="hidden" style="
+  position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200;
+  display:none; align-items:center; justify-content:center; padding:20px;
+">
+  <div class="card" style="max-width:360px; gap:16px; display:flex; flex-direction:column;">
+    <h2 style="font-family:var(--font-heading); font-size:22px; text-align:center;">⚙️ Settings</h2>
+
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-family:var(--font-heading); font-size:17px; font-weight:600;">🔊 Sound Effects</span>
+      <button id="toggle-sound" class="btn btn-secondary" style="padding:8px 18px; min-height:44px; font-size:15px;">ON</button>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-family:var(--font-heading); font-size:17px; font-weight:600;">🎵 Music</span>
+      <button id="toggle-music" class="btn btn-secondary" style="padding:8px 18px; min-height:44px; font-size:15px;">OFF</button>
+    </div>
+
+    <hr style="border:none; border-top:1px solid #EEE;">
+
+    <button id="btn-reset" class="btn btn-secondary" style="color:#EF5350; font-size:15px;">
+      🗑️ Profile Reset
+    </button>
+    <button id="btn-close-settings" class="btn btn-primary btn-large">Theek Hai ✓</button>
+  </div>
+</div>
+
+<script src="../js/progress.js"></script>
+<script src="../js/audio.js"></script>
+<script src="../js/avatar.js"></script>
+<script src="../js/dashboard.js"></script>
+</body>
+</html>

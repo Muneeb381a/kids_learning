@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Sikho Star — Sticker Book</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .stickers-page {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #FCE4EC 0%, var(--bg-cream) 60%);
+      display: flex;
+      flex-direction: column;
+    }
+    .stickers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      padding: 20px 16px 100px;
+      max-width: 560px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .sticker-slot {
+      aspect-ratio: 1;
+      background: white;
+      border-radius: 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      transition: all 0.2s;
+      border: 3px solid transparent;
+      position: relative;
+    }
+    .sticker-slot.earned {
+      animation: pop 0.4s ease both;
+      border-color: var(--happy-pink);
+    }
+    .sticker-slot.locked {
+      opacity: 0.4;
+      filter: grayscale(1);
+      background: #F5F5F5;
+    }
+    .sticker-slot.locked::after {
+      content: '🔒';
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      font-size: 14px;
+    }
+    .sticker-label {
+      font-size: 10px;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      color: var(--text-medium);
+      margin-top: 4px;
+      text-align: center;
+    }
+    .stickers-header {
+      background: linear-gradient(135deg, #E91E63, #C2185B);
+      padding: 20px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .stickers-count {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      background: rgba(255,255,255,0.25);
+      padding: 6px 14px;
+      border-radius: 12px;
+      margin-left: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="stickers-page fade-in">
+
+  <div class="stickers-header">
+    <button class="back-btn" style="color:white;" onclick="history.back()">←</button>
+    <span style="font-family:var(--font-heading);font-size:20px;font-weight:700;">🎨 Sticker Book</span>
+    <span class="stickers-count" id="sticker-count">0 / 0</span>
+  </div>
+
+  <div class="stickers-grid" id="stickers-grid"></div>
+
+  <nav class="bottom-bar">
+    <a href="dashboard.html" class="nav-item">
+      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
+    </a>
+    <a href="stickers.html" class="nav-item active">
+      <span class="nav-icon">🎨</span><span class="nav-label">Stickers</span>
+    </a>
+    <a href="parent.html" class="nav-item">
+      <span class="nav-icon">👨‍👩‍👧</span><span class="nav-label">Parents</span>
+    </a>
+  </nav>
+</div>
+
+<script src="../js/progress.js"></script>
+<script>
+const ALL_STICKERS = [
+  { id:'star1',     emoji:'⭐', label:'First Star' },
+  { id:'math1',     emoji:'🔢', label:'Math Starter' },
+  { id:'sci1',      emoji:'🔬', label:'Science Fan' },
+  { id:'eng1',      emoji:'🔤', label:'English Pro' },
+  { id:'urdu1',     emoji:'✍️', label:'Urdu Ustaz' },
+  { id:'streak3',   emoji:'🔥', label:'3-Day Fire' },
+  { id:'streak7',   emoji:'🌋', label:'7-Day Legend' },
+  { id:'stars10',   emoji:'💫', label:'10 Stars' },
+  { id:'stars30',   emoji:'🌟', label:'30 Stars' },
+  { id:'level5',    emoji:'🏅', label:'5 Levels' },
+  { id:'level20',   emoji:'🥈', label:'20 Levels' },
+  { id:'perfect',   emoji:'💯', label:'Perfect Score' },
+  { id:'rainbow',   emoji:'🌈', label:'Rainbow' },
+  { id:'trophy',    emoji:'🏆', label:'Champion' },
+  { id:'rocket',    emoji:'🚀', label:'Rocket Start' },
+  { id:'crown',     emoji:'👑', label:'King/Queen' },
+];
+
+function autoEarnStickers(data) {
+  const { progress, totalStars, streak } = data;
+  const earned = new Set(data.stickers);
+
+  const check = (cond, id) => { if (cond && !earned.has(id)) { earned.add(id); } };
+
+  check(totalStars >= 1,   'star1');
+  check(progress.maths.completed.length >= 1,   'math1');
+  check(progress.science.completed.length >= 1, 'sci1');
+  check(progress.english.completed.length >= 1, 'eng1');
+  check(progress.urdu.completed.length >= 1,    'urdu1');
+  check(streak.current >= 3,  'streak3');
+  check(streak.current >= 7,  'streak7');
+  check(totalStars >= 10,     'stars10');
+  check(totalStars >= 30,     'stars30');
+  const total = ['maths','science','english','urdu'].reduce((n,s)=>n+progress[s].completed.length,0);
+  check(total >= 5,  'level5');
+  check(total >= 20, 'level20');
+  check(total >= 40, 'trophy');
+
+  data.stickers = [...earned];
+  Progress.save();
+  return earned;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  Progress.load();
+  if (!Progress.hasProfile()) { window.location.replace('../index.html'); return; }
+
+  const earned = autoEarnStickers(Progress.data);
+  const grid   = document.getElementById('stickers-grid');
+  document.getElementById('sticker-count').textContent = `${earned.size} / ${ALL_STICKERS.length}`;
+
+  ALL_STICKERS.forEach((s, i) => {
+    const isEarned = earned.has(s.id);
+    const slot = document.createElement('div');
+    slot.className = `sticker-slot ${isEarned ? 'earned' : 'locked'}`;
+    if (isEarned) slot.style.animationDelay = (i * 0.05) + 's';
+    slot.innerHTML = `<span>${s.emoji}</span><span class="sticker-label">${s.label}</span>`;
+    grid.appendChild(slot);
+  });
+});
+</script>
+</body>
+</html>

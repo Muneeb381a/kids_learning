@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Sikho Star — Trophy Room</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .trophy-page {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #FFF8E1 0%, var(--bg-cream) 60%);
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 20px;
+    }
+
+    .trophy-header {
+      background: linear-gradient(135deg, #F57F17, #FF8F00);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .trophy-header h1 {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+      flex: 1;
+    }
+
+    .trophy-count {
+      background: rgba(255,255,255,0.25);
+      border-radius: 12px;
+      padding: 6px 14px;
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+    }
+
+    /* Category divider */
+    .category-label {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-medium);
+      padding: 16px 16px 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Trophy grid */
+    .trophy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 16px;
+    }
+
+    .trophy-card {
+      background: white;
+      border-radius: 18px;
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .trophy-card.earned {
+      background: linear-gradient(135deg, #FFFDE7, #FFF8E1);
+      border: 2px solid #FFD54F;
+    }
+
+    .trophy-card.earned:hover { transform: translateY(-3px); }
+
+    .trophy-card.locked {
+      opacity: 0.45;
+      filter: grayscale(0.7);
+    }
+
+    .trophy-icon {
+      font-size: 44px;
+      line-height: 1;
+      display: block;
+    }
+
+    .trophy-card.earned .trophy-icon {
+      animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 4px 8px rgba(255, 193, 7, 0.4));
+    }
+
+    .trophy-name {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.3;
+    }
+
+    .trophy-desc {
+      font-size: 11px;
+      color: var(--text-medium);
+      line-height: 1.4;
+    }
+
+    .earned-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .lock-badge {
+      font-size: 20px;
+      opacity: 0.5;
+    }
+
+    /* Summary bar */
+    .summary-bar {
+      margin: 16px 16px 4px;
+      background: white;
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .summary-icon { font-size: 40px; }
+    .summary-text h3 {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .summary-text p { font-size: 13px; color: var(--text-medium); }
+  </style>
+</head>
+<body>
+<div class="trophy-page fade-in">
+
+  <div class="trophy-header">
+    <button class="back-btn" style="color:white;" onclick="history.back()">←</button>
+    <h1>🏆 Trophy Room</h1>
+    <span class="trophy-count" id="trophy-count">0 / 0</span>
+  </div>
+
+  <div class="summary-bar slide-in-up">
+    <span class="summary-icon">🤖</span>
+    <div class="summary-text">
+      <h3 id="summary-title">Trophies kamao!</h3>
+      <p id="summary-desc">Seekhte raho aur sab trophies unlock karo!</p>
+    </div>
+  </div>
+
+  <div class="category-label">📚 Subject Trophies</div>
+  <div class="trophy-grid" id="grid-subject"></div>
+
+  <div class="category-label">🔥 Streak Trophies</div>
+  <div class="trophy-grid" id="grid-streak"></div>
+
+  <div class="category-label">⭐ Star Trophies</div>
+  <div class="trophy-grid" id="grid-stars"></div>
+
+  <div class="category-label">🏅 Special Trophies</div>
+  <div class="trophy-grid" id="grid-special"></div>
+
+</div>
+
+<script src="../js/progress.js"></script>
+<script>
+const TROPHIES = {
+  subject: [
+    { icon:'🔢', name:'Math Explorer',  desc:'Maths ka pehla level complete karo',     check: d => d.progress.maths.completed.length >= 1  },
+    { icon:'⛰️', name:'Maths Champion', desc:'Maths Mountain — sab 10 levels!',        check: d => d.progress.maths.completed.length >= 10 },
+    { icon:'🔬', name:'Science Fan',    desc:'Science ka pehla level complete karo',    check: d => d.progress.science.completed.length >= 1  },
+    { icon:'🌊', name:'Ocean Explorer', desc:'Science Sea — sab 10 levels!',           check: d => d.progress.science.completed.length >= 10 },
+    { icon:'🔤', name:'English Starter',desc:'English ka pehla level complete karo',   check: d => d.progress.english.completed.length >= 1  },
+    { icon:'🏰', name:'English Empire', desc:'English Empire — sab 10 levels!',        check: d => d.progress.english.completed.length >= 10 },
+    { icon:'✍️', name:'Urdu Shagird',   desc:'Urdu ka pehla level complete karo',      check: d => d.progress.urdu.completed.length >= 1  },
+    { icon:'🌙', name:'Urdu Ustaz',     desc:'Urdu Universe — sab 10 levels!',         check: d => d.progress.urdu.completed.length >= 10 },
+  ],
+  streak: [
+    { icon:'🔥', name:'3-Day Warrior', desc:'3 din lagatar seekha!',                   check: d => d.streak.longest >= 3  },
+    { icon:'🌋', name:'Week Champion', desc:'7 din ki streak — amazing!',              check: d => d.streak.longest >= 7  },
+    { icon:'☀️', name:'Month Legend',  desc:'30 din ki streak — tum superhero ho!',    check: d => d.streak.longest >= 30 },
+    { icon:'♾️', name:'Eternal Star',  desc:'Koi bhi longest streak — bas seekhte raho!', check: d => d.streak.longest >= 1 },
+  ],
+  stars: [
+    { icon:'💫', name:'Star Collector', desc:'10 stars kamao',                          check: d => d.totalStars >= 10  },
+    { icon:'🌟', name:'Star Master',    desc:'30 stars kamao',                          check: d => d.totalStars >= 30  },
+    { icon:'✨', name:'Star Legend',    desc:'100 stars kamao — zabardast!',            check: d => d.totalStars >= 100 },
+    { icon:'🌠', name:'Shooting Star', desc:'Koi bhi pehla star kamao!',               check: d => d.totalStars >= 1   },
+  ],
+  special: [
+    { icon:'🎯', name:'First Win',      desc:'Pehla level complete kiya!',              check: d => ['maths','science','english','urdu'].some(s=>d.progress[s].completed.length>0) },
+    { icon:'🎮', name:'Mini-game Pro',  desc:'5 mini-games khelo',                      check: d => (d.miniGamesPlayed||0) >= 5  },
+    { icon:'👤', name:'Style Icon',     desc:'Avatar customize karo',                   check: d => !!(d.profile && d.profile.avatarConfig) },
+    { icon:'🏆', name:'Grand Champion', desc:'Sab 40 levels complete — tum legend ho!', check: d => ['maths','science','english','urdu'].reduce((n,s)=>n+d.progress[s].completed.length,0)>=40 },
+  ]
+};
+
+function buildGrid(gridId, items, data) {
+  const grid = document.getElementById(gridId);
+  let delay  = 0;
+  items.forEach(t => {
+    const earned = t.check(data);
+    const card   = document.createElement('div');
+    card.className = `trophy-card ${earned ? 'earned' : 'locked'} slide-in-up`;
+    card.style.animationDelay = (delay * 0.08) + 's';
+    delay++;
+    card.innerHTML = `
+      ${earned ? '<span class="earned-badge">✅</span>' : ''}
+      <span class="trophy-icon">${t.icon}</span>
+      <div class="trophy-name">${t.name}</div>
+      <div class="trophy-desc">${t.desc}</div>
+      ${!earned ? '<span class="lock-badge">🔒</span>' : ''}
+    `;
+    grid.appendChild(card);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  Progress.load();
+  if (!Progress.hasProfile()) { window.location.replace('../index.html'); return; }
+
+  const data = Progress.data;
+  let totalEarned = 0;
+  let totalAll    = 0;
+
+  Object.entries(TROPHIES).forEach(([key, items]) => {
+    totalAll += items.length;
+    totalEarned += items.filter(t => t.check(data)).length;
+    buildGrid(`grid-${key}`, items, data);
+  });
+
+  document.getElementById('trophy-count').textContent = `${totalEarned} / ${totalAll}`;
+
+  const pct = Math.round((totalEarned / totalAll) * 100);
+  document.getElementById('summary-title').textContent =
+    pct === 100 ? 'Sab trophies! Tum champion ho! 🏆' :
+    pct >= 50   ? `${totalEarned}/${totalAll} — Acha progress! 💪` :
+    `${totalEarned}/${totalAll} — Seekhte raho! 📚`;
+  document.getElementById('summary-desc').textContent =
+    pct === 100 ? 'Har ek trophy unlock ho gayi — legend!' :
+    `${totalAll - totalEarned} trophies baaki hain. Khelay jao!`;
+});
+</script>
+</body>
+</html>

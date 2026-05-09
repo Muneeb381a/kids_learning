@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Sikho Star — Body Parts</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧍</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Open+Sans:wght@400;600&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    body { background: linear-gradient(160deg,#E0F7FA 0%,#FFF8E1 55%,#E8F5E9 100%); }
+    .body-page { min-height:100vh; display:flex; flex-direction:column; }
+
+    /* Layout */
+    .main-area {
+      display:flex; flex:1; padding:14px 16px 6px; gap:16px; align-items:flex-start;
+    }
+    .svg-panel { display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
+    .info-panel { flex:1; display:flex; flex-direction:column; gap:10px; min-width:0; }
+
+    /* View toggle */
+    .view-toggle {
+      display:flex; gap:6px; margin-bottom:10px;
+      background:white; border-radius:28px; padding:4px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.12);
+    }
+    .toggle-btn {
+      padding:7px 16px; border-radius:24px; border:none;
+      font-family:var(--font-heading); font-size:14px; font-weight:700;
+      background:transparent; color:#546E7A; cursor:pointer; transition:all 0.2s;
+    }
+    .toggle-btn.active { background:linear-gradient(135deg,#26A69A,#00796B); color:white; box-shadow:0 2px 6px rgba(0,150,136,0.4); }
+
+    /* SVG wrapper + transitions */
+    .svg-wrapper { position:relative; }
+    .body-svg {
+      width:210px; height:auto; overflow:visible;
+      filter:drop-shadow(0 8px 18px rgba(0,0,0,0.14));
+      display:block;
+    }
+    @keyframes sv-in  { from { opacity:0; transform:translateX(18px) scale(0.97); } to { opacity:1; transform:none; } }
+    @keyframes sv-out { from { opacity:1; } to { opacity:0; transform:translateX(-12px) scale(0.97); } }
+    .sv-entering { animation:sv-in 0.32s ease both; }
+    .sv-exiting  { animation:sv-out 0.22s ease both; }
+
+    /* View label */
+    .view-label {
+      margin-top:8px; font-family:var(--font-heading); font-size:12px;
+      font-weight:700; color:#78909C; letter-spacing:0.5px; text-transform:uppercase; text-align:center;
+    }
+
+    /* Hotspot styles */
+    @keyframes hs-ring {
+      0%,100% { transform:scale(1); opacity:0.28; }
+      50%      { transform:scale(1.4); opacity:0.1; }
+    }
+    .hs-outer {
+      transform-box:fill-box; transform-origin:center;
+      animation:hs-ring 2.2s ease-in-out infinite;
+    }
+    .hs-inner { stroke:white; stroke-width:2.5; transition:transform 0.18s ease; transform-box:fill-box; transform-origin:center; }
+    .hotspot-g { cursor:pointer; }
+    .hotspot-g:hover .hs-inner { transform:scale(1.15); }
+    .hotspot-g.active .hs-outer { animation:none; opacity:0.42; transform:scale(1.25); }
+    .hotspot-g.active .hs-inner { transform:scale(1.1); }
+    .hs-emoji { font-size:12px; dominant-baseline:central; text-anchor:middle; pointer-events:none; user-select:none; }
+
+    /* Info card */
+    .info-card {
+      background:white; border-radius:var(--radius);
+      box-shadow:var(--shadow-sm); overflow:hidden;
+    }
+    .part-color-bar { height:5px; transition:background 0.3s; }
+
+    .info-prompt {
+      display:flex; flex-direction:column; align-items:center;
+      gap:10px; padding:24px 20px; text-align:center;
+    }
+    .prompt-mascot { font-size:54px; animation:float 3s ease-in-out infinite; }
+    .info-prompt p { font-family:var(--font-heading); font-size:15px; color:var(--text-medium); line-height:1.5; margin:0; }
+    .prompt-hint { font-size:13px !important; color:#90A4AE !important; }
+
+    .part-detail { display:none; flex-direction:column; }
+    .part-detail.show { display:flex; animation:fade-in 0.3s ease both; }
+
+    .part-top { display:flex; align-items:center; gap:14px; padding:16px 18px 12px; }
+    .part-big-emoji { font-size:54px; line-height:1; flex-shrink:0; animation:pop 0.4s ease both; }
+    .part-names { display:flex; flex-direction:column; gap:3px; }
+    .part-view-badge {
+      display:inline-block; padding:2px 10px; border-radius:20px;
+      font-family:var(--font-heading); font-size:11px; font-weight:700;
+      color:white; background:#607D8B; width:fit-content; margin-bottom:2px;
+    }
+    .part-en { font-family:var(--font-heading); font-size:22px; font-weight:700; color:var(--text-dark); }
+    .part-ur { font-family:var(--font-urdu); font-size:18px; color:var(--text-medium); direction:rtl; }
+
+    .part-body { display:flex; flex-direction:column; gap:10px; padding:0 18px 16px; }
+    .part-desc { background:var(--bg-cream); border-radius:14px; padding:11px 14px; font-size:14px; color:var(--text-dark); line-height:1.65; }
+    .part-fact {
+      background:#E3F2FD; border-radius:12px; padding:10px 13px;
+      font-size:13px; color:#1565C0; font-weight:600;
+      display:flex; gap:8px; align-items:flex-start; line-height:1.5;
+    }
+    .roomi-says {
+      background:#E8F5E9; border-radius:12px; padding:9px 13px;
+      font-family:var(--font-heading); font-size:14px; color:#2E7D32; font-weight:700;
+    }
+
+    /* Footer */
+    .body-footer {
+      background:white; padding:12px 16px;
+      display:flex; align-items:center; gap:12px;
+      box-shadow:0 -2px 8px rgba(0,0,0,0.08); position:sticky; bottom:0;
+    }
+    .explore-info { font-family:var(--font-heading); font-size:15px; font-weight:700; color:var(--text-dark); flex:1; }
+    .explore-info span { color:var(--success-green); }
+    .explore-dots { display:flex; gap:5px; flex-wrap:wrap; max-width:140px; margin-top:4px; }
+    .exp-dot { width:11px; height:11px; border-radius:50%; background:#E0E0E0; transition:background 0.35s, transform 0.2s; }
+    .exp-dot.done { background:var(--success-green); transform:scale(1.15); }
+
+    /* Mobile */
+    @media (max-width:520px) {
+      .main-area { flex-direction:column; align-items:center; padding:10px 12px 4px; }
+      .body-svg  { width:170px; }
+      .info-panel { width:100%; }
+      .part-top { padding:14px 16px 10px; }
+      .part-body { padding:0 16px 14px; }
+      .part-big-emoji { font-size:44px; }
+      .part-en { font-size:19px; }
+    }
+    @media (min-width:521px) {
+      .main-area { max-width:780px; margin:0 auto; width:100%; }
+      .svg-panel { position:sticky; top:70px; }
+    }
+  </style>
+</head>
+<body>
+<div class="body-page fade-in">
+
+  <header class="page-header" style="background:linear-gradient(135deg,#26A69A,#00796B);">
+    <button class="back-btn" style="color:white;" onclick="history.back()">←</button>
+    <span class="page-title" style="color:white;">🧍 Body Parts / جسم کے اعضاء</span>
+  </header>
+
+  <div class="main-area">
+
+    <!-- ======= SVG PANEL ======= -->
+    <div class="svg-panel">
+
+      <div class="view-toggle">
+        <button class="toggle-btn active" id="btn-front" onclick="switchView('front')">🫁 Saamnay</button>
+        <button class="toggle-btn" id="btn-back" onclick="switchView('back')">🔄 Peechay</button>
+      </div>
+
+      <div class="svg-wrapper">
+
+        <!-- ========== FRONT SVG ========== -->
+        <svg id="svg-front" class="body-svg" viewBox="0 0 220 445" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="fSkin" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FFD5B8"/><stop offset="100%" stop-color="#FFBA94"/>
+            </linearGradient>
+            <linearGradient id="fShirt" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4DD0E1"/><stop offset="100%" stop-color="#0097A7"/>
+            </linearGradient>
+            <linearGradient id="fPants" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#546E7A"/><stop offset="100%" stop-color="#263238"/>
+            </linearGradient>
+          </defs>
+
+          <!-- ground shadow -->
+          <ellipse cx="110" cy="442" rx="58" ry="7" fill="#00000018"/>
+
+          <!-- ARMS -->
+          <path d="M 63 162 Q 40 212 30 278" stroke="url(#fSkin)" stroke-width="30" stroke-linecap="round" fill="none"/>
+          <path d="M 157 162 Q 180 212 190 278" stroke="url(#fSkin)" stroke-width="30" stroke-linecap="round" fill="none"/>
+
+          <!-- HANDS -->
+          <ellipse cx="27" cy="284" rx="21" ry="14" fill="#FFD5B8" stroke="#FFBA94" stroke-width="1.5"/>
+          <path d="M 12 279 L 8 270" stroke="#FFBA94" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M 18 276 L 16 267" stroke="#FFBA94" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M 24 274 L 23 265" stroke="#FFBA94" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M 30 274 L 31 265" stroke="#FFBA94" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+          <ellipse cx="193" cy="284" rx="21" ry="14" fill="#FFD5B8" stroke="#FFBA94" stroke-width="1.5"/>
+          <path d="M 208 279 L 212 270" stroke="#FFBA94" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M 202 276 L 204 267" stroke="#FFBA94" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M 196 274 L 197 265" stroke="#FFBA94" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M 190 274 L 189 265" stroke="#FFBA94" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+          <!-- SHIRT -->
+          <path d="M 56 155 C 38 161 34 180 34 198 L 37 270 Q 76 280 110 280 Q 144 280 183 270 L 186 198 C 186 180 182 161 164 155 Z" fill="url(#fShirt)"/>
+          <path d="M 93 157 L 110 182 L 127 157" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M 37 270 Q 76 280 110 280 Q 144 280 183 270" stroke="white" stroke-width="1" fill="none" opacity="0.25"/>
+          <rect x="58" y="188" width="30" height="23" rx="5" fill="white" opacity="0.12" stroke="white" stroke-width="0.8" stroke-opacity="0.25"/>
+          <path d="M 58 161 L 47 190" stroke="white" stroke-width="1.5" opacity="0.22" stroke-linecap="round"/>
+          <path d="M 162 161 L 173 190" stroke="white" stroke-width="1.5" opacity="0.22" stroke-linecap="round"/>
+          <!-- heart on shirt -->
+          <text x="97" y="230" font-size="26" text-anchor="middle">❤️</text>
+
+          <!-- NECK -->
+          <rect x="96" y="131" width="28" height="26" rx="11" fill="url(#fSkin)"/>
+
+          <!-- HAIR -->
+          <ellipse cx="110" cy="66" rx="56" ry="52" fill="#5D4037"/>
+          <ellipse cx="58" cy="90" rx="15" ry="34" fill="#5D4037"/>
+          <ellipse cx="162" cy="90" rx="15" ry="34" fill="#5D4037"/>
+          <path d="M 88 28 Q 110 22 132 28" stroke="#795548" stroke-width="2" fill="none" opacity="0.55"/>
+          <path d="M 80 37 Q 110 28 140 37" stroke="#795548" stroke-width="1.5" fill="none" opacity="0.38"/>
+
+          <!-- HEAD -->
+          <ellipse cx="110" cy="82" rx="50" ry="56" fill="url(#fSkin)" stroke="#FFBA94" stroke-width="1"/>
+
+          <!-- EARS -->
+          <ellipse cx="61" cy="88" rx="9" ry="13" fill="#FFD5B8" stroke="#FFBA94" stroke-width="1.5"/>
+          <ellipse cx="62" cy="88" rx="5" ry="8" fill="#FFBA94" opacity="0.45"/>
+          <ellipse cx="159" cy="88" rx="9" ry="13" fill="#FFD5B8" stroke="#FFBA94" stroke-width="1.5"/>
+          <ellipse cx="158" cy="88" rx="5" ry="8" fill="#FFBA94" opacity="0.45"/>
+
+          <!-- EYEBROWS -->
+          <path d="M 83 66 Q 95 60 106 66" stroke="#4E342E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M 114 66 Q 125 60 137 66" stroke="#4E342E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+          <!-- LEFT EYE -->
+          <ellipse cx="96" cy="78" rx="12" ry="13" fill="white" stroke="#E0E0E0" stroke-width="0.5"/>
+          <circle cx="97" cy="79" r="7.5" fill="#4E342E"/>
+          <circle cx="97" cy="79" r="4.5" fill="#111"/>
+          <circle cx="94" cy="76" r="2.2" fill="white"/>
+          <path d="M 84 74 Q 90 68 107 74" stroke="#4E342E" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+          <!-- RIGHT EYE -->
+          <ellipse cx="124" cy="78" rx="12" ry="13" fill="white" stroke="#E0E0E0" stroke-width="0.5"/>
+          <circle cx="123" cy="79" r="7.5" fill="#4E342E"/>
+          <circle cx="123" cy="79" r="4.5" fill="#111"/>
+          <circle cx="126" cy="76" r="2.2" fill="white"/>
+          <path d="M 113 74 Q 130 68 136 74" stroke="#4E342E" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+
+          <!-- CHEEKS -->
+          <ellipse cx="76" cy="100" rx="14" ry="9" fill="#F48FB1" opacity="0.28"/>
+          <ellipse cx="144" cy="100" rx="14" ry="9" fill="#F48FB1" opacity="0.28"/>
+
+          <!-- NOSE -->
+          <path d="M 105 90 L 100 107 Q 106 113 110 112 Q 114 113 120 107 L 115 90" fill="#FFBA94" opacity="0.62" stroke="#FF9770" stroke-width="0.5"/>
+          <ellipse cx="104" cy="110" rx="4" ry="3" fill="#FF9770" opacity="0.38"/>
+          <ellipse cx="116" cy="110" rx="4" ry="3" fill="#FF9770" opacity="0.38"/>
+
+          <!-- MOUTH -->
+          <path d="M 94 121 Q 110 136 126 121" stroke="#BF360C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M 97 122 Q 110 131 123 122" fill="white" opacity="0.55"/>
+          <path d="M 100 127 Q 110 131 120 127" stroke="#EF5350" stroke-width="1.2" fill="none" opacity="0.45"/>
+
+          <!-- BELT -->
+          <rect x="38" y="272" width="144" height="16" rx="8" fill="#37474F"/>
+          <rect x="103" y="273" width="14" height="14" rx="3" fill="#FFD54F" stroke="#FFC107" stroke-width="1"/>
+          <circle cx="110" cy="280" r="2.5" fill="#FF9800"/>
+
+          <!-- LEGS -->
+          <path d="M 82 286 Q 72 348 66 424" stroke="url(#fPants)" stroke-width="37" stroke-linecap="round" fill="none"/>
+          <path d="M 138 286 Q 148 348 154 424" stroke="url(#fPants)" stroke-width="37" stroke-linecap="round" fill="none"/>
+
+          <!-- SHOES -->
+          <ellipse cx="63" cy="430" rx="28" ry="12" fill="#212121"/>
+          <ellipse cx="59" cy="426" rx="19" ry="8" fill="#424242"/>
+          <ellipse cx="157" cy="430" rx="28" ry="12" fill="#212121"/>
+          <ellipse cx="161" cy="426" rx="19" ry="8" fill="#424242"/>
+
+          <!-- ===== FRONT HOTSPOTS ===== -->
+          <g class="hotspot-g" data-part="dimagh">
+            <circle class="hs-outer" cx="110" cy="33" r="19" fill="#9C27B0" opacity="0.22"/>
+            <circle class="hs-inner" cx="110" cy="33" r="13" fill="#9C27B0" opacity="0.85"/>
+            <text class="hs-emoji" x="110" y="33">🧠</text>
+          </g>
+          <g class="hotspot-g" data-part="kaan" style="animation-delay:.8s">
+            <circle class="hs-outer" cx="52" cy="88" r="17" fill="#FF9800" opacity="0.22"/>
+            <circle class="hs-inner" cx="52" cy="88" r="11" fill="#FF9800" opacity="0.85"/>
+            <text class="hs-emoji" x="52" y="88">👂</text>
+          </g>
+          <g class="hotspot-g" data-part="kaan" style="animation-delay:1.6s">
+            <circle class="hs-outer" cx="168" cy="88" r="17" fill="#FF9800" opacity="0.22"/>
+            <circle class="hs-inner" cx="168" cy="88" r="11" fill="#FF9800" opacity="0.85"/>
+            <text class="hs-emoji" x="168" y="88">👂</text>
+          </g>
+          <g class="hotspot-g" data-part="aankh" style="animation-delay:.3s">
+            <circle class="hs-outer" cx="110" cy="78" r="22" fill="#2196F3" opacity="0.16"/>
+            <circle class="hs-inner" cx="110" cy="78" r="11" fill="#2196F3" opacity="0.82"/>
+            <text class="hs-emoji" x="110" y="78">👁️</text>
+          </g>
+          <g class="hotspot-g" data-part="naak" style="animation-delay:.5s">
+            <circle class="hs-outer" cx="110" cy="107" r="16" fill="#4CAF50" opacity="0.22"/>
+            <circle class="hs-inner" cx="110" cy="107" r="10" fill="#4CAF50" opacity="0.85"/>
+            <text class="hs-emoji" x="110" y="107">👃</text>
+          </g>
+          <g class="hotspot-g" data-part="muh" style="animation-delay:.7s">
+            <circle class="hs-outer" cx="110" cy="128" r="16" fill="#F44336" opacity="0.2"/>
+            <circle class="hs-inner" cx="110" cy="128" r="10" fill="#F44336" opacity="0.85"/>
+            <text class="hs-emoji" x="110" y="128">👄</text>
+          </g>
+          <g class="hotspot-g" data-part="phephere" style="animation-delay:.2s">
+            <circle class="hs-outer" cx="110" cy="188" r="19" fill="#00BCD4" opacity="0.2"/>
+            <circle class="hs-inner" cx="110" cy="188" r="12" fill="#00BCD4" opacity="0.85"/>
+            <text class="hs-emoji" x="110" y="188">🫁</text>
+          </g>
+          <g class="hotspot-g" data-part="dil" style="animation-delay:.4s">
+            <circle class="hs-outer" cx="86" cy="218" r="17" fill="#E91E63" opacity="0.22"/>
+            <circle class="hs-inner" cx="86" cy="218" r="11" fill="#E91E63" opacity="0.85"/>
+            <text class="hs-emoji" x="86" y="218">❤️</text>
+          </g>
+          <g class="hotspot-g" data-part="pet" style="animation-delay:.6s">
+            <circle class="hs-outer" cx="110" cy="250" r="18" fill="#FF9800" opacity="0.2"/>
+            <circle class="hs-inner" cx="110" cy="250" r="11" fill="#FF9800" opacity="0.85"/>
+            <text class="hs-emoji" x="110" y="250">🫃</text>
+          </g>
+          <g class="hotspot-g" data-part="haath" style="animation-delay:.9s">
+            <circle class="hs-outer" cx="22" cy="282" r="17" fill="#66BB6A" opacity="0.22"/>
+            <circle class="hs-inner" cx="22" cy="282" r="11" fill="#66BB6A" opacity="0.85"/>
+            <text class="hs-emoji" x="22" y="282">🤚</text>
+          </g>
+          <g class="hotspot-g" data-part="haath" style="animation-delay:1.4s">
+            <circle class="hs-outer" cx="198" cy="282" r="17" fill="#66BB6A" opacity="0.22"/>
+            <circle class="hs-inner" cx="198" cy="282" r="11" fill="#66BB6A" opacity="0.85"/>
+            <text class="hs-emoji" x="198" y="282">🤚</text>
+          </g>
+          <g class="hotspot-g" data-part="pair" style="animation-delay:1.1s">
+            <circle class="hs-outer" cx="63" cy="430" r="18" fill="#795548" opacity="0.25"/>
+            <circle class="hs-inner" cx="63" cy="430" r="11" fill="#795548" opacity="0.85"/>
+            <text class="hs-emoji" x="63" y="430">🦶</text>
+          </g>
+          <g class="hotspot-g" data-part="pair" style="animation-delay:1.5s">
+            <circle class="hs-outer" cx="157" cy="430" r="18" fill="#795548" opacity="0.25"/>
+            <circle class="hs-inner" cx="157" cy="430" r="11" fill="#795548" opacity="0.85"/>
+            <text class="hs-emoji" x="157" y="430">🦶</text>
+          </g>
+        </svg>
+
+        <!-- ========== BACK SVG ========== -->
+        <svg id="svg-back" class="body-svg" viewBox="0 0 220 445" xmlns="http://www.w3.org/2000/svg" style="display:none">
+          <defs>
+            <linearGradient id="bSkin" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FFD5B8"/><stop offset="100%" stop-color="#FFBA94"/>
+            </linearGradient>
+            <linearGradient id="bShirt" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4DD0E1"/><stop offset="100%" stop-color="#0097A7"/>
+            </linearGradient>
+            <linearGradient id="bPants" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#546E7A"/><stop offset="100%" stop-color="#263238"/>
+            </linearGradient>
+          </defs>
+
+          <!-- ground shadow -->
+          <ellipse cx="110" cy="442" rx="58" ry="7" fill="#00000018"/>
+
+          <!-- ARMS -->
+          <path d="M 63 162 Q 40 212 30 278" stroke="url(#bSkin)" stroke-width="30" stroke-linecap="round" fill="none"/>
+          <path d="M 157 162 Q 180 212 190 278" stroke="url(#bSkin)" stroke-width="30" stroke-linecap="round" fill="none"/>
+
+          <!-- BACK OF HANDS (knuckles) -->
+          <ellipse cx="27" cy="284" rx="21" ry="14" fill="#FFD5B8" stroke="#FFBA94" stroke-width="1.5"/>
+          <path d="M 14 280 Q 13 273 15 280" stroke="#FFBA94" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <path d="M 20 278 Q 19 271 21 278" stroke="#FFBA94" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <path d="M 26 277 Q 26 270 27 277" stroke="#FFBA94" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <path d="M 32 278 Q 33 271 33 278" stroke="#FFBA94" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+
+          <ellipse cx="193" cy="284" rx="21" ry="14" fill="#FFD5B8" stroke="#FFBA94" stroke-width="1.5"/>
+          <path d="M 206 280 Q 207 273 205 280" stroke="#FFBA94" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <path d="M 200 278 Q 201 271 199 278" stroke="#FFBA94" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <path d="M 194 277 Q 194 270 193 277" stroke="#FFBA94" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <path d="M 188 278 Q 187 271 187 278" stroke="#FFBA94" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+
+          <!-- BACK SHIRT -->
+          <path d="M 56 155 C 38 161 34 180 34 198 L 37 270 Q 76 280 110 280 Q 144 280 183 270 L 186 198 C 186 180 182 161 164 155 Z" fill="url(#bShirt)"/>
+          <path d="M 37 270 Q 76 280 110 280 Q 144 280 183 270" stroke="white" stroke-width="1" fill="none" opacity="0.25"/>
+          <path d="M 58 161 L 47 190" stroke="white" stroke-width="1.5" opacity="0.22" stroke-linecap="round"/>
+          <path d="M 162 161 L 173 190" stroke="white" stroke-width="1.5" opacity="0.22" stroke-linecap="round"/>
+
+          <!-- LEFT SHOULDER BLADE -->
+          <path d="M 57 168 Q 82 168 84 190 Q 82 212 60 214 Q 43 205 45 184 Z" fill="white" opacity="0.13"/>
+          <path d="M 59 170 Q 80 172 82 190 Q 80 208 62 211" stroke="white" stroke-width="1.2" fill="none" opacity="0.22" stroke-linecap="round"/>
+          <!-- RIGHT SHOULDER BLADE -->
+          <path d="M 163 168 Q 138 168 136 190 Q 138 212 160 214 Q 177 205 175 184 Z" fill="white" opacity="0.13"/>
+          <path d="M 161 170 Q 140 172 138 190 Q 140 208 158 211" stroke="white" stroke-width="1.2" fill="none" opacity="0.22" stroke-linecap="round"/>
+
+          <!-- SPINE -->
+          <line x1="110" y1="160" x2="110" y2="270" stroke="white" stroke-width="2" opacity="0.18"/>
+          <circle cx="110" cy="163" r="3.5" fill="white" opacity="0.32"/>
+          <circle cx="110" cy="175" r="3.5" fill="white" opacity="0.32"/>
+          <circle cx="110" cy="187" r="3.5" fill="white" opacity="0.32"/>
+          <circle cx="110" cy="199" r="3.5" fill="white" opacity="0.32"/>
+          <circle cx="110" cy="211" r="3.5" fill="white" opacity="0.32"/>
+          <circle cx="110" cy="223" r="3.5" fill="white" opacity="0.32"/>
+          <circle cx="110" cy="235" r="3.5" fill="white" opacity="0.32"/>
+          <circle cx="110" cy="247" r="3.5" fill="white" opacity="0.32"/>
+          <circle cx="110" cy="259" r="3.5" fill="white" opacity="0.32"/>
+
+          <!-- KIDNEYS (faint bean shapes through shirt) -->
+          <ellipse cx="84" cy="226" rx="17" ry="21" fill="#FFCDD2" opacity="0.38" transform="rotate(-8 84 226)"/>
+          <ellipse cx="84" cy="226" rx="10" ry="13" fill="#EF9A9A" opacity="0.3" transform="rotate(-8 84 226)"/>
+          <ellipse cx="136" cy="226" rx="17" ry="21" fill="#FFCDD2" opacity="0.38" transform="rotate(8 136 226)"/>
+          <ellipse cx="136" cy="226" rx="10" ry="13" fill="#EF9A9A" opacity="0.3" transform="rotate(8 136 226)"/>
+
+          <!-- NECK (from behind) -->
+          <rect x="96" y="131" width="28" height="26" rx="11" fill="url(#bSkin)"/>
+          <line x1="110" y1="133" x2="110" y2="156" stroke="#FFBA94" stroke-width="1.2" opacity="0.45"/>
+
+          <!-- HAIR (back of head — covers almost everything) -->
+          <ellipse cx="110" cy="80" rx="55" ry="58" fill="#5D4037"/>
+          <ellipse cx="58" cy="90" rx="15" ry="34" fill="#5D4037"/>
+          <ellipse cx="162" cy="90" rx="15" ry="34" fill="#5D4037"/>
+          <!-- Hair highlights/texture -->
+          <path d="M 74 44 Q 110 28 146 44" stroke="#795548" stroke-width="2" fill="none" opacity="0.52"/>
+          <path d="M 67 58 Q 110 40 153 58" stroke="#795548" stroke-width="1.5" fill="none" opacity="0.38"/>
+          <path d="M 64 72 Q 110 53 156 72" stroke="#795548" stroke-width="1.2" fill="none" opacity="0.28"/>
+          <line x1="88" y1="34" x2="82" y2="98" stroke="#795548" stroke-width="1.2" opacity="0.28"/>
+          <line x1="100" y1="29" x2="97" y2="98" stroke="#795548" stroke-width="1.2" opacity="0.28"/>
+          <line x1="110" y1="27" x2="110" y2="98" stroke="#795548" stroke-width="1.2" opacity="0.28"/>
+          <line x1="120" y1="29" x2="123" y2="98" stroke="#795548" stroke-width="1.2" opacity="0.28"/>
+          <line x1="132" y1="34" x2="138" y2="98" stroke="#795548" stroke-width="1.2" opacity="0.28"/>
+
+          <!-- EARS (visible from behind) -->
+          <ellipse cx="57" cy="88" rx="9" ry="13" fill="#FFD5B8" stroke="#FFBA94" stroke-width="1.5"/>
+          <ellipse cx="58" cy="88" rx="5" ry="8" fill="#FFBA94" opacity="0.45"/>
+          <ellipse cx="163" cy="88" rx="9" ry="13" fill="#FFD5B8" stroke="#FFBA94" stroke-width="1.5"/>
+          <ellipse cx="162" cy="88" rx="5" ry="8" fill="#FFBA94" opacity="0.45"/>
+
+          <!-- BELT -->
+          <rect x="38" y="272" width="144" height="16" rx="8" fill="#37474F"/>
+          <path d="M 80 274 L 140 274" stroke="#263238" stroke-width="2" opacity="0.3"/>
+
+          <!-- LEGS -->
+          <path d="M 82 286 Q 72 348 66 424" stroke="url(#bPants)" stroke-width="37" stroke-linecap="round" fill="none"/>
+          <path d="M 138 286 Q 148 348 154 424" stroke="url(#bPants)" stroke-width="37" stroke-linecap="round" fill="none"/>
+
+          <!-- SHOE HEELS -->
+          <ellipse cx="63" cy="430" rx="28" ry="12" fill="#212121"/>
+          <ellipse cx="59" cy="426" rx="19" ry="8" fill="#424242"/>
+          <ellipse cx="157" cy="430" rx="28" ry="12" fill="#212121"/>
+          <ellipse cx="161" cy="426" rx="19" ry="8" fill="#424242"/>
+
+          <!-- ===== BACK HOTSPOTS ===== -->
+          <g class="hotspot-g" data-part="reeth">
+            <circle class="hs-outer" cx="110" cy="211" r="20" fill="#607D8B" opacity="0.2"/>
+            <circle class="hs-inner" cx="110" cy="211" r="13" fill="#607D8B" opacity="0.85"/>
+            <text class="hs-emoji" x="110" y="211">🦴</text>
+          </g>
+          <g class="hotspot-g" data-part="gurda" style="animation-delay:.55s">
+            <circle class="hs-outer" cx="84" cy="226" r="18" fill="#EF5350" opacity="0.2"/>
+            <circle class="hs-inner" cx="84" cy="226" r="11" fill="#EF5350" opacity="0.85"/>
+            <text class="hs-emoji" x="84" y="226">🫘</text>
+          </g>
+          <g class="hotspot-g" data-part="gurda" style="animation-delay:1.2s">
+            <circle class="hs-outer" cx="136" cy="226" r="18" fill="#EF5350" opacity="0.2"/>
+            <circle class="hs-inner" cx="136" cy="226" r="11" fill="#EF5350" opacity="0.85"/>
+            <text class="hs-emoji" x="136" y="226">🫘</text>
+          </g>
+          <g class="hotspot-g" data-part="kaan" style="animation-delay:.8s">
+            <circle class="hs-outer" cx="48" cy="88" r="17" fill="#FF9800" opacity="0.22"/>
+            <circle class="hs-inner" cx="48" cy="88" r="11" fill="#FF9800" opacity="0.85"/>
+            <text class="hs-emoji" x="48" y="88">👂</text>
+          </g>
+          <g class="hotspot-g" data-part="kaan" style="animation-delay:1.6s">
+            <circle class="hs-outer" cx="172" cy="88" r="17" fill="#FF9800" opacity="0.22"/>
+            <circle class="hs-inner" cx="172" cy="88" r="11" fill="#FF9800" opacity="0.85"/>
+            <text class="hs-emoji" x="172" y="88">👂</text>
+          </g>
+          <g class="hotspot-g" data-part="haath" style="animation-delay:.9s">
+            <circle class="hs-outer" cx="22" cy="282" r="17" fill="#66BB6A" opacity="0.22"/>
+            <circle class="hs-inner" cx="22" cy="282" r="11" fill="#66BB6A" opacity="0.85"/>
+            <text class="hs-emoji" x="22" y="282">🤚</text>
+          </g>
+          <g class="hotspot-g" data-part="haath" style="animation-delay:1.4s">
+            <circle class="hs-outer" cx="198" cy="282" r="17" fill="#66BB6A" opacity="0.22"/>
+            <circle class="hs-inner" cx="198" cy="282" r="11" fill="#66BB6A" opacity="0.85"/>
+            <text class="hs-emoji" x="198" y="282">🤚</text>
+          </g>
+          <g class="hotspot-g" data-part="pair" style="animation-delay:1.1s">
+            <circle class="hs-outer" cx="63" cy="430" r="18" fill="#795548" opacity="0.25"/>
+            <circle class="hs-inner" cx="63" cy="430" r="11" fill="#795548" opacity="0.85"/>
+            <text class="hs-emoji" x="63" y="430">🦶</text>
+          </g>
+          <g class="hotspot-g" data-part="pair" style="animation-delay:1.5s">
+            <circle class="hs-outer" cx="157" cy="430" r="18" fill="#795548" opacity="0.25"/>
+            <circle class="hs-inner" cx="157" cy="430" r="11" fill="#795548" opacity="0.85"/>
+            <text class="hs-emoji" x="157" y="430">🦶</text>
+          </g>
+        </svg>
+
+      </div><!-- /svg-wrapper -->
+
+      <div class="view-label" id="view-label">⬆️ Agla Hissa (سامنے)</div>
+
+    </div><!-- /svg-panel -->
+
+    <!-- ======= INFO PANEL ======= -->
+    <div class="info-panel">
+      <div class="info-card" id="info-card">
+
+        <div class="part-color-bar" id="pd-bar"></div>
+
+        <!-- Before any click -->
+        <div class="info-prompt" id="info-prompt">
+          <span class="prompt-mascot">🤖</span>
+          <p>Kisi bhi <strong>glowing dot</strong> par click karo! 👆</p>
+          <p class="prompt-hint">Front aur Back dono explore karo! 🔄<br>12 body parts dhundo!</p>
+        </div>
+
+        <!-- After click -->
+        <div class="part-detail" id="part-detail">
+          <div class="part-top">
+            <span class="part-big-emoji" id="pd-emoji">👁️</span>
+            <div class="part-names">
+              <div class="part-view-badge" id="pd-view-badge">Agla Hissa</div>
+              <div class="part-en" id="pd-en">Eyes</div>
+              <div class="part-ur" id="pd-ur">آنکھیں</div>
+            </div>
+          </div>
+          <div class="part-body">
+            <div class="part-desc" id="pd-desc">—</div>
+            <div class="part-fact">💡 <span id="pd-fact">—</span></div>
+            <div class="roomi-says" id="pd-roomi">🤖 Wah! Shabaash!</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /main-area -->
+
+  <!-- FOOTER -->
+  <div class="body-footer">
+    <div>
+      <div class="explore-info">Dekhe: <span id="explored-count">0</span> / 12</div>
+      <div class="explore-dots" id="explore-dots"></div>
+    </div>
+    <button class="btn btn-green" id="btn-quiz" style="flex-shrink:0;padding:12px 20px;min-height:52px;font-size:16px;">
+      📝 Quiz Shuru!
+    </button>
+  </div>
+
+</div>
+
+<script src="../js/progress.js"></script>
+<script src="../js/audio.js"></script>
+<script>
+
+const PARTS = {
+  dimagh: {
+    en:'Brain', ur:'دماغ', emoji:'🧠', color:'#9C27B0', view:'front',
+    desc:'Dimagh hamara control center hai! Sochna, yaad rakhna, khwab dekhna — sab kuch yahan se control hota hai.',
+    fact:'Dimagh mein 100 arab se zyada nerve cells hoti hain — kisi bhi computer se tez!',
+    roomi:'🤖 Tum abhi soch rahe ho — to dimagh kaam kar raha hai! 🧠'
+  },
+  aankh: {
+    en:'Eyes', ur:'آنکھیں', emoji:'👁️', color:'#2196F3', view:'front',
+    desc:'Aankhon se hum rang, roshni aur cheezein dekhte hain. Do aankhein milke hamen 3D vision deti hain!',
+    fact:'Aankhein ek second mein 10 crore images process karti hain — camera se bhi tez!',
+    roomi:'🤖 Aankh se hi tum ye game dekh rahe ho! 👁️ Wah!'
+  },
+  kaan: {
+    en:'Ears', ur:'کان', emoji:'👂', color:'#FF9800', view:'both',
+    desc:'Kaanon se awaazein sunne aati hain. Kaan hamare balance ko bhi maintain karta hai — isliye hum seedhe chalte hain!',
+    fact:'Kaan sone mein bhi kaam karta rehta hai — isliye awaz se neend khulti hai!',
+    roomi:'🤖 Meri awaaz sun rahe ho? Ye kaan ki wajah se hai! 😄'
+  },
+  naak: {
+    en:'Nose', ur:'ناک', emoji:'👃', color:'#4CAF50', view:'front',
+    desc:'Naak se hum khushbu sounchte hain aur saans lete hain. Naak hawa ko filter karke saaf bhi karta hai!',
+    fact:'Naak 1 trillion se zyada khushbuain pehchaan sakti hai!',
+    roomi:'🤖 Biryani ki khushbu? Naak ne pakad liya! 🍚'
+  },
+  muh: {
+    en:'Mouth', ur:'منہ', emoji:'👄', color:'#F44336', view:'front',
+    desc:'Muh se hum khaate, peete aur bolte hain. Daant khane ko chaba dete hain aur zabaan taste batati hai!',
+    fact:'Insaan apni zindagi mein 3 crore liter se zyada saliva banata hai!',
+    roomi:'🤖 "Shabaash!" — ye muh se nikla! Wah wah! 🗣️'
+  },
+  dil: {
+    en:'Heart', ur:'دل', emoji:'❤️', color:'#E91E63', view:'front',
+    desc:'Dil khoon pump karta hai — poore jism mein khoon pahunchata hai. Ye ruk ruk kar dhadakta rehta hai!',
+    fact:'Dil ek din mein 1 lakh baar dhadakta hai — zindagi bhar kabhi nahi rukta!',
+    roomi:'🤖 Thub-dub, thub-dub — ye teri dhadkan hai! ❤️'
+  },
+  phephere: {
+    en:'Lungs', ur:'پھیپھڑے', emoji:'🫁', color:'#00BCD4', view:'front',
+    desc:'Phephere saans lete hain. Hawa andar aati hai, oxygen khoon mein jaati hai aur CO2 bahar nikalta hai.',
+    fact:'Ek din mein hum 20,000 baar saans lete hain — bina soche bhi!',
+    roomi:'🤖 Deep breath lo! Dekho phephere kaam kar rahe hain! 😤'
+  },
+  pet: {
+    en:'Stomach', ur:'پیٹ', emoji:'🫃', color:'#FF9800', view:'front',
+    desc:'Pet mein khana pachta (digest) hota hai. Pet khane ko chhote chhote pieces mein todta hai!',
+    fact:'Pet itna bada ho sakta hai jitna ek chhota football — khane ke baad!',
+    roomi:'🤖 Biryani ka kya hoga? Pet digest karega! 🍚'
+  },
+  haath: {
+    en:'Hands', ur:'ہاتھ', emoji:'🤲', color:'#66BB6A', view:'both',
+    desc:'Haath se hum cheezein pakdte, likhte, khelate aur kaam karte hain! Har haath mein 27 haddiyan hoti hain.',
+    fact:'Fingerprints bilkul unique hote hain — duniya mein kisi ke bhi exactly same nahi!',
+    roomi:'🤖 Haath utha ke wave karo! Tumhara haath unique hai! 👋'
+  },
+  pair: {
+    en:'Legs & Feet', ur:'ٹانگیں اور پاؤں', emoji:'🦶', color:'#795548', view:'both',
+    desc:'Pair aur paon se hum chalte, daudte, koodte aur khelate hain! Paon mein 52 haddiyan hoti hain.',
+    fact:'Ek insaan apni zindagi mein 3 baar zameen ka chakkar lagane jitna chalta hai!',
+    roomi:'🤖 Uthao paon aur dance karo! 💃'
+  },
+  reeth: {
+    en:'Spine / Backbone', ur:'ریڑھ کی ہڈی', emoji:'🦴', color:'#607D8B', view:'back',
+    desc:'Reeth ki haddi peeth ke beech mein hoti hai — 33 chhoti haddiyon (vertebrae) se bani hoti hai. Ye hamein seedha rakhti hai!',
+    fact:'Reeth ki haddi ek spring ki tarah kaam karti hai — jump karne par jhatka absorb karti hai!',
+    roomi:'🤖 Seedhe baitho! Reeth ki haddi ki madad karo! 🦴'
+  },
+  gurda: {
+    en:'Kidneys', ur:'گردے', emoji:'🫘', color:'#EF5350', view:'back',
+    desc:'Gurday khoon ko filter karte hain — bekar cheezein nikaal dete hain. Insaan ke do gurday hote hain!',
+    fact:'Gurday ek din mein 180 liter khoon filter karte hain — factory ki tarah kaam karte hain!',
+    roomi:'🤖 Gurde chupe hain peeth mein — magar kaam bht bada karte hain! 🫘'
+  }
+};
+
+const TOTAL_PARTS = 12;
+const VIEW_LABELS = { front:'Agla Hissa', back:'Peechla Hissa', both:'Dono Taraf' };
+const VIEW_BADGE_COLORS = { front:'#26A69A', back:'#5C6BC0', both:'#FF9800' };
+const ROOMI_EXPLORE = [
+  '🤖 Wah! Ye dekh liya!',
+  '🤖 Shabaash! Ek aur dhundo!',
+  '🤖 Zabardast! Tum bohot ache ho!',
+  '🤖 Star student! ⭐ Aur dekho!',
+  '🤖 Kamaal! Almost there! 🔥'
+];
+
+let explored  = new Set();
+let lastPart  = null;
+let curView   = 'front';
+
+function buildDots() {
+  const c = document.getElementById('explore-dots');
+  for (let i = 0; i < TOTAL_PARTS; i++) {
+    const d = document.createElement('div');
+    d.className = 'exp-dot';
+    c.appendChild(d);
+  }
+}
+
+function updateDots() {
+  const n = explored.size;
+  document.querySelectorAll('.exp-dot').forEach((d, i) => d.classList.toggle('done', i < n));
+  document.getElementById('explored-count').textContent = n;
+}
+
+function showPart(partId) {
+  const p = PARTS[partId];
+  if (!p) return;
+
+  document.querySelectorAll('.hotspot-g').forEach(g =>
+    g.classList.toggle('active', g.dataset.part === partId)
+  );
+
+  document.getElementById('info-prompt').style.display = 'none';
+  const detail = document.getElementById('part-detail');
+  detail.classList.remove('show');
+  void detail.offsetWidth;
+  detail.classList.add('show');
+
+  document.getElementById('pd-bar').style.background = p.color;
+  document.getElementById('pd-emoji').textContent  = p.emoji;
+  document.getElementById('pd-en').textContent     = p.en;
+  document.getElementById('pd-ur').textContent     = p.ur;
+  document.getElementById('pd-desc').textContent   = p.desc;
+  document.getElementById('pd-fact').textContent   = p.fact;
+
+  const badge = document.getElementById('pd-view-badge');
+  badge.textContent = VIEW_LABELS[p.view];
+  badge.style.background = VIEW_BADGE_COLORS[p.view];
+
+  const roomiEl = document.getElementById('pd-roomi');
+  if (!explored.has(partId)) {
+    roomiEl.textContent = ROOMI_EXPLORE[Math.min(explored.size, ROOMI_EXPLORE.length - 1)];
+    explored.add(partId);
+    updateDots();
+    Audio.play('correct');
+    if (explored.size === TOTAL_PARTS) {
+      setTimeout(() => { roomiEl.textContent = '🤖 Wah! Tumne sab 12 parts dekh liye! Shaheen ho tum! 🌟'; }, 600);
+    }
+  } else {
+    roomiEl.textContent = p.roomi;
+    Audio.play('click');
+  }
+  lastPart = partId;
+}
+
+function switchView(view) {
+  if (view === curView) return;
+  Audio.play('click');
+
+  const showEl = document.getElementById(view === 'front' ? 'svg-front' : 'svg-back');
+  const hideEl = document.getElementById(view === 'front' ? 'svg-back'  : 'svg-front');
+
+  hideEl.classList.add('sv-exiting');
+  setTimeout(() => {
+    hideEl.style.display = 'none';
+    hideEl.classList.remove('sv-exiting');
+    showEl.style.display = 'block';
+    showEl.classList.add('sv-entering');
+    showEl.addEventListener('animationend', () => showEl.classList.remove('sv-entering'), { once:true });
+  }, 220);
+
+  document.getElementById('btn-front').classList.toggle('active', view === 'front');
+  document.getElementById('btn-back').classList.toggle('active', view === 'back');
+  document.getElementById('view-label').textContent =
+    view === 'front' ? '⬆️ Agla Hissa (سامنے)' : '🔄 Peechla Hissa (پیچھے)';
+
+  curView = view;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  Progress.load();
+  if (!Progress.hasProfile()) { window.location.replace('../index.html'); return; }
+  Audio.init(Progress.data.settings);
+  buildDots();
+
+  document.querySelectorAll('.hotspot-g').forEach(g => {
+    g.addEventListener('click', () => showPart(g.dataset.part));
+  });
+
+  document.getElementById('btn-quiz').addEventListener('click', () => {
+    Audio.play('click');
+    window.location.href = 'level.html?subject=science&level=1';
+  });
+});
+</script>
+</body>
+</html>

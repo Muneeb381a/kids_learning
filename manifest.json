@@ -1,0 +1,21 @@
+{
+  "name": "Sikho Star",
+  "short_name": "Sikho Star",
+  "description": "Fun bilingual learning app for Pakistani kids ages 5–10",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a237e",
+  "theme_color": "#4FC3F7",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%231a237e'/><text y='140' x='96' font-size='120' text-anchor='middle'>⭐</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "kids"],
+  "prefer_related_applications": false
+}

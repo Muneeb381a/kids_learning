@@ -1,0 +1,99 @@
+/* ===== RESPONSIVE — Mobile First ===== */
+
+/* Extra-small phones (< 360px) */
+@media (max-width: 359px) {
+  .logo h1       { font-size: 30px; }
+  .mascot        { font-size: 64px; }
+  .logo-star     { font-size: 52px; }
+  .avatar-grid   { grid-template-columns: repeat(2, 1fr); }
+  .subjects-grid { gap: 10px; }
+  .subject-card  { min-height: 140px; padding: 16px 12px; }
+  .card          { padding: 20px 14px; }
+  .age-btn       { width: 46px; height: 46px; font-size: 17px; }
+}
+
+/* Standard phones (360–479px) — primary target */
+@media (max-width: 479px) {
+  .top-bar   { padding: 12px 14px; }
+  .stat-pill { padding: 6px 10px; font-size: 14px; }
+  .btn-huge  { padding: 18px 38px; font-size: 21px; }
+  .subjects-grid { gap: 12px; }
+  .subject-card  { min-height: 152px; }
+  .subject-icon  { font-size: 36px; }
+  .greeting-mascot { font-size: 50px; }
+  .speech-bubble   { font-size: 16px; }
+  .mascot.small    { font-size: 44px; }
+}
+
+/* Tablets (480–767px) */
+@media (min-width: 480px) and (max-width: 767px) {
+  .subjects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 560px;
+    margin-inline: auto;
+  }
+
+  .subject-card { min-height: 180px; }
+  .card         { max-width: 520px; }
+
+  .greeting-section,
+  .streak-section,
+  .subjects-section {
+    max-width: 560px;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .level-path { max-width: 480px; }
+}
+
+/* Desktop (768px+) */
+@media (min-width: 768px) {
+  body { background: #BBDEFB; }
+
+  .dashboard-page {
+    max-width: 760px;
+    margin-inline: auto;
+    min-height: 100vh;
+    box-shadow: 0 0 48px rgba(0, 0, 0, 0.18);
+    background: linear-gradient(160deg, #E3F2FD 0%, var(--bg-cream) 55%, #E8F5E9 100%);
+  }
+
+  .subject-card { min-height: 190px; }
+
+  .subjects-grid { gap: 16px; }
+
+  .card { max-width: 520px; }
+
+  .coming-soon-page { max-width: 760px; margin-inline: auto; }
+}
+
+/* Landscape phones (short screens) */
+@media (max-height: 520px) and (orientation: landscape) {
+  .splash-content   { gap: 12px; padding: 20px; }
+  .mascot           { font-size: 52px; }
+  .logo h1          { font-size: 28px; }
+  .logo-star        { font-size: 44px; }
+  .logo             { gap: 4px; }
+  .tagline          { font-size: 14px; }
+  .btn-huge         { padding: 14px 36px; font-size: 20px; min-height: 60px; }
+  .speech-bubble    { padding: 8px 16px; font-size: 15px; }
+
+  #screen-profile-create { padding-top: 14px; gap: 8px; }
+  .profile-card     { padding: 16px; gap: 12px; }
+  .profile-card h2  { font-size: 20px; }
+}
+
+/* Touch devices — bigger tap targets */
+@media (hover: none) and (pointer: coarse) {
+  .btn       { min-height: 64px; }
+  .age-btn   { width: 58px; height: 58px; }
+  .nav-item  { padding: 10px 14px; }
+  .level-node { padding: 18px 20px; }
+}
+
+/* Print (certificates) */
+@media print {
+  .bottom-bar, .top-bar, .back-btn { display: none !important; }
+  body { background: white !important; }
+}

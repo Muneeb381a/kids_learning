@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="description" content="Sikho Star — Fun bilingual learning for Pakistani kids ages 5–10">
+  <title>Sikho Star ⭐ — Kids Learning</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Open+Sans:wght@400;600&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4FC3F7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Sikho Star">
+</head>
+<body>
+
+  <!-- ===== SCREEN 1: SPLASH ===== -->
+  <div id="screen-splash" class="screen active">
+    <div class="stars-bg" id="stars-bg"></div>
+
+    <div class="splash-content">
+      <div class="mascot-container">
+        <span class="mascot" id="splash-mascot">🤖</span>
+        <div class="speech-bubble" id="splash-bubble">Assalamu Alaikum! 👋</div>
+      </div>
+
+      <div class="logo">
+        <span class="logo-star">⭐</span>
+        <h1>Sikho Star</h1>
+        <p class="tagline">Seekhna, Khelna, Barhna!</p>
+      </div>
+
+      <button id="btn-start" class="btn btn-primary btn-huge">
+        Shuru Karein! 🚀
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN 2: PROFILE CREATION ===== -->
+  <div id="screen-profile-create" class="screen">
+    <div class="screen-header">
+      <span class="mascot small float-anim">🤖</span>
+    </div>
+
+    <div class="card profile-card slide-in-up">
+      <h2>Apna naam batao! 😊</h2>
+
+      <input
+        type="text"
+        id="input-name"
+        class="big-input"
+        placeholder="Mera naam hai..."
+        maxlength="20"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="words"
+        spellcheck="false"
+      >
+
+      <div>
+        <h3>Apni umr chunain:</h3>
+        <div class="age-buttons" id="age-buttons">
+          <button class="age-btn" data-age="5">5</button>
+          <button class="age-btn" data-age="6">6</button>
+          <button class="age-btn" data-age="7">7</button>
+          <button class="age-btn" data-age="8">8</button>
+          <button class="age-btn" data-age="9">9</button>
+          <button class="age-btn" data-age="10">10</button>
+        </div>
+      </div>
+
+      <div>
+        <h3>Apna avatar chunain:</h3>
+        <div class="avatar-grid" id="avatar-grid">
+          <div class="avatar-option" data-avatar="boy1">
+            <span class="avatar-emoji">👦</span>
+            <span>Ali</span>
+          </div>
+          <div class="avatar-option" data-avatar="girl1">
+            <span class="avatar-emoji">👧</span>
+            <span>Sara</span>
+          </div>
+          <div class="avatar-option" data-avatar="boy2">
+            <span class="avatar-emoji">🧒</span>
+            <span>Usman</span>
+          </div>
+          <div class="avatar-option" data-avatar="girl2">
+            <span class="avatar-emoji">🧕</span>
+            <span>Aisha</span>
+          </div>
+        </div>
+      </div>
+
+      <button id="btn-create-profile" class="btn btn-primary btn-large" disabled>
+        Chalein! ✨
+      </button>
+    </div>
+  </div>
+
+  <script src="js/progress.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

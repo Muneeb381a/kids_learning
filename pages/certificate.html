@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sikho Star — Certificate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Open+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #B8860B;
+      --gold-light: #FFD54F;
+      --navy: #1a237e;
+      --cream: #FFFDE7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #E8EAF6;
+      font-family: 'Open Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    /* ---- Action bar (hidden on print) ---- */
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .btn {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 16px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-print { background: linear-gradient(135deg, #1a237e, #283593); color: white; }
+    .btn-back  { background: white; color: #37474F; }
+    .btn:hover { transform: translateY(-2px); }
+
+    /* ---- Certificate ---- */
+    .cert-wrap {
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .certificate {
+      background: var(--cream);
+      width: 100%;
+      aspect-ratio: 1.414; /* A4 landscape */
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 56px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+
+    /* Decorative border layers */
+    .certificate::before {
+      content: '';
+      position: absolute;
+      inset: 14px;
+      border: 3px solid var(--gold);
+    }
+    .certificate::after {
+      content: '';
+      position: absolute;
+      inset: 20px;
+      border: 1px solid var(--gold-light);
+    }
+
+    /* Corner ornaments */
+    .corner {
+      position: absolute;
+      font-size: 28px;
+      line-height: 1;
+      opacity: 0.6;
+    }
+    .corner.tl { top: 24px; left: 24px; }
+    .corner.tr { top: 24px; right: 24px; }
+    .corner.bl { bottom: 24px; left: 24px; }
+    .corner.br { bottom: 24px; right: 24px; }
+
+    /* Background watermark */
+    .watermark {
+      position: absolute;
+      font-size: 180px;
+      opacity: 0.04;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Content */
+    .cert-logo {
+      font-size: 36px;
+      margin-bottom: 4px;
+    }
+
+    .cert-app-name {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .cert-divider {
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 16px;
+    }
+
+    .cert-title {
+      font-family: 'Playfair Display', 'Fredoka', serif;
+      font-size: clamp(22px, 4vw, 34px);
+      font-weight: 700;
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+    }
+
+    .cert-body {
+      text-align: center;
+      color: #37474F;
+      font-size: clamp(13px, 2vw, 16px);
+      line-height: 1.7;
+    }
+
+    .cert-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(24px, 4.5vw, 38px);
+      font-weight: 700;
+      color: var(--navy);
+      display: block;
+      margin: 6px 0;
+    }
+
+    .cert-subject {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(18px, 3vw, 26px);
+      font-weight: 700;
+      color: var(--gold);
+      display: block;
+      margin: 4px 0;
+    }
+
+    .cert-stars {
+      font-size: clamp(20px, 3.5vw, 28px);
+      letter-spacing: 4px;
+      margin: 10px 0;
+      display: block;
+    }
+
+    .cert-date {
+      font-size: clamp(11px, 1.8vw, 14px);
+      color: #78909C;
+      margin-top: 14px;
+      display: block;
+    }
+
+    /* Footer with signatures */
+    .cert-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      width: 100%;
+      margin-top: 20px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(184,134,11,0.3);
+    }
+
+    .sig-block {
+      text-align: center;
+      font-size: clamp(10px, 1.6vw, 13px);
+      color: #546E7A;
+    }
+
+    .sig-line {
+      width: 120px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 4px;
+    }
+
+    .sig-emoji { font-size: 28px; display: block; margin-bottom: 4px; }
+
+    /* ===== PRINT STYLES ===== */
+    @media print {
+      body { background: white; padding: 0; }
+      .action-bar { display: none !important; }
+      .cert-wrap { max-width: 100%; }
+      .certificate {
+        box-shadow: none;
+        width: 100vw;
+        max-width: 100%;
+        aspect-ratio: auto;
+        min-height: 100vh;
+        page-break-inside: avoid;
+      }
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ACTION BAR -->
+<div class="action-bar" id="action-bar">
+  <button class="btn btn-back" onclick="history.back()">← Wapas</button>
+  <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+</div>
+
+<!-- CERTIFICATE -->
+<div class="cert-wrap">
+  <div class="certificate" id="cert">
+
+    <!-- Corners -->
+    <span class="corner tl">🌟</span>
+    <span class="corner tr">🌟</span>
+    <span class="corner bl">🌟</span>
+    <span class="corner br">🌟</span>
+    <span class="watermark" id="wm-icon">⭐</span>
+
+    <div class="cert-logo" id="cert-logo">⭐</div>
+    <div class="cert-app-name">Sikho Star</div>
+    <div class="cert-divider"></div>
+
+    <div class="cert-title">Certificate of Achievement</div>
+
+    <div class="cert-body">
+      This is to certify that
+      <span class="cert-name" id="cert-name">Student Name</span>
+      has successfully completed
+      <span class="cert-subject" id="cert-subject">Subject</span>
+      <span class="cert-stars" id="cert-stars">⭐⭐⭐</span>
+      with excellence and dedication
+      <span class="cert-date" id="cert-date">Date: —</span>
+    </div>
+
+    <div class="cert-footer">
+      <div class="sig-block">
+        <span class="sig-emoji">🤖</span>
+        <div class="sig-line"></div>
+        Roomi the Robot
+      </div>
+      <div class="sig-block" style="font-size:clamp(18px,2.5vw,22px); color:var(--gold); font-family:'Fredoka',sans-serif; font-weight:700;">
+        ⭐ SIKHO STAR ⭐
+      </div>
+      <div class="sig-block">
+        <span class="sig-emoji">👨‍👩‍👧</span>
+        <div class="sig-line"></div>
+        Parent / Guardian
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/progress.js"></script>
+<script>
+const SUBJECT_META = {
+  maths:   { name: 'Maths',   world: 'Maths Mountain',   icon: '⛰️', color: '#5C6BC0' },
+  science: { name: 'Science', world: 'Science Sea',       icon: '🌊', color: '#26A69A' },
+  english: { name: 'English', world: 'English Empire',    icon: '🏰', color: '#EF5350' },
+  urdu:    { name: 'Urdu',    world: 'Urdu Universe',     icon: '🌙', color: '#AB47BC' },
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  Progress.load();
+  if (!Progress.hasProfile()) { window.location.replace('../index.html'); return; }
+
+  const params  = new URLSearchParams(location.search);
+  const subject = params.get('subject') || 'maths';
+  const meta    = SUBJECT_META[subject] || SUBJECT_META.maths;
+  const profile = Progress.data.profile;
+  const prog    = Progress.getSubjectProgress(subject);
+
+  const totalStars = Object.values(prog.stars).reduce((a, b) => a + b, 0);
+  const maxStars   = prog.completed.length * 3;
+  const starEmoji  = prog.completed.length >= 10
+    ? '⭐⭐⭐' : prog.completed.length >= 5 ? '⭐⭐' : '⭐';
+
+  document.getElementById('cert-name').textContent    = profile.name;
+  document.getElementById('cert-subject').textContent =
+    `${meta.name} (${meta.world}) — ${prog.completed.length}/10 Levels`;
+  document.getElementById('cert-logo').textContent    = meta.icon;
+  document.getElementById('wm-icon').textContent      = meta.icon;
+  document.getElementById('cert-stars').textContent   = starEmoji + ` ${totalStars} Stars`;
+  document.getElementById('cert-date').textContent    =
+    'Date: ' + new Date().toLocaleDateString('en-PK', { year:'numeric', month:'long', day:'numeric' });
+
+  /* Tint the border for subject color */
+  document.querySelector('.certificate').style.setProperty('--gold', meta.color);
+});
+</script>
+</body>
+</html>
