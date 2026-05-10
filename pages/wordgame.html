@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Sikho Star — Word Scramble</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔤</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Open+Sans:wght@400;600&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    body { background: linear-gradient(160deg, #FF6F00 0%, #F57F17 40%, #FFD54F 100%); min-height: 100vh; }
+    .wg-page { min-height: 100vh; display: flex; flex-direction: column; max-width: 520px; margin: 0 auto; }
+
+    /* HEADER */
+    .wg-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 20px; color: white;
+    }
+    .wg-header-title { font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: white; flex: 1; }
+    .wg-stat {
+      background: rgba(255,255,255,0.25); border-radius: 14px;
+      padding: 6px 14px; font-family: var(--font-heading); font-size: 16px;
+      font-weight: 700; color: white; display: flex; align-items: center; gap: 6px;
+    }
+
+    /* CATEGORY SCREEN */
+    #cat-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 24px; }
+    .cat-title { font-family: var(--font-heading); font-size: 26px; font-weight: 700; color: white; text-align: center; }
+    .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; }
+    .cat-card {
+      background: white; border-radius: 20px; padding: 22px 16px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      transition: transform 0.18s, box-shadow 0.18s;
+      border: none; font-family: var(--font-heading);
+    }
+    .cat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.22); }
+    .cat-card:active { transform: scale(0.97); }
+    .cat-icon { font-size: 44px; }
+    .cat-name { font-size: 18px; font-weight: 700; color: var(--text-dark); }
+    .cat-count { font-size: 13px; color: var(--text-medium); }
+
+    /* GAME SCREEN */
+    #game-screen { flex: 1; display: none; flex-direction: column; padding: 16px; gap: 14px; }
+
+    /* Progress dots */
+    .wg-dots { display: flex; gap: 8px; justify-content: center; }
+    .wg-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.35); transition: background 0.3s, transform 0.2s; }
+    .wg-dot.done { background: white; transform: scale(1.2); }
+    .wg-dot.active { background: #FFD54F; transform: scale(1.3); }
+
+    /* Word card */
+    .word-card {
+      background: white; border-radius: 24px;
+      padding: 24px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      animation: slide-in-up 0.35s ease both;
+    }
+    .word-hint-emoji { font-size: 72px; animation: float 2.5s ease-in-out infinite; }
+    .word-urdu { font-family: var(--font-urdu); font-size: 22px; direction: rtl; color: var(--text-medium); }
+    .word-category-label { font-size: 12px; font-weight: 700; color: var(--text-medium); letter-spacing: 0.5px; text-transform: uppercase; }
+
+    /* Answer boxes */
+    .answer-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .answer-box {
+      width: 46px; height: 52px; border-radius: 12px;
+      border: 3px solid #E0E0E0; background: #FAFAFA;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-heading); font-size: 24px; font-weight: 700;
+      color: var(--text-dark); transition: all 0.2s; cursor: pointer;
+    }
+    .answer-box.filled { border-color: #FF9800; background: #FFF3E0; }
+    .answer-box.correct-anim { border-color: var(--success-green); background: #E8F5E9; animation: pop 0.3s ease both; }
+    .answer-box.wrong-anim  { border-color: #EF5350; background: #FFEBEE; animation: shake 0.4s ease both; }
+
+    /* Letter tiles */
+    .letter-tiles { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 4px; }
+    .letter-tile {
+      width: 46px; height: 52px; border-radius: 12px;
+      background: linear-gradient(135deg, #FF9800, #E65100);
+      border: 2px solid rgba(255,255,255,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-heading); font-size: 24px; font-weight: 700;
+      color: white; cursor: pointer; box-shadow: 0 4px 10px rgba(230,81,0,0.35);
+      transition: transform 0.15s, opacity 0.15s;
+      user-select: none;
+    }
+    .letter-tile:hover { transform: translateY(-3px) scale(1.05); }
+    .letter-tile:active { transform: scale(0.95); }
+    .letter-tile.used { opacity: 0; pointer-events: none; transform: scale(0.8); }
+
+    /* Feedback */
+    .wg-feedback {
+      text-align: center; font-family: var(--font-heading); font-size: 18px;
+      font-weight: 700; min-height: 28px; color: white;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .wg-feedback.correct { color: #E8F5E9; }
+    .wg-feedback.wrong   { color: #FFCCBC; }
+
+    /* RESULT SCREEN */
+    #result-screen {
+      position: fixed; inset: 0;
+      background: linear-gradient(135deg, #FF6F00, #F57F17);
+      z-index: 300; display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 20px; padding: 32px; text-align: center;
+    }
+    #result-screen.show { display: flex; }
+    .wg-res-mascot { font-size: 88px; animation: bounce-in 0.6s ease both; }
+    .wg-res-title { font-family: var(--font-heading); font-size: clamp(26px, 6vw, 40px); font-weight: 700; color: white; }
+    .wg-res-stars { font-size: 52px; letter-spacing: 8px; animation: star-pop 0.5s 0.3s both; }
+    .wg-res-detail { font-family: var(--font-heading); font-size: 18px; color: rgba(255,255,255,0.9); }
+    .wg-res-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+
+    /* Confetti */
+    .confetti-piece { position: fixed; pointer-events: none; animation: confetti-fall 2s ease-in forwards; }
+  </style>
+</head>
+<body>
+<div class="wg-page fade-in">
+
+  <!-- HEADER -->
+  <div class="wg-header">
+    <button class="back-btn" style="color:white;" id="btn-back" onclick="goBack()">←</button>
+    <div class="wg-header-title">🔤 Word Scramble</div>
+    <div class="wg-stat">⭐ <span id="wg-score">0</span></div>
+  </div>
+
+  <!-- CATEGORY SELECTION -->
+  <div id="cat-screen">
+    <div class="cat-title">Choose a Category!</div>
+    <div class="cat-grid">
+      <button class="cat-card" onclick="startGame('animals')">
+        <span class="cat-icon">🐾</span>
+        <span class="cat-name">Animals</span>
+        <span class="cat-count">8 words</span>
+      </button>
+      <button class="cat-card" onclick="startGame('fruits')">
+        <span class="cat-icon">🍎</span>
+        <span class="cat-name">Fruits</span>
+        <span class="cat-count">8 words</span>
+      </button>
+      <button class="cat-card" onclick="startGame('colors')">
+        <span class="cat-icon">🌈</span>
+        <span class="cat-name">Colors</span>
+        <span class="cat-count">8 words</span>
+      </button>
+      <button class="cat-card" onclick="startGame('body')">
+        <span class="cat-icon">🧍</span>
+        <span class="cat-name">Body Parts</span>
+        <span class="cat-count">8 words</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- GAME AREA -->
+  <div id="game-screen">
+    <div class="wg-dots" id="wg-dots"></div>
+
+    <div class="word-card" id="word-card">
+      <div class="word-category-label" id="wg-cat-label">Animals</div>
+      <div class="word-hint-emoji" id="wg-hint">🐱</div>
+      <div class="word-urdu" id="wg-urdu">بلی</div>
+      <div class="answer-row" id="answer-row"></div>
+    </div>
+
+    <div class="letter-tiles" id="letter-tiles"></div>
+    <div class="wg-feedback" id="wg-feedback"></div>
+
+    <button class="btn btn-secondary" id="btn-hint-wg"
+      style="background:rgba(255,255,255,0.25);color:white;border:2px solid rgba(255,255,255,0.4);font-size:15px;padding:10px 20px;">
+      💡 Hint (reveal one letter)
+    </button>
+  </div>
+
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="result-screen">
+  <span class="wg-res-mascot" id="wg-res-mascot">🏆</span>
+  <div class="wg-res-title" id="wg-res-title">Excellent!</div>
+  <div class="wg-res-stars" id="wg-res-stars">⭐⭐⭐</div>
+  <div class="wg-res-detail" id="wg-res-detail">8/8 words solved!</div>
+  <div class="wg-res-btns">
+    <button class="btn btn-primary" onclick="playAgain()">Play Again 🔄</button>
+    <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">Go Home 🏠</button>
+  </div>
+</div>
+
+<script src="../js/progress.js"></script>
+<script src="../js/audio.js"></script>
+<script>
+
+const WORD_SETS = {
+  animals: [
+    { word: 'CAT',   hint: '🐱', urdu: 'بلی' },
+    { word: 'DOG',   hint: '🐶', urdu: 'کتا' },
+    { word: 'COW',   hint: '🐄', urdu: 'گائے' },
+    { word: 'HEN',   hint: '🐔', urdu: 'مرغی' },
+    { word: 'ANT',   hint: '🐜', urdu: 'چیونٹی' },
+    { word: 'OWL',   hint: '🦉', urdu: 'الو' },
+    { word: 'FOX',   hint: '🦊', urdu: 'لومڑی' },
+    { word: 'BEE',   hint: '🐝', urdu: 'شہد کی مکھی' },
+  ],
+  fruits: [
+    { word: 'APPLE',  hint: '🍎', urdu: 'سیب' },
+    { word: 'MANGO',  hint: '🥭', urdu: 'آم' },
+    { word: 'GRAPE',  hint: '🍇', urdu: 'انگور' },
+    { word: 'LEMON',  hint: '🍋', urdu: 'لیموں' },
+    { word: 'MELON',  hint: '🍈', urdu: 'خربوزہ' },
+    { word: 'PEACH',  hint: '🍑', urdu: 'آڑو' },
+    { word: 'PLUM',   hint: '🫐', urdu: 'آلو بخارا' },
+    { word: 'GUAVA',  hint: '🍐', urdu: 'امرود' },
+  ],
+  colors: [
+    { word: 'RED',    hint: '🔴', urdu: 'سرخ' },
+    { word: 'BLUE',   hint: '🔵', urdu: 'نیلا' },
+    { word: 'GREEN',  hint: '🟢', urdu: 'سبز' },
+    { word: 'PINK',   hint: '🩷', urdu: 'گلابی' },
+    { word: 'BLACK',  hint: '⚫', urdu: 'کالا' },
+    { word: 'WHITE',  hint: '⚪', urdu: 'سفید' },
+    { word: 'BROWN',  hint: '🟤', urdu: 'بھورا' },
+    { word: 'GOLD',   hint: '🟡', urdu: 'سنہرا' },
+  ],
+  body: [
+    { word: 'EAR',    hint: '👂', urdu: 'کان' },
+    { word: 'EYE',    hint: '👁️', urdu: 'آنکھ' },
+    { word: 'NOSE',   hint: '👃', urdu: 'ناک' },
+    { word: 'HAND',   hint: '🤚', urdu: 'ہاتھ' },
+    { word: 'FOOT',   hint: '🦶', urdu: 'پاؤں' },
+    { word: 'HEART',  hint: '❤️', urdu: 'دل' },
+    { word: 'BRAIN',  hint: '🧠', urdu: 'دماغ' },
+    { word: 'TOOTH',  hint: '🦷', urdu: 'دانت' },
+  ]
+};
+
+const CAT_LABELS = { animals: '🐾 Animals', fruits: '🍎 Fruits', colors: '🌈 Colors', body: '🧍 Body Parts' };
+
+let words       = [];
+let wordIdx     = 0;
+let currentWord = '';
+let typed       = [];
+let errors      = 0;
+let totalScore  = 0;
+let category    = '';
+let hintsUsed   = 0;
+let tileEls     = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function goBack() {
+  if (document.getElementById('game-screen').style.display === 'flex') {
+    if (confirm('Leave the game? Your progress will be lost.')) {
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('cat-screen').style.display = 'flex';
+    }
+  } else {
+    window.location.href = 'dashboard.html';
+  }
+}
+
+function startGame(cat) {
+  category = cat;
+  words    = shuffle(WORD_SETS[cat]);
+  wordIdx  = 0; errors = 0; totalScore = 0; hintsUsed = 0;
+
+  document.getElementById('cat-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'flex';
+  document.getElementById('wg-cat-label').textContent = CAT_LABELS[cat];
+
+  buildDots();
+  loadWord();
+}
+
+function buildDots() {
+  const c = document.getElementById('wg-dots');
+  c.innerHTML = '';
+  words.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'wg-dot' + (i === 0 ? ' active' : '');
+    c.appendChild(d);
+  });
+}
+
+function updateDots() {
+  document.querySelectorAll('.wg-dot').forEach((d, i) => {
+    d.className = 'wg-dot' + (i < wordIdx ? ' done' : i === wordIdx ? ' active' : '');
+  });
+}
+
+function loadWord() {
+  if (wordIdx >= words.length) { showResult(); return; }
+  const entry = words[wordIdx];
+  currentWord = entry.word;
+  typed = [];
+
+  document.getElementById('wg-hint').textContent  = entry.hint;
+  document.getElementById('wg-urdu').textContent  = entry.urdu;
+  document.getElementById('wg-feedback').textContent = '';
+  document.getElementById('wg-feedback').className = 'wg-feedback';
+  updateDots();
+
+  /* Animate card in */
+  const card = document.getElementById('word-card');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'slide-in-up 0.35s ease both';
+
+  buildAnswerBoxes();
+  buildTiles();
+}
+
+function buildAnswerBoxes() {
+  const row = document.getElementById('answer-row');
+  row.innerHTML = '';
+  for (let i = 0; i < currentWord.length; i++) {
+    const box = document.createElement('div');
+    box.className = 'answer-box';
+    box.id = `abox-${i}`;
+    box.addEventListener('click', () => removeLastLetter(i));
+    row.appendChild(box);
+  }
+}
+
+function buildTiles() {
+  const scrambled = shuffle(currentWord.split(''));
+  const cont = document.getElementById('letter-tiles');
+  cont.innerHTML = '';
+  tileEls = [];
+  scrambled.forEach((letter, i) => {
+    const tile = document.createElement('div');
+    tile.className = 'letter-tile';
+    tile.textContent = letter;
+    tile.dataset.idx = i;
+    tile.dataset.letter = letter;
+    tile.addEventListener('click', () => tapLetter(tile, i));
+    cont.appendChild(tile);
+    tileEls.push(tile);
+  });
+}
+
+function tapLetter(tile, tileIdx) {
+  if (tile.classList.contains('used')) return;
+  if (typed.length >= currentWord.length) return;
+
+  const pos = typed.length;
+  const letter = tile.dataset.letter;
+
+  tile.classList.add('used');
+  typed.push({ letter, tileIdx });
+
+  const box = document.getElementById(`abox-${pos}`);
+  box.textContent = letter;
+  box.classList.add('filled');
+
+  Audio.play('click');
+
+  if (typed.length === currentWord.length) {
+    setTimeout(checkWord, 200);
+  }
+}
+
+function removeLastLetter(boxIdx) {
+  if (typed.length === 0) return;
+  const last = typed.length - 1;
+  if (boxIdx !== last) return;
+
+  const { tileIdx } = typed.pop();
+  tileEls[tileIdx].classList.remove('used');
+
+  const box = document.getElementById(`abox-${last}`);
+  box.textContent = '';
+  box.classList.remove('filled', 'correct-anim', 'wrong-anim');
+}
+
+function checkWord() {
+  const answer = typed.map(t => t.letter).join('');
+  const fb = document.getElementById('wg-feedback');
+
+  if (answer === currentWord) {
+    /* Correct */
+    for (let i = 0; i < currentWord.length; i++) {
+      document.getElementById(`abox-${i}`).className = 'answer-box correct-anim';
+    }
+    fb.textContent = '✅ Excellent! Correct!';
+    fb.className = 'wg-feedback correct';
+    Audio.play('correct');
+    totalScore += Math.max(10 - errors * 2, 3);
+    document.getElementById('wg-score').textContent = totalScore;
+
+    setTimeout(() => {
+      wordIdx++;
+      loadWord();
+    }, 900);
+  } else {
+    /* Wrong */
+    errors++;
+    for (let i = 0; i < currentWord.length; i++) {
+      document.getElementById(`abox-${i}`).className = 'answer-box wrong-anim';
+    }
+    fb.textContent = "❌ Try again! Tap the boxes to remove letters.";
+    fb.className = 'wg-feedback wrong';
+    Audio.play('wrong');
+
+    setTimeout(() => {
+      typed = [];
+      tileEls.forEach(t => t.classList.remove('used'));
+      for (let i = 0; i < currentWord.length; i++) {
+        const box = document.getElementById(`abox-${i}`);
+        box.textContent = '';
+        box.className = 'answer-box';
+      }
+      fb.textContent = '';
+    }, 1200);
+  }
+}
+
+function showResult() {
+  const solved = words.length;
+  const stars  = errors <= 2 ? 3 : errors <= 6 ? 2 : 1;
+  const mascot = stars === 3 ? '🏆' : stars === 2 ? '⭐' : '😊';
+  const title  = stars === 3 ? 'Perfect! Outstanding!' : stars === 2 ? 'Excellent! Well done!' : 'Good effort! Keep practicing!';
+
+  document.getElementById('wg-res-mascot').textContent = mascot;
+  document.getElementById('wg-res-title').textContent  = title;
+  document.getElementById('wg-res-stars').textContent  =
+    Array.from({ length: 3 }, (_, i) => i < stars ? '⭐' : '☆').join('');
+  document.getElementById('wg-res-detail').textContent =
+    `${solved} words solved! Score: ${totalScore} pts`;
+
+  document.getElementById('result-screen').classList.add('show');
+  Audio.play('win');
+  launchConfetti(stars === 3 ? 60 : 35);
+
+  if (Progress.data) {
+    Progress.data.miniGamesPlayed = (Progress.data.miniGamesPlayed || 0) + 1;
+    Progress.addStars && Progress.addStars(totalScore);
+    Progress.save();
+  }
+}
+
+function playAgain() {
+  document.getElementById('result-screen').classList.remove('show');
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('cat-screen').style.display = 'flex';
+}
+
+document.getElementById('btn-hint-wg').addEventListener('click', () => {
+  if (typed.length >= currentWord.length) return;
+  const pos = typed.length;
+  const correctLetter = currentWord[pos];
+  /* Find an unused tile with this letter */
+  const tile = tileEls.find(t =>
+    !t.classList.contains('used') && t.dataset.letter === correctLetter
+  );
+  if (tile) {
+    hintsUsed++;
+    tile.click();
+  }
+});
+
+function launchConfetti(count) {
+  const colors = ['#FFD54F','#F06292','#66BB6A','#4FC3F7','#FF9800','#CE93D8','#fff'];
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `
+        left:${Math.random()*100}vw; top:-20px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        width:${8+Math.random()*10}px; height:${8+Math.random()*10}px;
+        border-radius:${Math.random()>.5?'50%':'2px'};
+        animation-duration:${1.5+Math.random()*2}s;
+      `;
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }, i * 30);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  Progress.load();
+  if (!Progress.hasProfile()) { window.location.replace('../index.html'); return; }
+  Audio.init(Progress.data.settings);
+});
+</script>
+</body>
+</html>

@@ -108,16 +108,16 @@ function flipCard(cardEl, emoji, id) {
 function showResult() {
   const stars  = calcStars(moves);
   const mascot = stars === 3 ? '🏆' : stars === 2 ? '⭐' : '😊';
-  const title  = stars === 3 ? 'Perfect! Zabardast! 🎊'
-               : stars === 2 ? 'Wah! Acha kiya! 🌟'
-               : 'Kar liya! Shabaash! 💪';
+  const title  = stars === 3 ? 'Perfect! Outstanding! 🎊'
+               : stars === 2 ? 'Excellent! Well Done! 🌟'
+               : 'Completed! Great effort! 💪';
 
   document.getElementById('res-mascot').textContent = mascot;
   document.getElementById('res-title').textContent  = title;
   document.getElementById('res-stars').textContent  =
     Array.from({ length: 3 }, (_, i) => i < stars ? '⭐' : '☆').join('');
   document.getElementById('res-detail').textContent =
-    `${moves} moves mein ${matched}/8 matches!`;
+    `${matched}/8 pairs found in ${moves} moves!`;
 
   document.getElementById('game-result').classList.add('show');
   Audio.play('win');
@@ -150,7 +150,7 @@ function launchConfetti(count) {
 }
 
 function confirmExit() {
-  if (matched === 8 || moves === 0 || confirm('Game chord dein?')) {
+  if (matched === 8 || moves === 0 || confirm('Leave the game?')) {
     window.location.href = returnUrl || 'dashboard.html';
   }
 }

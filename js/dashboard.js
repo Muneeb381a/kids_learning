@@ -4,20 +4,20 @@
 
 function greetingText(name) {
   const h = new Date().getHours();
-  if (h < 5)  return `${name}, itni raat ko seekhna! 🌙 Wah!`;
-  if (h < 12) return `Subah Bakhair, ${name}! ☀️ Aao seekhte hain!`;
-  if (h < 17) return `Salam ${name}! 🌤️ Aaj kya seekhain?`;
-  if (h < 20) return `Sham Mubarak, ${name}! 🌇 Kuch naya seekhain?`;
-  return `Raat Mubarak, ${name}! 🌙 Kal bhi aana!`;
+  if (h < 5)  return `${name}, studying so late! 🌙 Amazing!`;
+  if (h < 12) return `Good Morning, ${name}! ☀️ Let's learn today!`;
+  if (h < 17) return `Hello ${name}! 🌤️ What shall we learn today?`;
+  if (h < 20) return `Good Evening, ${name}! 🌇 Time to learn something new!`;
+  return `Good Night, ${name}! 🌙 See you tomorrow!`;
 }
 
 function streakMessage(n) {
-  if (n === 0) return 'Aaj pehla din! Seekhna shuru karo! 📚';
-  if (n === 1) return 'Pehla din! Kal bhi aana, streak barhegi! 🔥';
-  if (n < 5)   return `${n} din! Aise hi chaltay raho! 💪`;
-  if (n < 14)  return `${n} roz! Tum star ho! 🌟`;
-  if (n < 30)  return `${n} roz! Zabardast dedication! 🏆`;
-  return `${n} roz! Tum LEGEND ho! 👑`;
+  if (n === 0) return 'First day! Start your learning journey! 📚';
+  if (n === 1) return 'Day 1 done! Come back tomorrow! 🔥';
+  if (n < 5)   return `${n} days! Keep it going! 💪`;
+  if (n < 14)  return `${n} days! You are a star! 🌟`;
+  if (n < 30)  return `${n} days! Brilliant dedication! 🏆`;
+  return `${n} days! You are a LEGEND! 👑`;
 }
 
 function setProgress(subject, completed) {
@@ -70,7 +70,7 @@ function initSettings(data) {
   });
 
   btnReset.addEventListener('click', () => {
-    if (confirm('Sach mein reset karna hai? Sab progress delete ho jaigi! ⚠️')) {
+    if (confirm('Are you sure? All progress will be deleted! ⚠️')) {
       localStorage.clear();
       window.location.replace('../index.html');
     }
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const streak = data.streak.current || 0;
   document.getElementById('streak-count').textContent = streak;
   document.getElementById('streak-title').textContent =
-    streak === 0 ? 'Aaj pehla din!' : `${streak} Roz ka Silsila! 🔥`;
+    streak === 0 ? 'First Day! Start now!' : `${streak} Day Streak! 🔥`;
   document.getElementById('streak-desc').textContent = streakMessage(streak);
 
   /* Greeting */

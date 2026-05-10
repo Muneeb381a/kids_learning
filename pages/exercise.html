@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Sikho Star — Exercise Time</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤸</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    body { background: linear-gradient(160deg, #004D40 0%, #00695C 40%, #26A69A 100%); min-height: 100vh; }
+    .ex-page { min-height: 100vh; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto; }
+
+    /* HEADER */
+    .ex-header {
+      display: flex; align-items: center; gap: 12px; padding: 16px 20px; color: white;
+    }
+    .ex-header-title { font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: white; flex: 1; }
+    .ex-xp-pill { background: rgba(255,255,255,0.2); border-radius: 14px; padding: 6px 14px; font-family: var(--font-heading); font-size: 16px; font-weight: 700; color: white; }
+
+    /* EXERCISE PROGRESS STRIP */
+    .ex-strip { display: flex; gap: 6px; padding: 0 20px 12px; }
+    .ex-pip { flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.2); transition: background 0.4s; }
+    .ex-pip.done   { background: #FFD54F; }
+    .ex-pip.active { background: white; }
+
+    /* MAIN CARD */
+    .ex-card {
+      margin: 0 16px 12px; background: white; border-radius: 28px;
+      padding: 28px 20px 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      animation: slide-in-up 0.4s ease both;
+    }
+
+    .ex-name { font-family: var(--font-heading); font-size: 24px; font-weight: 700; color: var(--text-dark); text-align: center; }
+    .ex-instruction { font-size: 14px; color: var(--text-medium); text-align: center; line-height: 1.5; max-width: 280px; }
+
+    /* Stick figure canvas */
+    .figure-area {
+      position: relative; width: 180px; height: 200px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* --- STICK FIGURE SVG ANIMATIONS --- */
+
+    /* Jumping Jacks */
+    @keyframes jj-body  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+    @keyframes jj-arm-l { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-120deg)} }
+    @keyframes jj-arm-r { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(120deg)} }
+    @keyframes jj-leg-l { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-28deg)} }
+    @keyframes jj-leg-r { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(28deg)} }
+
+    /* Arm Circles */
+    @keyframes arc-arm-l { 0%{transform:rotate(0deg)} 100%{transform:rotate(-360deg)} }
+    @keyframes arc-arm-r { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+
+    /* Touch Toes */
+    @keyframes toe-upper { 0%,40%,100%{transform:rotate(0deg)} 60%,90%{transform:rotate(55deg)} }
+    @keyframes toe-arm-l { 0%,40%,100%{transform:rotate(0deg)} 60%,90%{transform:rotate(60deg)} }
+    @keyframes toe-arm-r { 0%,40%,100%{transform:rotate(0deg)} 60%,90%{transform:rotate(-60deg)} }
+
+    /* March in Place */
+    @keyframes march-l { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-45deg)} }
+    @keyframes march-r { 0%,100%{transform:rotate(-45deg)} 50%{transform:rotate(0deg)} }
+    @keyframes march-arm-l { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(30deg)} }
+    @keyframes march-arm-r { 0%,100%{transform:rotate(30deg)} 50%{transform:rotate(0deg)} }
+
+    /* Star Jumps */
+    @keyframes star-body { 0%,100%{transform:translateY(0) scale(1)} 40%{transform:translateY(-20px) scale(1.05)} }
+    @keyframes star-arm-l { 0%,100%{transform:rotate(0deg)} 40%{transform:rotate(-150deg)} }
+    @keyframes star-arm-r { 0%,100%{transform:rotate(0deg)} 40%{transform:rotate(150deg)} }
+    @keyframes star-leg-l { 0%,100%{transform:rotate(0deg)} 40%{transform:rotate(-35deg)} }
+    @keyframes star-leg-r { 0%,100%{transform:rotate(0deg)} 40%{transform:rotate(35deg)} }
+
+    /* Breathing */
+    @keyframes breathe-body { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(1.06)} }
+    @keyframes breathe-arms { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-20deg)} }
+
+    /* Squat */
+    @keyframes squat-body { 0%,100%{transform:translateY(0)} 50%{transform:translateY(20px) scaleY(0.85)} }
+    @keyframes squat-leg-l { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-15deg)} }
+    @keyframes squat-leg-r { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(15deg)} }
+
+    /* Neck rolls */
+    @keyframes neck-roll { 0%{transform:rotate(0deg)} 25%{transform:rotate(-25deg)} 75%{transform:rotate(25deg)} 100%{transform:rotate(0deg)} }
+
+    .fig-svg { overflow: visible; }
+
+    /* Timer ring */
+    .timer-ring-wrap { display: flex; align-items: center; justify-content: center; }
+    .ring-svg { width: 110px; height: 110px; transform: rotate(-90deg); }
+    .ring-bg   { fill: none; stroke: #E0E0E0; stroke-width: 8; }
+    .ring-fill { fill: none; stroke: #26A69A; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+    .ring-label {
+      position: absolute; font-family: var(--font-heading); font-size: 28px;
+      font-weight: 700; color: var(--text-dark); text-align: center; line-height: 1;
+    }
+    .ring-unit { font-size: 13px; color: var(--text-medium); display: block; margin-top: 2px; }
+
+    /* Counter */
+    .ex-counter {
+      font-family: var(--font-heading); font-size: 42px; font-weight: 700;
+      color: var(--text-dark); text-align: center; line-height: 1;
+    }
+    .ex-counter small { font-size: 16px; color: var(--text-medium); display: block; margin-top: 4px; font-weight: 600; }
+
+    /* Controls */
+    .ex-controls { display: flex; gap: 12px; padding: 0 16px 20px; }
+    .btn-start-ex  { flex: 2; background: linear-gradient(135deg,#26A69A,#00796B); color: white; border: none; border-radius: 18px; padding: 16px; font-family: var(--font-heading); font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 18px rgba(0,150,136,0.4); transition: transform 0.15s; }
+    .btn-start-ex:active { transform: scale(0.97); }
+    .btn-skip-ex   { flex: 1; background: rgba(255,255,255,0.18); color: white; border: 2px solid rgba(255,255,255,0.35); border-radius: 18px; padding: 16px; font-family: var(--font-heading); font-size: 16px; font-weight: 700; cursor: pointer; }
+
+    /* Roomi tip */
+    .roomi-tip {
+      margin: 0 16px 16px; background: rgba(255,255,255,0.15); border-radius: 16px;
+      padding: 12px 16px; font-family: var(--font-heading); font-size: 14px;
+      color: rgba(255,255,255,0.95); font-weight: 600; text-align: center;
+    }
+
+    /* CELEBRATION SCREEN */
+    #celebrate-screen {
+      position: fixed; inset: 0; z-index: 400;
+      background: linear-gradient(135deg,#004D40,#00695C);
+      display: none; flex-direction: column; align-items: center;
+      justify-content: center; gap: 20px; padding: 32px; text-align: center;
+    }
+    #celebrate-screen.show { display: flex; }
+    .cel-mascot { font-size: 96px; animation: bounce-in 0.7s ease both; }
+    .cel-title { font-family: var(--font-heading); font-size: 36px; font-weight: 700; color: #FFD54F; }
+    .cel-sub { font-family: var(--font-heading); font-size: 20px; color: rgba(255,255,255,0.9); }
+    .cel-stars { font-size: 52px; letter-spacing: 10px; animation: star-pop 0.5s 0.4s both; }
+    .cel-xp { font-family: var(--font-heading); font-size: 24px; font-weight: 700; color: #FFD54F; }
+
+    .confetti-piece { position: fixed; pointer-events: none; animation: confetti-fall 2s ease-in forwards; }
+
+    /* Pause indicator */
+    .paused-overlay {
+      position: absolute; inset: 0; background: rgba(255,255,255,0.92);
+      border-radius: 28px; display: none; align-items: center; justify-content: center;
+      font-family: var(--font-heading); font-size: 28px; font-weight: 700; color: var(--text-dark);
+    }
+    .paused-overlay.show { display: flex; }
+  </style>
+</head>
+<body>
+<div class="ex-page fade-in">
+
+  <!-- HEADER -->
+  <div class="ex-header">
+    <button class="back-btn" style="color:white;" onclick="window.location.href='dashboard.html'">←</button>
+    <div class="ex-header-title">🤸 Exercise Time!</div>
+    <div class="ex-xp-pill">⭐ <span id="ex-xp">0</span> pts</div>
+  </div>
+
+  <!-- PROGRESS PIPS -->
+  <div class="ex-strip" id="ex-strip"></div>
+
+  <!-- EXERCISE CARD -->
+  <div class="ex-card" id="ex-card">
+    <div class="ex-name" id="ex-name">Jumping Jacks</div>
+
+    <!-- Animated stick figure -->
+    <div class="figure-area">
+      <svg class="fig-svg" id="fig-svg" viewBox="0 0 120 170" width="160" height="190">
+        <!-- Head -->
+        <circle id="f-head" cx="60" cy="22" r="16" fill="#FFCCBC" stroke="#FF8A65" stroke-width="2"/>
+        <circle cx="54" cy="20" r="3" fill="#37474F"/>
+        <circle cx="66" cy="20" r="3" fill="#37474F"/>
+        <path id="f-mouth" d="M 53 27 Q 60 33 67 27" stroke="#BF360C" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="48" cy="27" rx="5" ry="3.5" fill="#F48FB1" opacity="0.35"/>
+        <ellipse cx="72" cy="27" rx="5" ry="3.5" fill="#F48FB1" opacity="0.35"/>
+
+        <!-- Whole body group (for bounce animations) -->
+        <g id="f-body-g" style="transform-box:fill-box; transform-origin:60px 60px;">
+          <!-- Neck -->
+          <line x1="60" y1="38" x2="60" y2="48" stroke="#FFAB91" stroke-width="8" stroke-linecap="round"/>
+          <!-- Upper body (for bend) -->
+          <g id="f-upper" style="transform-box:fill-box; transform-origin:60px 48px;">
+            <!-- Torso -->
+            <line x1="60" y1="48" x2="60" y2="100" stroke="#26A69A" stroke-width="9" stroke-linecap="round"/>
+
+            <!-- Left arm -->
+            <g id="f-arm-l" style="transform-box:fill-box; transform-origin:60px 60px;">
+              <line x1="60" y1="60" x2="30" y2="88" stroke="#26A69A" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="30" cy="88" r="6" fill="#FFCCBC" stroke="#FF8A65" stroke-width="1.5"/>
+            </g>
+            <!-- Right arm -->
+            <g id="f-arm-r" style="transform-box:fill-box; transform-origin:60px 60px;">
+              <line x1="60" y1="60" x2="90" y2="88" stroke="#26A69A" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="90" cy="88" r="6" fill="#FFCCBC" stroke="#FF8A65" stroke-width="1.5"/>
+            </g>
+          </g>
+
+          <!-- Left leg -->
+          <g id="f-leg-l" style="transform-box:fill-box; transform-origin:60px 100px;">
+            <line x1="60" y1="100" x2="38" y2="148" stroke="#37474F" stroke-width="7" stroke-linecap="round"/>
+            <ellipse cx="36" cy="152" rx="11" ry="6" fill="#212121"/>
+          </g>
+          <!-- Right leg -->
+          <g id="f-leg-r" style="transform-box:fill-box; transform-origin:60px 100px;">
+            <line x1="60" y1="100" x2="82" y2="148" stroke="#37474F" stroke-width="7" stroke-linecap="round"/>
+            <ellipse cx="84" cy="152" rx="11" ry="6" fill="#212121"/>
+          </g>
+        </g>
+      </svg>
+      <div class="paused-overlay" id="paused-overlay">⏸ Paused</div>
+    </div>
+
+    <!-- Timer ring -->
+    <div class="timer-ring-wrap" style="position:relative;">
+      <svg class="ring-svg" viewBox="0 0 100 100">
+        <circle class="ring-bg" cx="50" cy="50" r="42"/>
+        <circle class="ring-fill" id="ring-fill" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="0"/>
+      </svg>
+      <div class="ring-label">
+        <span id="ring-time">30</span>
+        <span class="ring-unit">sec</span>
+      </div>
+    </div>
+
+    <!-- Instruction -->
+    <div class="ex-instruction" id="ex-instruction">Jump up, spreading your arms and legs wide — then bring them back together!</div>
+
+    <div class="paused-overlay" id="paused-overlay2" style="position:static;display:none;background:transparent;font-size:18px;color:var(--text-medium);">Tap Start to begin!</div>
+  </div>
+
+  <!-- ROOMI TIP -->
+  <div class="roomi-tip" id="roomi-tip">🤖 "Exercise makes your brain stronger too! Let's go!" </div>
+
+  <!-- CONTROLS -->
+  <div class="ex-controls">
+    <button class="btn-start-ex" id="btn-start">▶ Start!</button>
+    <button class="btn-skip-ex" id="btn-skip">Skip →</button>
+  </div>
+
+</div>
+
+<!-- CELEBRATION SCREEN -->
+<div id="celebrate-screen">
+  <span class="cel-mascot">🏆</span>
+  <div class="cel-title">Amazing Work!</div>
+  <div class="cel-stars">⭐⭐⭐</div>
+  <div class="cel-sub">You completed all exercises!</div>
+  <div class="cel-xp" id="cel-xp-val">+50 pts earned!</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px;">
+    <button class="btn btn-primary" onclick="restartExercises()">Go Again 🔄</button>
+    <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">Go Home 🏠</button>
+  </div>
+</div>
+
+<script src="../js/progress.js"></script>
+<script src="../js/audio.js"></script>
+<script>
+const EXERCISES = [
+  {
+    name: 'Jumping Jacks',
+    duration: 25,
+    instruction: 'Jump up, spreading your arms and legs wide — then bring them back together!',
+    roomi: '🤖 "Jumping jacks make your heart strong! Jump with energy!"',
+    color: '#26A69A',
+    anim: {
+      body: 'jj-body 0.65s ease-in-out infinite',
+      armL: 'jj-arm-l 0.65s ease-in-out infinite',
+      armR: 'jj-arm-r 0.65s ease-in-out infinite',
+      legL: 'jj-leg-l 0.65s ease-in-out infinite',
+      legR: 'jj-leg-r 0.65s ease-in-out infinite',
+      upper: 'none', mouth: 'none'
+    }
+  },
+  {
+    name: 'Arm Circles',
+    duration: 20,
+    instruction: 'Stretch your arms out wide and make big circles — forward then backward!',
+    roomi: '🤖 "Arm circles loosen your shoulders. Big circles!"',
+    color: '#5C6BC0',
+    anim: {
+      body: 'none',
+      armL: 'arc-arm-l 1.2s linear infinite',
+      armR: 'arc-arm-r 1.2s linear infinite',
+      legL: 'none', legR: 'none', upper: 'none', mouth: 'none'
+    }
+  },
+  {
+    name: 'Touch Your Toes',
+    duration: 20,
+    instruction: 'Stand tall, then slowly bend down and try to touch your toes. Then back up!',
+    roomi: '🤖 "Stretching keeps you flexible! Slow and steady wins!"',
+    color: '#EF5350',
+    anim: {
+      body: 'none',
+      upper: 'toe-upper 2.5s ease-in-out infinite',
+      armL: 'toe-arm-l 2.5s ease-in-out infinite',
+      armR: 'toe-arm-r 2.5s ease-in-out infinite',
+      legL: 'none', legR: 'none', mouth: 'none'
+    }
+  },
+  {
+    name: 'March in Place',
+    duration: 25,
+    instruction: 'Lift your knees high as you march in place — swing your arms too!',
+    roomi: '🤖 "Marching keeps your legs strong! Lift those knees high!"',
+    color: '#FF9800',
+    anim: {
+      body: 'none',
+      armL: 'march-arm-l 0.7s ease-in-out infinite',
+      armR: 'march-arm-r 0.7s ease-in-out infinite',
+      legL: 'march-l 0.7s ease-in-out infinite',
+      legR: 'march-r 0.7s ease-in-out infinite',
+      upper: 'none', mouth: 'none'
+    }
+  },
+  {
+    name: 'Star Jumps',
+    duration: 20,
+    instruction: 'Jump as high as you can, spreading arms and legs into a star shape!',
+    roomi: '🤖 "Star jumps make you feel like a superhero! JUMP!"',
+    color: '#9C27B0',
+    anim: {
+      body: 'star-body 0.8s ease-in-out infinite',
+      armL: 'star-arm-l 0.8s ease-in-out infinite',
+      armR: 'star-arm-r 0.8s ease-in-out infinite',
+      legL: 'star-leg-l 0.8s ease-in-out infinite',
+      legR: 'star-leg-r 0.8s ease-in-out infinite',
+      upper: 'none', mouth: 'none'
+    }
+  },
+  {
+    name: 'Deep Breathing',
+    duration: 20,
+    instruction: 'Breathe in slowly for 4 counts, hold for 2, breathe out for 4. Relax!',
+    roomi: '🤖 "Deep breaths calm your mind and fill your lungs with fresh air!"',
+    color: '#00BCD4',
+    anim: {
+      body: 'breathe-body 3s ease-in-out infinite',
+      armL: 'breathe-arms 3s ease-in-out infinite',
+      armR: 'breathe-arms 3s ease-in-out infinite reverse',
+      legL: 'none', legR: 'none', upper: 'none', mouth: 'none'
+    }
+  }
+];
+
+let exIdx   = 0;
+let timer   = null;
+let timeLeft = 0;
+let running  = false;
+let earnedXP = 0;
+const CIRCUMFERENCE = 264;
+
+function buildPips() {
+  const strip = document.getElementById('ex-strip');
+  strip.innerHTML = '';
+  EXERCISES.forEach((_, i) => {
+    const p = document.createElement('div');
+    p.className = 'ex-pip' + (i === 0 ? ' active' : '');
+    strip.appendChild(p);
+  });
+}
+
+function updatePips() {
+  document.querySelectorAll('.ex-pip').forEach((p, i) => {
+    p.className = 'ex-pip' + (i < exIdx ? ' done' : i === exIdx ? ' active' : '');
+  });
+}
+
+function applyAnim(ex) {
+  const bodyG  = document.getElementById('f-body-g');
+  const upper  = document.getElementById('f-upper');
+  const armL   = document.getElementById('f-arm-l');
+  const armR   = document.getElementById('f-arm-r');
+  const legL   = document.getElementById('f-leg-l');
+  const legR   = document.getElementById('f-leg-r');
+
+  bodyG.style.animation  = ex.anim.body;
+  upper.style.animation  = ex.anim.upper || 'none';
+  armL.style.animation   = ex.anim.armL;
+  armR.style.animation   = ex.anim.armR;
+  legL.style.animation   = ex.anim.legL;
+  legR.style.animation   = ex.anim.legR;
+
+  document.querySelector('.ring-fill').style.stroke = ex.color;
+  document.getElementById('f-head').setAttribute('fill', '#FFCCBC');
+}
+
+function stopAnim() {
+  ['f-body-g','f-upper','f-arm-l','f-arm-r','f-leg-l','f-leg-r'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.animation = 'none';
+  });
+}
+
+function loadExercise() {
+  if (exIdx >= EXERCISES.length) { celebrate(); return; }
+  const ex = EXERCISES[exIdx];
+
+  running  = false;
+  timeLeft = ex.duration;
+  clearInterval(timer);
+
+  const card = document.getElementById('ex-card');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'slide-in-up 0.4s ease both';
+
+  document.getElementById('ex-name').textContent        = ex.name;
+  document.getElementById('ex-instruction').textContent = ex.instruction;
+  document.getElementById('roomi-tip').textContent      = ex.roomi;
+  document.getElementById('ring-time').textContent      = ex.duration;
+  document.getElementById('ring-fill').style.strokeDashoffset = 0;
+  document.getElementById('btn-start').textContent = '▶ Start!';
+  document.getElementById('paused-overlay2').style.display = 'block';
+  document.getElementById('paused-overlay').classList.remove('show');
+
+  stopAnim();
+  updatePips();
+}
+
+function startTimer() {
+  const ex = EXERCISES[exIdx];
+  running  = true;
+  document.getElementById('btn-start').textContent = '⏸ Pause';
+  document.getElementById('paused-overlay2').style.display = 'none';
+  document.getElementById('paused-overlay').classList.remove('show');
+  applyAnim(ex);
+
+  timer = setInterval(() => {
+    timeLeft--;
+    document.getElementById('ring-time').textContent = timeLeft;
+    const progress = (ex.duration - timeLeft) / ex.duration;
+    document.getElementById('ring-fill').style.strokeDashoffset =
+      CIRCUMFERENCE * (1 - progress);
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      running = false;
+      Audio.play('correct');
+      earnedXP += 10;
+      document.getElementById('ex-xp').textContent = earnedXP;
+      stopAnim();
+      setTimeout(() => {
+        exIdx++;
+        loadExercise();
+      }, 600);
+    }
+  }, 1000);
+}
+
+function pauseTimer() {
+  running = false;
+  clearInterval(timer);
+  document.getElementById('btn-start').textContent = '▶ Resume';
+  document.getElementById('paused-overlay').classList.add('show');
+  stopAnim();
+}
+
+document.getElementById('btn-start').addEventListener('click', () => {
+  if (running) {
+    pauseTimer();
+  } else {
+    startTimer();
+  }
+});
+
+document.getElementById('btn-skip').addEventListener('click', () => {
+  clearInterval(timer);
+  running = false;
+  stopAnim();
+  exIdx++;
+  loadExercise();
+});
+
+function celebrate() {
+  launchConfetti(70);
+  Audio.play('win');
+  document.getElementById('cel-xp-val').textContent = `+${earnedXP} points earned!`;
+  document.getElementById('celebrate-screen').classList.add('show');
+
+  if (Progress.data) {
+    Progress.data.totalStars = (Progress.data.totalStars || 0) + Math.floor(earnedXP / 10);
+    Progress.save();
+  }
+}
+
+function restartExercises() {
+  exIdx = 0; earnedXP = 0; running = false;
+  clearInterval(timer);
+  document.getElementById('celebrate-screen').classList.remove('show');
+  document.getElementById('ex-xp').textContent = 0;
+  buildPips();
+  loadExercise();
+}
+
+function launchConfetti(count) {
+  const colors = ['#FFD54F','#F06292','#66BB6A','#4FC3F7','#FF9800','#CE93D8','#fff'];
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `
+        left:${Math.random()*100}vw; top:-20px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        width:${8+Math.random()*10}px; height:${8+Math.random()*10}px;
+        border-radius:${Math.random()>.5?'50%':'2px'};
+        animation-duration:${1.5+Math.random()*2}s;
+      `;
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }, i * 25);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  Progress.load();
+  if (!Progress.hasProfile()) { window.location.replace('../index.html'); return; }
+  Audio.init(Progress.data.settings);
+  buildPips();
+  loadExercise();
+});
+</script>
+</body>
+</html>

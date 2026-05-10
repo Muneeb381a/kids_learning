@@ -14,8 +14,8 @@ const SUBJECT_COLORS = {
   urdu:    { fill: '#AB47BC', bg: 'linear-gradient(135deg,#AB47BC,#7B1FA2)' }
 };
 
-const CORRECT_MSGS = ['Shabaash! 🌟', 'Wah! Bilkul sahi! ⭐', 'Kya baat! 🎉', 'Perfect! 💯', 'Zabardast! 🏆'];
-const WRONG_MSGS   = ['Koi baat nahi! 💪', 'Dobara sochein! 🤔', 'Galat — try karo! 😊', 'Himmat rakh! 🌟'];
+const CORRECT_MSGS = ['Excellent! 🌟', 'Amazing! Well done! ⭐', 'Perfect! 🎉', 'Brilliant! 💯', 'Outstanding! 🏆'];
+const WRONG_MSGS   = ["Don't worry! 💪", 'Think again! 🤔', 'Try once more! 😊', 'You can do it! 🌟'];
 
 let questions    = [];
 let current      = 0;
@@ -31,7 +31,7 @@ function renderQuestion() {
   const q     = questions[current];
   const total = questions.length;
 
-  document.getElementById('q-counter').textContent = `Sawaal ${current + 1} / ${total}`;
+  document.getElementById('q-counter').textContent = `Question ${current + 1} / ${total}`;
   document.getElementById('quiz-progress').style.width = ((current / total) * 100) + '%';
 
   const qText = document.getElementById('q-text');
@@ -87,9 +87,9 @@ function handleAnswer(chosen, correct) {
   nextBtn.classList.remove('hidden');
 
   if (current + 1 >= questions.length) {
-    nextBtn.textContent = '🏆 Jawab Dekh!';
+    nextBtn.textContent = '🏆 See Results!';
   } else {
-    nextBtn.textContent = 'Agla Sawaal ➡️';
+    nextBtn.textContent = 'Next Question ➡️';
   }
 }
 
@@ -126,17 +126,17 @@ function showResult() {
   const overlay = document.getElementById('result-overlay');
 
   let mascot = '🤖', title = '';
-  if (pct === 100) { mascot = '🏆'; title = 'Perfect! Zabardast! 🎊'; }
-  else if (pct >= 80) { mascot = '⭐'; title = 'Wah! Shabaash! 🌟'; }
-  else if (pct >= 60) { mascot = '😊'; title = 'Acha kiya! 👍'; }
-  else { mascot = '💪'; title = 'Koi baat nahi! Dobara karo!'; }
+  if (pct === 100) { mascot = '🏆'; title = 'Perfect Score! Outstanding! 🎊'; }
+  else if (pct >= 80) { mascot = '⭐'; title = 'Excellent! Well Done! 🌟'; }
+  else if (pct >= 60) { mascot = '😊'; title = 'Good Job! Keep it up! 👍'; }
+  else { mascot = '💪'; title = "Don't worry! Try again!"; }
 
   document.getElementById('res-mascot').textContent = mascot;
   document.getElementById('res-title').textContent  = title;
   document.getElementById('res-stars').textContent  =
     Array.from({ length: 3 }, (_, i) => i < stars ? '⭐' : '☆').join('');
   document.getElementById('res-score').textContent  =
-    `${score}/${total} sahi jawab! (${pct}%)`;
+    `${score}/${total} correct answers! (${pct}%)`;
 
   overlay.classList.add('show');
   Audio.play(pct === 100 ? 'win' : 'levelup');
@@ -178,8 +178,8 @@ function launchConfetti(count = 40) {
 
 /* ---- Exit confirmation ---- */
 function confirmExit() {
-  if (current === 0 || answered || confirm('Level chord dein? Progress save nahi hogi!')) {
-    history.back();
+  if (current === 0 || confirm('Leave level? Your progress will not be saved!')) {
+    window.location.href = `map.html?subject=${subject}`;
   }
 }
 
