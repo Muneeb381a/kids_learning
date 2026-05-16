@@ -13,11 +13,11 @@ const SCIENCE_DATA = {
       icon: '🧍',
       specialPage: 'body.html',
       questions: [
-        { type: 'mcq', q: 'Hum dekhne ke liye kya use karte hain?', choices: ['Naak', 'Aankh', 'Kaan', 'Muh'], answer: 1 },
-        { type: 'mcq', q: 'Hum sunne ke liye kya use karte hain?', choices: ['Aankh', 'Haath', 'Kaan', 'Pair'], answer: 2 },
-        { type: 'mcq', q: 'Hum chalne ke liye kya use karte hain?', choices: ['Haath', 'Naak', 'Pair', 'Muh'], answer: 2 },
-        { type: 'mcq', q: 'Hum khane ke liye kya use karte hain?', choices: ['Kaan', 'Muh', 'Aankh', 'Naak'], answer: 1 },
-        { type: 'mcq', q: 'Hum sounchne ke liye kya use karte hain?', choices: ['Pair', 'Dil', 'Dimagh', 'Haath'], answer: 2 }
+        { type: 'mcq', q: 'Which body part do we use to see? 👀', choices: ['Nose', 'Eyes', 'Ears', 'Mouth'], answer: 1 },
+        { type: 'mcq', q: 'Which body part do we use to hear sounds? 🎵', choices: ['Eyes', 'Hands', 'Ears', 'Feet'], answer: 2 },
+        { type: 'mcq', q: 'Which body part do we use to walk and run? 🏃', choices: ['Hands', 'Nose', 'Legs', 'Mouth'], answer: 2 },
+        { type: 'mcq', q: 'Which body part do we use to eat food? 😋', choices: ['Ears', 'Mouth', 'Eyes', 'Nose'], answer: 1 },
+        { type: 'mcq', q: 'Which body part do we use to think? 🧠', choices: ['Feet', 'Heart', 'Brain', 'Hands'], answer: 2 }
       ]
     },
     {
@@ -25,11 +25,11 @@ const SCIENCE_DATA = {
       title: 'Animals — Farm, Wild, Pet',
       icon: '🐄',
       questions: [
-        { type: 'mcq', q: 'Kaunsa janwar ghar mein pala jata hai?', choices: ['Sher', 'Billi', 'Hathi', 'Magar'], answer: 1 },
-        { type: 'mcq', q: 'Kaunsa janwar jungle mein rehta hai?', choices: ['Murgi', 'Gaay', 'Sher', 'Billi'], answer: 2 },
-        { type: 'mcq', q: 'Gaay kya deti hai?', choices: ['Andey', 'Doodh', 'Unn', 'Maans'], answer: 1 },
-        { type: 'mcq', q: 'Kaunsa janwar farm mein hota hai?', choices: ['Sher', 'Murgi', 'Hathi', 'Zebrafish'], answer: 1 },
-        { type: 'mcq', q: 'Kutta kis cheez ke liye mashoor hai?', choices: ['Wafadari', 'Doodh dena', 'Udna', 'Ande dena'], answer: 0 }
+        { type: 'mcq', q: 'Which animal is kept as a pet at home? 🏠', choices: ['Lion', 'Cat', 'Elephant', 'Crocodile'], answer: 1 },
+        { type: 'mcq', q: 'Which animal lives in the jungle? 🌿', choices: ['Hen', 'Cow', 'Lion', 'Cat'], answer: 2 },
+        { type: 'mcq', q: 'What does a cow give us? 🐄', choices: ['Eggs', 'Milk', 'Wool', 'Honey'], answer: 1 },
+        { type: 'mcq', q: 'Which animal is found on a farm? 🚜', choices: ['Lion', 'Chicken', 'Elephant', 'Dolphin'], answer: 1 },
+        { type: 'mcq', q: 'What is a dog most famous for? 🐕', choices: ['Being loyal and faithful', 'Giving milk', 'Flying', 'Laying eggs'], answer: 0 }
       ]
     },
     {
@@ -37,11 +37,11 @@ const SCIENCE_DATA = {
       title: 'Birds',
       icon: '🐦',
       questions: [
-        { type: 'mcq', q: 'Kaun sa parinda bol sakta hai?', choices: ['Chirya', 'Tota', 'Kabootar', 'Baaz'], answer: 1 },
-        { type: 'mcq', q: 'Kaun sa parinda nahi ur sakta?', choices: ['Kabootar', 'Tota', 'Penguin', 'Chirya'], answer: 2 },
-        { type: 'mcq', q: 'Chidiya kahan rehti hai?', choices: ['Pani mein', 'Ghar mein', 'Ped par', 'Zameen par'], answer: 2 },
-        { type: 'mcq', q: 'Murgh subah kya karta hai?', choices: ['Sota hai', 'Baang deta hai', 'Urtaa hai', 'Tairta hai'], answer: 1 },
-        { type: 'mcq', q: 'Parindey ande kahan dete hain?', choices: ['Pani mein', 'Ghonsle mein', 'Zameen par', 'Ped ke andar'], answer: 1 }
+        { type: 'mcq', q: 'Which bird can copy our voice and talk? 🦜', choices: ['Sparrow', 'Parrot', 'Pigeon', 'Eagle'], answer: 1 },
+        { type: 'mcq', q: 'Which bird CANNOT fly? 🐧', choices: ['Pigeon', 'Parrot', 'Penguin', 'Sparrow'], answer: 2 },
+        { type: 'mcq', q: 'Where does a sparrow usually live? 🌳', choices: ['In water', 'In a house', 'On a tree', 'Underground'], answer: 2 },
+        { type: 'mcq', q: 'What does a rooster do every morning? 🌅', choices: ['Sleeps', 'Crows loudly', 'Flies away', 'Swims'], answer: 1 },
+        { type: 'mcq', q: 'Where do birds lay their eggs? 🥚', choices: ['In water', 'In their nest', 'On the ground', 'Inside rocks'], answer: 1 }
       ]
     },
     {
@@ -49,11 +49,11 @@ const SCIENCE_DATA = {
       title: 'Fruits',
       icon: '🍎',
       questions: [
-        { type: 'mcq', q: 'Aam kis season mein aata hai?', choices: ['Sardi', 'Garmi', 'Barish', 'Khushki'], answer: 1 },
-        { type: 'mcq', q: 'Kela kaunse rang ka hota hai?', choices: ['Laal', 'Neela', 'Peela', 'Hara'], answer: 2 },
-        { type: 'mcq', q: 'Kaunsa phal khatte (sour) hote hain?', choices: ['Kela', 'Nimbu', 'Aam', 'Angoor'], answer: 1 },
-        { type: 'mcq', q: 'Seb (apple) kis rang ka hota hai?', choices: ['Neela', 'Laal ya Hara', 'Peela', 'Kala'], answer: 1 },
-        { type: 'mcq', q: 'Kaunse phal mein vitamin C zyada hoti hai?', choices: ['Kela', 'Santra', 'Aam', 'Guava'], answer: 1 }
+        { type: 'mcq', q: 'In which season does mango grow? 🥭', choices: ['Winter', 'Summer', 'Rainy', 'Spring'], answer: 1 },
+        { type: 'mcq', q: 'What colour is a banana? 🍌', choices: ['Red', 'Blue', 'Yellow', 'Green'], answer: 2 },
+        { type: 'mcq', q: 'Which fruit tastes sour? 🍋', choices: ['Banana', 'Lemon', 'Mango', 'Grapes'], answer: 1 },
+        { type: 'mcq', q: 'What colour is an apple? 🍎', choices: ['Blue', 'Red or Green', 'Yellow', 'Black'], answer: 1 },
+        { type: 'mcq', q: 'Which fruit is packed with Vitamin C? 🍊', choices: ['Banana', 'Orange', 'Mango', 'Grapes'], answer: 1 }
       ]
     },
     {
@@ -61,11 +61,11 @@ const SCIENCE_DATA = {
       title: 'Vegetables',
       icon: '🥕',
       questions: [
-        { type: 'mcq', q: 'Gajar kaunse rang ki hoti hai?', choices: ['Neeli', 'Narnji', 'Peeli', 'Laal'], answer: 1 },
-        { type: 'mcq', q: 'Aloo zameen ke andar ugta hai ya upar?', choices: ['Upar', 'Andar', 'Pani mein', 'Ped par'], answer: 1 },
-        { type: 'mcq', q: 'Palak khane se kya milta hai?', choices: ['Protein', 'Iron aur Calcium', 'Sugar', 'Fat'], answer: 1 },
-        { type: 'mcq', q: 'Kaun sa sabzi gol hoti hai?', choices: ['Gajar', 'Pyaz', 'Arbi', 'Sab hi gol hain'], answer: 1 },
-        { type: 'mcq', q: 'Tamatar — sabzi hai ya phal?', choices: ['Sirf sabzi', 'Sirf phal', 'Botanically phal, khane mein sabzi', 'Na sabzi na phal'], answer: 2 }
+        { type: 'mcq', q: 'What colour is a carrot? 🥕', choices: ['Blue', 'Orange', 'Yellow', 'Red'], answer: 1 },
+        { type: 'mcq', q: 'Does a potato grow underground or above ground? 🥔', choices: ['Above ground', 'Underground', 'In water', 'On a tree'], answer: 1 },
+        { type: 'mcq', q: 'What does spinach give our body? 💪', choices: ['Protein', 'Iron and Calcium', 'Sugar', 'Fat'], answer: 1 },
+        { type: 'mcq', q: 'Which vegetable is round like a ball? 🧅', choices: ['Carrot', 'Onion', 'Broccoli', 'All of them'], answer: 1 },
+        { type: 'mcq', q: 'Is a tomato a fruit or a vegetable? 🍅', choices: ['Only a vegetable', 'Only a fruit', 'A fruit by science, used as a vegetable in cooking', 'Neither'], answer: 2 }
       ]
     },
     {
@@ -73,11 +73,11 @@ const SCIENCE_DATA = {
       title: 'Plants & Trees',
       icon: '🌱',
       questions: [
-        { type: 'mcq', q: 'Podey barhne ke liye kya chahiye?', choices: ['Sirf pani', 'Sirf dhoop', 'Pani, mitti, dhoop', 'Kuch nahi'], answer: 2 },
-        { type: 'mcq', q: 'Podey oxygen kab banate hain?', choices: ['Raat ko', 'Din mein', 'Hamesha', 'Kabhi nahi'], answer: 1 },
-        { type: 'mcq', q: 'Beej se kya nikalta hai?', choices: ['Phal', 'Patta', 'Poda', 'Phool'], answer: 2 },
-        { type: 'mcq', q: 'Sabse uncha ped kaunsa hai?', choices: ['Aam', 'Neem', 'Sequoia', 'Banana'], answer: 2 },
-        { type: 'mcq', q: 'Phool ka kaam kya hai?', choices: ['Photosynthesis', 'Reproduction / beej banana', 'Pani lena', 'Oxygen lena'], answer: 1 }
+        { type: 'mcq', q: 'What does a plant need to grow healthy? 🌱', choices: ['Only water', 'Only sunlight', 'Water, soil and sunlight', 'Nothing'], answer: 2 },
+        { type: 'mcq', q: 'When do plants make oxygen for us? ☀️', choices: ['At night', 'During the day', 'Always', 'Never'], answer: 1 },
+        { type: 'mcq', q: 'What grows from a seed? 🌰', choices: ['A fruit', 'A leaf', 'A plant', 'A flower'], answer: 2 },
+        { type: 'mcq', q: 'What is the tallest type of tree in the world? 🌲', choices: ['Mango', 'Neem', 'Sequoia', 'Banana'], answer: 2 },
+        { type: 'mcq', q: 'What is the main job of a flower? 🌸', choices: ['Photosynthesis', 'Making seeds (reproduction)', 'Absorbing water', 'Absorbing oxygen'], answer: 1 }
       ]
     },
     {
@@ -85,11 +85,11 @@ const SCIENCE_DATA = {
       title: 'Weather',
       icon: '⛅',
       questions: [
-        { type: 'mcq', q: 'Barish mein hum kya pehnte hain?', choices: ['Sunglasses', 'Raincoat ya Chatri', 'Muffler', 'Nothing'], answer: 1 },
-        { type: 'mcq', q: 'Sardi mein hawa kesi hoti hai?', choices: ['Garam', 'Thandi', 'Normal', 'Nami wali'], answer: 1 },
-        { type: 'mcq', q: 'Bijli kab chamakti hai?', choices: ['Dhoop mein', 'Toofan mein', 'Subah', 'Eid par'], answer: 1 },
-        { type: 'mcq', q: 'Rainbow kab aata hai?', choices: ['Sardi mein', 'Barish ke baad', 'Garmi mein', 'Raat ko'], answer: 1 },
-        { type: 'mcq', q: 'Fog (kohre) mein hum kya mushkil se dekh sakte hain?', choices: ['Rang', 'Dur ki cheezein', 'Paas ki cheezein', 'Kuch bhi nahi'], answer: 1 }
+        { type: 'mcq', q: 'What do we wear or carry in the rain? 🌧️', choices: ['Sunglasses', 'Raincoat or umbrella', 'Scarf', 'Nothing'], answer: 1 },
+        { type: 'mcq', q: 'How does the air feel in winter? ❄️', choices: ['Hot', 'Cold', 'Warm', 'Humid'], answer: 1 },
+        { type: 'mcq', q: 'When does lightning flash in the sky? ⚡', choices: ['On a sunny day', 'During a thunderstorm', 'In the morning', 'On Eid'], answer: 1 },
+        { type: 'mcq', q: 'When does a rainbow usually appear? 🌈', choices: ['In winter', 'After rain', 'In summer', 'At night'], answer: 1 },
+        { type: 'mcq', q: 'What is hard to see clearly in thick fog? 🌫️', choices: ['Colours', 'Things far away', 'Things close to you', 'Nothing'], answer: 1 }
       ]
     },
     {
@@ -97,11 +97,11 @@ const SCIENCE_DATA = {
       title: 'Day & Night',
       icon: '🌙',
       questions: [
-        { type: 'mcq', q: 'Raat ko aasman mein kya chamakta hai?', choices: ['Suraj', 'Chaand aur Taare', 'Dhoop', 'Rainbow'], answer: 1 },
-        { type: 'mcq', q: 'Din mein roshni kahan se aati hai?', choices: ['Chaand se', 'Suraj se', 'Sitaron se', 'Bijli se'], answer: 1 },
-        { type: 'mcq', q: 'Suraj kis taraf se ugta hai?', choices: ['Paschim (West)', 'Mashrik (East)', 'Upar se', 'Neeche se'], answer: 1 },
-        { type: 'mcq', q: 'Ek din mein kitne ghante hote hain?', choices: ['12', '24', '36', '48'], answer: 1 },
-        { type: 'mcq', q: 'Raat aur din mein kya farq hai?', choices: ['Koi farq nahi', 'Din mein roshni, raat mein andhera', 'Raat mein roshni', 'Din mein andhera'], answer: 1 }
+        { type: 'mcq', q: 'What shines and glows in the night sky? 🌙', choices: ['The Sun', 'The Moon and Stars', 'Sunlight', 'Rainbow'], answer: 1 },
+        { type: 'mcq', q: 'Where does daylight come from? ☀️', choices: ['The Moon', 'The Sun', 'The Stars', 'Electricity'], answer: 1 },
+        { type: 'mcq', q: 'From which direction does the Sun rise every morning? 🌅', choices: ['West', 'East', 'Above us', 'Below us'], answer: 1 },
+        { type: 'mcq', q: 'How many hours are there in one full day? 🕐', choices: ['12', '24', '36', '48'], answer: 1 },
+        { type: 'mcq', q: 'What is the difference between day and night? 🤔', choices: ['No difference', 'Day has sunlight, night has darkness', 'Night has sunlight', 'Day has darkness'], answer: 1 }
       ]
     },
     {
@@ -109,11 +109,11 @@ const SCIENCE_DATA = {
       title: 'Planets & Solar System',
       icon: '🪐',
       questions: [
-        { type: 'mcq', q: 'Hamare solar system mein kitne planet hain?', choices: ['7', '8', '9', '10'], answer: 1 },
-        { type: 'mcq', q: 'Suraj ke sabse qareeb kaun sa planet hai?', choices: ['Venus', 'Mercury', 'Earth', 'Mars'], answer: 1 },
-        { type: 'mcq', q: 'Hum kaunse planet par rehte hain?', choices: ['Mars', 'Venus', 'Earth', 'Jupiter'], answer: 2 },
-        { type: 'mcq', q: 'Sabse bara planet kaunsa hai?', choices: ['Saturn', 'Mars', 'Jupiter', 'Neptune'], answer: 2 },
-        { type: 'mcq', q: 'Chaand kya hai?', choices: ['Ek planet', 'Ek sitara', 'Earth ka moon', 'Ek asteroid'], answer: 2 }
+        { type: 'mcq', q: 'How many planets are in our Solar System? 🌌', choices: ['7', '8', '9', '10'], answer: 1 },
+        { type: 'mcq', q: 'Which planet is closest to the Sun? ☀️', choices: ['Venus', 'Mercury', 'Earth', 'Mars'], answer: 1 },
+        { type: 'mcq', q: 'Which planet do we live on? 🌍', choices: ['Mars', 'Venus', 'Earth', 'Jupiter'], answer: 2 },
+        { type: 'mcq', q: 'Which is the biggest planet in our Solar System? 🪐', choices: ['Saturn', 'Mars', 'Jupiter', 'Neptune'], answer: 2 },
+        { type: 'mcq', q: 'What is the Moon? 🌕', choices: ['A planet', 'A star', "Earth's natural satellite", 'An asteroid'], answer: 2 }
       ]
     },
     {
@@ -122,11 +122,11 @@ const SCIENCE_DATA = {
       icon: '🏆',
       isBoss: true,
       questions: [
-        { type: 'mcq', q: 'Hum khushbu kisse sounchte hain?', choices: ['Kaan', 'Aankh', 'Naak', 'Zabaan'], answer: 2 },
-        { type: 'mcq', q: 'Hum mitha kisse mehsoos karte hain?', choices: ['Naak', 'Zabaan', 'Haath', 'Aankh'], answer: 1 },
-        { type: 'mcq', q: 'Hum aawaaz kisse sunteyn hain?', choices: ['Aankh', 'Kaan', 'Naak', 'Haath'], answer: 1 },
-        { type: 'mcq', q: 'Hum cheez ko touch se kya mehsoos karte hain?', choices: ['Khushbu', 'Awaaz', 'Texture aur Temperature', 'Rang'], answer: 2 },
-        { type: 'mcq', q: 'Kitne senses hote hain insaan ko?', choices: ['3', '4', '5', '6'], answer: 2 }
+        { type: 'mcq', q: 'Which body part do we use to smell? 👃', choices: ['Ears', 'Eyes', 'Nose', 'Tongue'], answer: 2 },
+        { type: 'mcq', q: 'Which body part helps us taste sweet food? 😋', choices: ['Nose', 'Tongue', 'Hands', 'Eyes'], answer: 1 },
+        { type: 'mcq', q: 'Which body part do we use to hear sounds? 👂', choices: ['Eyes', 'Ears', 'Nose', 'Hands'], answer: 1 },
+        { type: 'mcq', q: 'What do we feel with our sense of touch? ✋', choices: ['Smell', 'Sound', 'Texture and temperature', 'Colour'], answer: 2 },
+        { type: 'mcq', q: 'How many senses does a human being have? 🤔', choices: ['3', '4', '5', '6'], answer: 2 }
       ]
     }
   ]

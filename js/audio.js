@@ -8,12 +8,19 @@ const Audio = {
   sounds: {
     click:   { freq: 880,  dur: 0.07, type: 'sine'     },
     correct: { freq: 523,  dur: 0.35, type: 'sine',  arp: [523, 659, 784] },
-    wrong:   { freq: 200,  dur: 0.38, type: 'sawtooth' },
-    win:     { freq: 523,  dur: 0.6,  type: 'sine',  arp: [523, 659, 784, 1047] },
+    wrong:   { freq: 180,  dur: 0.42, type: 'sawtooth', arp: [200, 160, 140] },
+    win:     { freq: 523,  dur: 0.18, type: 'sine',  arp: [523, 659, 784, 1047, 1319] },
     levelup: { freq: 784,  dur: 0.6,  type: 'sine',  arp: [659, 784, 988, 1319] },
     star:    { freq: 1047, dur: 0.22, type: 'sine'     },
     sticker: { freq: 659,  dur: 0.28, type: 'sine',  arp: [659, 880] },
     streak:  { freq: 440,  dur: 0.4,  type: 'sine',  arp: [440, 554, 659] },
+    pop:     { freq: 1200, dur: 0.1,  type: 'sine',  arp: [1200, 900] },
+    tick:    { freq: 600,  dur: 0.05, type: 'square' },
+    woosh:   { freq: 400,  dur: 0.25, type: 'sine',  arp: [400, 600, 300] },
+    fanfare: { freq: 392,  dur: 0.14, type: 'sine',  arp: [392, 523, 659, 784, 1047, 1319, 1047, 784] },
+    countdown: { freq: 440, dur: 0.08, type: 'square', arp: [880, 880] },
+    bubble:  { freq: 800,  dur: 0.18, type: 'sine',  arp: [800, 1100, 700] },
+    miss:    { freq: 300,  dur: 0.3,  type: 'sawtooth', arp: [300, 250] },
   },
 
   init(settings = {}) {

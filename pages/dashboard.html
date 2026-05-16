@@ -19,7 +19,7 @@
   <!-- TOP BAR -->
   <header class="top-bar">
     <div class="top-bar-left">
-      <a href="avatar.html" id="kid-avatar" style="display:inline-block;text-decoration:none;" title="Avatar customize karo"></a>
+      <a href="avatar.html" id="kid-avatar" style="display:inline-block;text-decoration:none;" title="Customise your avatar"></a>
       <div class="kid-info">
         <h2 id="kid-name">Loading...</h2>
         <p>⭐ <span id="total-stars">0</span> Stars earned</p>
@@ -56,14 +56,15 @@
 
   <!-- GAMES & ACTIVITIES -->
   <section style="padding:0 16px 14px;">
-    <p class="section-title" style="margin-bottom:10px;">🎮 Games & Activities:</p>
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+    <p class="section-title" style="margin-bottom:10px;">🎮 Games & Activities</p>
+    <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch; scrollbar-width:none;">
 
       <a href="minigame.html?from=dashboard.html" style="
         background:linear-gradient(135deg,#7B1FA2,#AB47BC);
         border-radius:18px; padding:14px 10px; text-decoration:none;
         display:flex; flex-direction:column; align-items:center; gap:6px;
         box-shadow:0 4px 14px rgba(123,31,162,0.35);
+        min-width:100px; flex-shrink:0;
         animation:slide-in-up 0.4s 0.2s both;">
         <span style="font-size:32px; animation:float 2.4s ease-in-out infinite;">🃏</span>
         <span style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:white;text-align:center;line-height:1.3;">Memory Match</span>
@@ -74,9 +75,54 @@
         border-radius:18px; padding:14px 10px; text-decoration:none;
         display:flex; flex-direction:column; align-items:center; gap:6px;
         box-shadow:0 4px 14px rgba(230,81,0,0.35);
+        min-width:100px; flex-shrink:0;
         animation:slide-in-up 0.4s 0.3s both;">
         <span style="font-size:32px; animation:float 2.8s ease-in-out infinite;">🔤</span>
         <span style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:white;text-align:center;line-height:1.3;">Word Scramble</span>
+      </a>
+
+      <a href="numblast.html" style="
+        background:linear-gradient(135deg,#1565C0,#1E88E5);
+        border-radius:18px; padding:14px 10px; text-decoration:none;
+        display:flex; flex-direction:column; align-items:center; gap:6px;
+        box-shadow:0 4px 14px rgba(21,101,192,0.35);
+        min-width:100px; flex-shrink:0;
+        animation:slide-in-up 0.4s 0.4s both;">
+        <span style="font-size:32px; animation:float 2.2s ease-in-out infinite;">💥</span>
+        <span style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:white;text-align:center;line-height:1.3;">Number Blast</span>
+      </a>
+
+      <a href="tapcount.html" style="
+        background:linear-gradient(135deg,#AD1457,#E91E63);
+        border-radius:18px; padding:14px 10px; text-decoration:none;
+        display:flex; flex-direction:column; align-items:center; gap:6px;
+        box-shadow:0 4px 14px rgba(173,20,87,0.35);
+        min-width:100px; flex-shrink:0;
+        animation:slide-in-up 0.4s 0.5s both;">
+        <span style="font-size:32px; animation:float 3s ease-in-out infinite;">🔢</span>
+        <span style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:white;text-align:center;line-height:1.3;">Count & Tap</span>
+      </a>
+
+      <a href="balloonpop.html" style="
+        background:linear-gradient(135deg,#00838F,#00BCD4);
+        border-radius:18px; padding:14px 10px; text-decoration:none;
+        display:flex; flex-direction:column; align-items:center; gap:6px;
+        box-shadow:0 4px 14px rgba(0,131,143,0.35);
+        min-width:100px; flex-shrink:0;
+        animation:slide-in-up 0.4s 0.7s both;">
+        <span style="font-size:32px; animation:float 2.6s ease-in-out infinite;">🎈</span>
+        <span style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:white;text-align:center;line-height:1.3;">Balloon Pop</span>
+      </a>
+
+      <a href="mathrace.html" style="
+        background:linear-gradient(135deg,#33691E,#7CB342);
+        border-radius:18px; padding:14px 10px; text-decoration:none;
+        display:flex; flex-direction:column; align-items:center; gap:6px;
+        box-shadow:0 4px 14px rgba(51,105,30,0.35);
+        min-width:100px; flex-shrink:0;
+        animation:slide-in-up 0.4s 0.8s both;">
+        <span style="font-size:32px; animation:float 2.1s ease-in-out infinite;">🏎️</span>
+        <span style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:white;text-align:center;line-height:1.3;">Math Race</span>
       </a>
 
       <a href="exercise.html" style="
@@ -84,9 +130,21 @@
         border-radius:18px; padding:14px 10px; text-decoration:none;
         display:flex; flex-direction:column; align-items:center; gap:6px;
         box-shadow:0 4px 14px rgba(0,105,92,0.35);
-        animation:slide-in-up 0.4s 0.4s both;">
+        min-width:100px; flex-shrink:0;
+        animation:slide-in-up 0.4s 0.9s both;">
         <span style="font-size:32px; animation:float 2s ease-in-out infinite;">🤸</span>
         <span style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:white;text-align:center;line-height:1.3;">Exercise Time</span>
+      </a>
+
+      <a href="stories.html" style="
+        background:linear-gradient(135deg,#4527A0,#7B1FA2);
+        border-radius:18px; padding:14px 10px; text-decoration:none;
+        display:flex; flex-direction:column; align-items:center; gap:6px;
+        box-shadow:0 4px 14px rgba(69,39,160,0.45);
+        min-width:100px; flex-shrink:0;
+        animation:slide-in-up 0.4s 1.0s both;">
+        <span style="font-size:32px; animation:float 2.3s ease-in-out infinite;">📖</span>
+        <span style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:white;text-align:center;line-height:1.3;">Story Time</span>
       </a>
 
     </div>
@@ -94,7 +152,7 @@
 
   <!-- SUBJECTS -->
   <section class="subjects-section">
-    <p class="section-title">📚 Choose your subject:</p>
+    <p class="section-title">📚 Choose a Subject</p>
 
     <div class="subjects-grid">
 

@@ -501,8 +501,8 @@
         <!-- Before any click -->
         <div class="info-prompt" id="info-prompt">
           <span class="prompt-mascot">🤖</span>
-          <p>Kisi bhi <strong>glowing dot</strong> par click karo! 👆</p>
-          <p class="prompt-hint">Front aur Back dono explore karo! 🔄<br>12 body parts dhundo!</p>
+          <p>Tap any <strong>glowing dot</strong> to explore! 👆</p>
+          <p class="prompt-hint">Explore both Front and Back! 🔄<br>Find all 12 body parts!</p>
         </div>
 
         <!-- After click -->
@@ -518,7 +518,7 @@
           <div class="part-body">
             <div class="part-desc" id="pd-desc">—</div>
             <div class="part-fact">💡 <span id="pd-fact">—</span></div>
-            <div class="roomi-says" id="pd-roomi">🤖 Wah! Shabaash!</div>
+            <div class="roomi-says" id="pd-roomi">🤖 Well done! Keep exploring!</div>
           </div>
         </div>
 
@@ -547,87 +547,87 @@
 const PARTS = {
   dimagh: {
     en:'Brain', ur:'دماغ', emoji:'🧠', color:'#9C27B0', view:'front',
-    desc:'Dimagh hamara control center hai! Sochna, yaad rakhna, khwab dekhna — sab kuch yahan se control hota hai.',
-    fact:'Dimagh mein 100 arab se zyada nerve cells hoti hain — kisi bhi computer se tez!',
-    roomi:'🤖 Tum abhi soch rahe ho — to dimagh kaam kar raha hai! 🧠'
+    desc:'The brain is our control centre! Thinking, remembering, dreaming — everything is controlled from here.',
+    fact:'The brain has over 100 billion nerve cells — faster than any computer!',
+    roomi:'🤖 You are thinking right now — your brain is working! 🧠'
   },
   aankh: {
     en:'Eyes', ur:'آنکھیں', emoji:'👁️', color:'#2196F3', view:'front',
-    desc:'Aankhon se hum rang, roshni aur cheezein dekhte hain. Do aankhein milke hamen 3D vision deti hain!',
-    fact:'Aankhein ek second mein 10 crore images process karti hain — camera se bhi tez!',
-    roomi:'🤖 Aankh se hi tum ye game dekh rahe ho! 👁️ Wah!'
+    desc:'Eyes let us see colours, light and things around us. Two eyes together give us 3D vision!',
+    fact:'Eyes can process 10 million images per second — faster than any camera!',
+    roomi:'🤖 You are seeing this game with your eyes right now! 👁️ Amazing!'
   },
   kaan: {
     en:'Ears', ur:'کان', emoji:'👂', color:'#FF9800', view:'both',
-    desc:'Kaanon se awaazein sunne aati hain. Kaan hamare balance ko bhi maintain karta hai — isliye hum seedhe chalte hain!',
-    fact:'Kaan sone mein bhi kaam karta rehta hai — isliye awaz se neend khulti hai!',
-    roomi:'🤖 Meri awaaz sun rahe ho? Ye kaan ki wajah se hai! 😄'
+    desc:'Ears let us hear sounds. Ears also keep our balance — that is why we can walk straight!',
+    fact:'Ears keep working while we sleep — that is why sounds can wake us up!',
+    roomi:'🤖 Can you hear me? That is because of your ears! 😄'
   },
   naak: {
     en:'Nose', ur:'ناک', emoji:'👃', color:'#4CAF50', view:'front',
-    desc:'Naak se hum khushbu sounchte hain aur saans lete hain. Naak hawa ko filter karke saaf bhi karta hai!',
-    fact:'Naak 1 trillion se zyada khushbuain pehchaan sakti hai!',
-    roomi:'🤖 Biryani ki khushbu? Naak ne pakad liya! 🍚'
+    desc:'The nose lets us smell and breathe. It also filters the air to keep our lungs clean!',
+    fact:'The nose can recognise over 1 trillion different smells!',
+    roomi:'🤖 Smell something yummy? Your nose caught it! 🍕'
   },
   muh: {
     en:'Mouth', ur:'منہ', emoji:'👄', color:'#F44336', view:'front',
-    desc:'Muh se hum khaate, peete aur bolte hain. Daant khane ko chaba dete hain aur zabaan taste batati hai!',
-    fact:'Insaan apni zindagi mein 3 crore liter se zyada saliva banata hai!',
-    roomi:'🤖 "Shabaash!" — ye muh se nikla! Wah wah! 🗣️'
+    desc:'The mouth is used for eating, drinking and talking. Teeth chew food and the tongue helps us taste!',
+    fact:'A person makes over 30,000 litres of saliva in their lifetime — enough to fill a swimming pool!',
+    roomi:'🤖 "Well done!" — that just came out of your mouth! 🗣️'
   },
   dil: {
     en:'Heart', ur:'دل', emoji:'❤️', color:'#E91E63', view:'front',
-    desc:'Dil khoon pump karta hai — poore jism mein khoon pahunchata hai. Ye ruk ruk kar dhadakta rehta hai!',
-    fact:'Dil ek din mein 1 lakh baar dhadakta hai — zindagi bhar kabhi nahi rukta!',
-    roomi:'🤖 Thub-dub, thub-dub — ye teri dhadkan hai! ❤️'
+    desc:'The heart pumps blood around the whole body. It beats non-stop, day and night!',
+    fact:'The heart beats 100,000 times a day — and never stops for a whole lifetime!',
+    roomi:'🤖 Thub-dub, thub-dub — that is your heartbeat! ❤️'
   },
   phephere: {
     en:'Lungs', ur:'پھیپھڑے', emoji:'🫁', color:'#00BCD4', view:'front',
-    desc:'Phephere saans lete hain. Hawa andar aati hai, oxygen khoon mein jaati hai aur CO2 bahar nikalta hai.',
-    fact:'Ek din mein hum 20,000 baar saans lete hain — bina soche bhi!',
-    roomi:'🤖 Deep breath lo! Dekho phephere kaam kar rahe hain! 😤'
+    desc:'Lungs help us breathe. Air comes in, oxygen goes into the blood, and CO2 goes back out.',
+    fact:'We breathe about 20,000 times a day — without even thinking about it!',
+    roomi:'🤖 Take a deep breath! Feel your lungs working! 😤'
   },
   pet: {
     en:'Stomach', ur:'پیٹ', emoji:'🫃', color:'#FF9800', view:'front',
-    desc:'Pet mein khana pachta (digest) hota hai. Pet khane ko chhote chhote pieces mein todta hai!',
-    fact:'Pet itna bada ho sakta hai jitna ek chhota football — khane ke baad!',
-    roomi:'🤖 Biryani ka kya hoga? Pet digest karega! 🍚'
+    desc:'Food is digested in the stomach. It breaks food down into tiny pieces the body can use!',
+    fact:'The stomach can stretch to the size of a small football after a big meal!',
+    roomi:'🤖 What happens to your food? The stomach digests it! 🍕'
   },
   haath: {
     en:'Hands', ur:'ہاتھ', emoji:'🤲', color:'#66BB6A', view:'both',
-    desc:'Haath se hum cheezein pakdte, likhte, khelate aur kaam karte hain! Har haath mein 27 haddiyan hoti hain.',
-    fact:'Fingerprints bilkul unique hote hain — duniya mein kisi ke bhi exactly same nahi!',
-    roomi:'🤖 Haath utha ke wave karo! Tumhara haath unique hai! 👋'
+    desc:'Hands help us grip, write, play and work! Each hand has 27 bones inside it.',
+    fact:'Fingerprints are completely unique — no two people in the world have the same ones!',
+    roomi:'🤖 Raise your hand and wave! Your hand is one of a kind! 👋'
   },
   pair: {
     en:'Legs & Feet', ur:'ٹانگیں اور پاؤں', emoji:'🦶', color:'#795548', view:'both',
-    desc:'Pair aur paon se hum chalte, daudte, koodte aur khelate hain! Paon mein 52 haddiyan hoti hain.',
-    fact:'Ek insaan apni zindagi mein 3 baar zameen ka chakkar lagane jitna chalta hai!',
-    roomi:'🤖 Uthao paon aur dance karo! 💃'
+    desc:'Legs and feet help us walk, run, jump and play! Feet alone contain 52 bones.',
+    fact:'In a lifetime, a person walks enough steps to go around the Earth 3 times!',
+    roomi:'🤖 Lift your feet and dance! 💃'
   },
   reeth: {
-    en:'Spine / Backbone', ur:'ریڑھ کی ہڈی', emoji:'🦴', color:'#607D8B', view:'back',
-    desc:'Reeth ki haddi peeth ke beech mein hoti hai — 33 chhoti haddiyon (vertebrae) se bani hoti hai. Ye hamein seedha rakhti hai!',
-    fact:'Reeth ki haddi ek spring ki tarah kaam karti hai — jump karne par jhatka absorb karti hai!',
-    roomi:'🤖 Seedhe baitho! Reeth ki haddi ki madad karo! 🦴'
+    en:'Spine', ur:'ریڑھ کی ہڈی', emoji:'🦴', color:'#607D8B', view:'back',
+    desc:'The spine runs down the centre of the back — it is made of 33 small bones called vertebrae. It keeps us standing straight!',
+    fact:'The spine works like a spring — it absorbs shock every time you jump or run!',
+    roomi:'🤖 Sit up straight! Help your spine do its job! 🦴'
   },
   gurda: {
     en:'Kidneys', ur:'گردے', emoji:'🫘', color:'#EF5350', view:'back',
-    desc:'Gurday khoon ko filter karte hain — bekar cheezein nikaal dete hain. Insaan ke do gurday hote hain!',
-    fact:'Gurday ek din mein 180 liter khoon filter karte hain — factory ki tarah kaam karte hain!',
-    roomi:'🤖 Gurde chupe hain peeth mein — magar kaam bht bada karte hain! 🫘'
+    desc:'Kidneys filter the blood — they remove all the waste. We have two kidneys, one on each side!',
+    fact:'Kidneys filter 180 litres of blood every single day — working like a cleaning factory!',
+    roomi:'🤖 Kidneys are hidden in your back — but they do a huge job! 🫘'
   }
 };
 
 const TOTAL_PARTS = 12;
-const VIEW_LABELS = { front:'Agla Hissa', back:'Peechla Hissa', both:'Dono Taraf' };
+const VIEW_LABELS = { front:'Front', back:'Back', both:'Both Sides' };
 const VIEW_BADGE_COLORS = { front:'#26A69A', back:'#5C6BC0', both:'#FF9800' };
 const ROOMI_EXPLORE = [
-  '🤖 Wah! Ye dekh liya!',
-  '🤖 Shabaash! Ek aur dhundo!',
-  '🤖 Zabardast! Tum bohot ache ho!',
-  '🤖 Star student! ⭐ Aur dekho!',
-  '🤖 Kamaal! Almost there! 🔥'
+  '🤖 Great! You found it!',
+  '🤖 Well done! Find another one!',
+  '🤖 Amazing! You are so good!',
+  '🤖 Star student! ⭐ Keep exploring!',
+  '🤖 Brilliant! Almost there! 🔥'
 ];
 
 let explored  = new Set();

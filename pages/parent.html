@@ -230,7 +230,7 @@ function checkPIN() {
     document.getElementById('parent-dash').style.display = 'flex';
     loadDash();
   } else {
-    document.getElementById('pin-error').textContent = 'Galat PIN! Dobara try karein.';
+    document.getElementById('pin-error').textContent = 'Wrong PIN! Try again.';
     pinBuffer = '';
     updateDots();
     setTimeout(() => document.getElementById('pin-error').textContent = '', 2000);
@@ -306,7 +306,7 @@ function loadDash() {
   });
 
   document.getElementById('btn-reset-all').addEventListener('click', () => {
-    if (confirm('Sach mein sab reset karna hai? Bacha ki puri progress delete ho jaigi!')) {
+    if (confirm('Reset all progress? Your child\'s data will be permanently deleted!')) {
       localStorage.clear();
       window.location.replace('../index.html');
     }

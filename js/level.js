@@ -23,8 +23,76 @@ let score        = 0;
 let answered     = false;
 let subject      = '';
 let levelNum     = 1;
+let playerAge    = 7;
+let speedTimer   = null;
+let speedLeft    = 0;
+let fastBonus    = 0;
 
 function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function ageAdaptQuestions(qs, age) {
+  if (age <= 6) return qs.slice(0, Math.min(4, qs.length));
+  if (age >= 9) return [...qs].sort(() => Math.random() - 0.5);
+  return qs;
+}
+
+function particleBurst(el) {
+  if (!el) return;
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width  / 2;
+  const cy = rect.top  + rect.height / 2;
+  const colors = ['#FFD54F','#F06292','#66BB6A','#4FC3F7','#FF9800','#CE93D8','#fff'];
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    const angle = (i / 18) * Math.PI * 2;
+    const dist  = 55 + Math.random() * 55;
+    p.style.cssText = `
+      position:fixed;left:${cx}px;top:${cy}px;
+      width:${6+Math.random()*7}px;height:${6+Math.random()*7}px;
+      border-radius:${Math.random()>.5?'50%':'3px'};
+      background:${colors[i % colors.length]};pointer-events:none;z-index:999;
+      --dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;
+      animation:particle-out 0.65s ease-out forwards;
+    `;
+    document.body.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }
+}
+
+function startSpeedTimer() {
+  if (playerAge < 9) return;
+  const LIMIT = 12;
+  speedLeft = LIMIT;
+  const bar = document.getElementById('speed-bar-fill');
+  if (!bar) return;
+  bar.style.transition = 'none';
+  bar.style.width = '100%';
+  document.getElementById('speed-bar-wrap').style.display = 'block';
+  void bar.offsetWidth;
+  bar.style.transition = `width ${LIMIT}s linear`;
+  bar.style.width = '0%';
+
+  speedTimer = setInterval(() => {
+    speedLeft--;
+    if (speedLeft <= 0) {
+      clearInterval(speedTimer);
+      if (!answered) {
+        handleAnswer(-1, questions[current].answer);
+      }
+    }
+  }, 1000);
+}
+
+function stopSpeedTimer() {
+  clearInterval(speedTimer);
+  const wrap = document.getElementById('speed-bar-wrap');
+  if (wrap) wrap.style.display = 'none';
+  if (speedLeft > 8) {
+    fastBonus++;
+    const fb = document.getElementById('speed-bonus-msg');
+    if (fb) { fb.textContent = '⚡ Fast! +Bonus!'; fb.style.opacity = '1'; setTimeout(() => fb.style.opacity='0', 1200); }
+  }
+}
 
 /* ---- Render question ---- */
 function renderQuestion() {
@@ -50,6 +118,8 @@ function renderQuestion() {
   /* Mascot alternates */
   document.getElementById('q-mascot').textContent = current % 2 === 0 ? '🤖' : '⭐';
 
+  startSpeedTimer();
+
   q.choices.forEach((text, idx) => {
     const btn = document.createElement('button');
     btn.className   = 'choice-btn';
@@ -64,12 +134,13 @@ function renderQuestion() {
 function handleAnswer(chosen, correct) {
   if (answered) return;
   answered = true;
+  stopSpeedTimer();
 
   const btns = document.querySelectorAll('.choice-btn');
   btns.forEach(b => b.disabled = true);
 
   const isRight = chosen === correct;
-  if (isRight) score++;
+  if (isRight) { score++; particleBurst(btns[chosen]); }
 
   btns[chosen].classList.add(isRight ? 'correct' : 'wrong');
   if (!isRight) btns[correct].classList.add('correct');
@@ -215,7 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('level-title').textContent = `Level ${levelNum}: ${levelDef.title}`;
   document.getElementById('level-icon').textContent  = levelDef.icon || '';
 
-  questions = [...levelDef.questions];
+  playerAge = parseInt(Progress.data?.profile?.age) || 7;
+  questions = ageAdaptQuestions([...levelDef.questions], playerAge);
   renderQuestion();
 
   document.getElementById('btn-next').addEventListener('click', nextStep);

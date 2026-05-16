@@ -1,6 +1,6 @@
 /* Sikho Star Service Worker — offline cache */
 
-const CACHE  = 'sikho-star-v2';
+const CACHE  = 'sikho-star-v4';
 const ASSETS = [
   '/',
   '/index.html',
@@ -32,6 +32,10 @@ const ASSETS = [
   '/pages/wordgame.html',
   '/pages/exercise.html',
   '/pages/body.html',
+  '/pages/numblast.html',
+  '/pages/tapcount.html',
+  '/pages/balloonpop.html',
+  '/pages/mathrace.html',
   '/manifest.json',
 ];
 

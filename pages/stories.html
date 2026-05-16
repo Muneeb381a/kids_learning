@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Sikho Star — Stories</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/animations.css">
+<style>
+body { background: #0A1232; }
+
+.str-wrap { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+.str-wrap.hidden { display: none; }
+
+/* ── Header ── */
+.str-head {
+  background: linear-gradient(135deg, #080F3A, #1a237e);
+  padding: 14px 20px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+  position: sticky; top: 0; z-index: 50;
+}
+
+/* ── Select grid ── */
+.str-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; padding: 20px 16px; flex: 1;
+}
+
+.str-card {
+  border-radius: 24px; padding: 22px 14px;
+  cursor: pointer; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  position: relative; overflow: hidden;
+  border-top: 1.5px solid rgba(255,255,255,0.3);
+  border-left: 1.5px solid rgba(255,255,255,0.15);
+  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s;
+}
+.str-card::before {
+  content: ''; position: absolute; top: -22px; right: -22px;
+  width: 90px; height: 90px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, transparent 70%);
+}
+.str-card:hover  { transform: translateY(-10px) scale(1.03); }
+.str-card:active { transform: scale(0.96); }
+
+.str-c1 { background: linear-gradient(145deg,#FF8F00,#E65100,#BF360C); box-shadow: 0 10px 0 #7F2700, 0 18px 36px rgba(230,81,0,.55); }
+.str-c2 { background: linear-gradient(145deg,#66BB6A,#43A047,#2E7D32); box-shadow: 0 10px 0 #1B4D20, 0 18px 36px rgba(67,160,71,.5); }
+.str-c3 { background: linear-gradient(145deg,#42A5F5,#1565C0,#0D47A1); box-shadow: 0 10px 0 #082566, 0 18px 36px rgba(21,101,192,.5); }
+.str-c4 { background: linear-gradient(145deg,#CE93D8,#AB47BC,#7B1FA2); box-shadow: 0 10px 0 #4A148C, 0 18px 36px rgba(123,31,162,.5); }
+
+.sc-cover { font-size: 58px; line-height: 1; animation: float 3s ease-in-out infinite; filter: drop-shadow(0 4px 14px rgba(0,0,0,0.35)); }
+.sc-title  { font-family: var(--font-heading); font-size: 14px; font-weight: 700; color: white; line-height: 1.3; }
+.sc-tag    { font-size: 11px; color: rgba(255,255,255,0.72); font-weight: 600; }
+.sc-badge  { font-size: 10px; background: rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 20px; color: white; font-weight: 700; }
+
+/* ── Reader ── */
+.str-prog-rail { height: 6px; background: rgba(255,255,255,0.1); }
+.str-prog-fill { height: 100%; background: linear-gradient(90deg,#FFD54F,#FF8F00); transition: width .5s ease; border-radius: 0 4px 4px 0; box-shadow: 0 0 10px rgba(255,180,0,.7); }
+
+/* Scene */
+.str-scene {
+  height: 260px; position: relative; overflow: hidden; flex-shrink: 0;
+  transition: background .7s ease;
+}
+.str-scene::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 48px; background: linear-gradient(transparent, rgba(0,0,0,0.18));
+  pointer-events: none;
+}
+
+.sc-ch { position: absolute; line-height: 1; user-select: none; will-change: transform; }
+
+/* Character animations */
+@keyframes sc-fly   { 0%,100%{transform:translateY(0) rotate(-5deg)} 40%{transform:translateY(-16px) translateX(8px) rotate(6deg)} 70%{transform:translateY(-8px) translateX(-5px) rotate(-2deg)} }
+@keyframes sc-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
+@keyframes sc-bounce{ 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-18px) scale(1.06)} }
+@keyframes sc-spin  { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes sc-glow  { 0%,100%{filter:drop-shadow(0 0 8px rgba(255,220,0,.5))} 50%{filter:drop-shadow(0 0 28px rgba(255,220,0,.95)) brightness(1.2)} }
+@keyframes sc-shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px) rotate(-4deg)} 40%{transform:translateX(8px) rotate(4deg)} 70%{transform:translateX(-4px)} }
+@keyframes sc-rise  { 0%,100%{transform:translateY(0);opacity:1} 50%{transform:translateY(-14px);opacity:.65} }
+@keyframes sc-sway  { 0%,100%{transform:rotate(-9deg)} 50%{transform:rotate(9deg)} }
+@keyframes sc-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
+@keyframes sc-fall  { 0%{transform:translateY(-36px);opacity:0} 25%{opacity:1} 100%{transform:translateY(70px);opacity:0} }
+@keyframes sc-walk  { 0%,100%{transform:translateX(0)} 35%{transform:translateX(-12px)} 70%{transform:translateX(10px)} }
+
+.sc-fly    { animation: sc-fly    2.6s ease-in-out infinite; }
+.sc-float  { animation: sc-float  2.8s ease-in-out infinite; }
+.sc-bounce { animation: sc-bounce 1.5s ease-in-out infinite; }
+.sc-spin   { animation: sc-spin   4s linear infinite; }
+.sc-glow   { animation: sc-glow   2.2s ease-in-out infinite; }
+.sc-shake  { animation: sc-shake  .9s ease-in-out infinite; }
+.sc-rise   { animation: sc-rise   3s ease-in-out infinite; }
+.sc-sway   { animation: sc-sway   2.2s ease-in-out infinite; transform-origin: bottom center; }
+.sc-pulse  { animation: sc-pulse  2s ease-in-out infinite; }
+.sc-fall   { animation: sc-fall   2s ease-in-out infinite; }
+.sc-walk   { animation: sc-walk   2.2s ease-in-out infinite; }
+
+/* Text card */
+.str-txt-card {
+  background: white; margin: 14px 16px 0; border-radius: 20px;
+  padding: 18px 20px; flex: 1; min-height: 105px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.9);
+  border: 1.5px solid rgba(92,107,192,0.1); position: relative; overflow: hidden;
+}
+.str-txt-card::after { content: '📖'; position: absolute; top:12px; right:14px; font-size:20px; opacity:.15; }
+#str-text {
+  font-family: var(--font-heading); font-size: 15px; line-height: 1.7;
+  color: #1A1A2E; font-weight: 600;
+  animation: slide-in-up .4s ease both;
+}
+
+/* Navigation */
+.str-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px 22px; gap: 8px;
+}
+.str-nav-btn {
+  background: white; border: none; border-radius: 16px; padding: 12px 18px;
+  font-family: var(--font-heading); font-size: 14px; font-weight: 700;
+  cursor: pointer; color: #3949AB; min-width: 86px;
+  box-shadow: 0 6px 0 #C8CCE8, 0 10px 20px rgba(26,35,126,0.12);
+  transition: all 0.12s ease;
+}
+.str-nav-btn:hover  { transform: translateY(-3px); }
+.str-nav-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #C8CCE8, 0 4px 10px rgba(26,35,126,0.08); }
+.str-nav-btn:disabled { opacity: .35; cursor: default; transform: none; }
+.str-next { background: linear-gradient(135deg,#5C6BC0,#3949AB); color: white; box-shadow: 0 6px 0 #1A237E, 0 12px 24px rgba(57,73,171,.4); }
+.str-next:hover  { box-shadow: 0 9px 0 #1A237E, 0 18px 30px rgba(57,73,171,.45); }
+.str-next:active { box-shadow: 0 1px 0 #1A237E, 0 4px 12px rgba(57,73,171,.25) !important; }
+
+.str-dots { display: flex; gap: 7px; align-items: center; }
+.str-dot  { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.28); transition: all .3s; cursor: pointer; }
+.str-dot.on { background: #FFD54F; width: 22px; border-radius: 4px; box-shadow: 0 0 10px rgba(255,213,79,.7); }
+
+/* Speak button */
+.speak-btn {
+  background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.24);
+  border-radius: 12px; width: 42px; height: 42px; font-size: 20px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  margin-left: auto; transition: all .18s;
+}
+.speak-btn:hover   { background: rgba(255,255,255,0.26); transform: scale(1.1); }
+.speak-btn.talking { background: rgba(255,213,79,0.26); border-color: rgba(255,213,79,0.6); }
+
+/* Finish overlay */
+.str-finish {
+  position: fixed; inset: 0; background: rgba(8,15,58,0.94);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; z-index: 200; animation: fade-in .5s ease both;
+  padding: 30px;
+}
+.str-finish .big-em  { font-size: 84px; animation: bounce-in .7s both; }
+.str-finish h2       { font-family: var(--font-heading); font-size: 30px; font-weight: 700; color: #FFD54F; text-align: center; }
+.str-finish p        { font-family: var(--font-heading); font-size: 16px; color: rgba(255,255,255,0.86); text-align: center; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- ===== SELECT ===== -->
+<div id="vSelect" class="str-wrap">
+  <header class="str-head">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <span class="page-title">📖 Story Time</span>
+  </header>
+  <div class="str-grid" id="storyGrid"></div>
+</div>
+
+<!-- ===== READER ===== -->
+<div id="vReader" class="str-wrap hidden">
+  <header class="str-head">
+    <button class="back-btn" id="btnBack">←</button>
+    <span class="page-title" id="readerTitle"></span>
+    <button class="speak-btn" id="btnSpeak" title="Listen">🔊</button>
+  </header>
+  <div class="str-prog-rail"><div class="str-prog-fill" id="progFill"></div></div>
+  <div class="str-scene" id="sceneBox"></div>
+  <div class="str-txt-card"><p id="str-text"></p></div>
+  <div class="str-nav">
+    <button class="str-nav-btn" id="btnPrev">← Back</button>
+    <div class="str-dots" id="dotRow"></div>
+    <button class="str-nav-btn str-next" id="btnNext">Next →</button>
+  </div>
+</div>
+
+<script>
+/* ===== STORY DATA ===== */
+const S = [
+  {
+    title:"The Clever Crow", cover:"🐦", tag:"Smart thinking wins!",
+    col:"str-c1",
+    scenes:[
+      { bg:"linear-gradient(160deg,#FF6D00,#E65100,#BF360C)",
+        ch:[{e:"☀️",x:74,y:5,s:50,a:"sc-pulse"},{e:"🌵",x:6,y:52,s:50,a:""},{e:"🌵",x:78,y:55,s:42,a:""},{e:"🐦",x:16,y:28,s:68,a:"sc-fly"},{e:"🏺",x:54,y:46,s:78,a:""},{e:"💧",x:58,y:68,s:24,a:"sc-rise"}],
+        t:"On a scorching hot day, a clever crow 🐦 was desperately thirsty. It found a tall jug — but the water was deep at the bottom, far too low to reach! 😩" },
+      { bg:"linear-gradient(160deg,#E65100,#C62828,#880E4F)",
+        ch:[{e:"🐦",x:20,y:30,s:68,a:"sc-float"},{e:"💡",x:32,y:14,s:46,a:"sc-glow"},{e:"🏺",x:56,y:48,s:76,a:""},{e:"🪨",x:52,y:72,s:28,a:""},{e:"🪨",x:63,y:74,s:24,a:""},{e:"🪨",x:74,y:71,s:30,a:""}],
+        t:"The crow thought hard... 💭 Then — a brilliant idea! 💡 It spotted small pebbles on the ground. 'If I drop them in one by one, the water will RISE!' 🧠 Clever thinking!" },
+      { bg:"linear-gradient(160deg,#283593,#1A237E,#0D1B4B)",
+        ch:[{e:"🌙",x:74,y:6,s:44,a:"sc-float"},{e:"⭐",x:15,y:10,s:26,a:"sc-pulse"},{e:"⭐",x:55,y:8,s:20,a:"sc-pulse"},{e:"🐦",x:22,y:22,s:68,a:"sc-walk"},{e:"🏺",x:55,y:44,s:78,a:""},{e:"🪨",x:36,y:14,s:28,a:"sc-fall"},{e:"💧",x:58,y:54,s:38,a:"sc-rise"}],
+        t:"One by one — PLOP! PLOP! PLOP! 🪨🪨🪨 The crow dropped pebbles into the jug. With every pebble, the water slowly crept higher and higher! 📈💧 Almost there!" },
+      { bg:"linear-gradient(160deg,#1B5E20,#2E7D32,#43A047)",
+        ch:[{e:"🌟",x:10,y:12,s:34,a:"sc-spin"},{e:"🌟",x:78,y:8,s:28,a:"sc-spin"},{e:"✨",x:50,y:14,s:26,a:"sc-pulse"},{e:"🐦",x:18,y:26,s:72,a:"sc-bounce"},{e:"🏺",x:55,y:44,s:78,a:""},{e:"🎉",x:74,y:28,s:44,a:"sc-shake"}],
+        t:"The water rose to the top! The crow drank and felt so refreshed! 💧😊 It used its BRAIN to solve the problem. 🧠✨\n\n💡 Moral: Smart thinking can solve any problem!" }
+    ]
+  },
+  {
+    title:"Sara's Magic Garden", cover:"🌷", tag:"Patience grows beauty!",
+    col:"str-c2",
+    scenes:[
+      { bg:"linear-gradient(160deg,#4E342E,#6D4C41,#8D6E63)",
+        ch:[{e:"☁️",x:12,y:8,s:44,a:"sc-float"},{e:"☁️",x:62,y:10,s:36,a:"sc-float"},{e:"👧",x:18,y:22,s:72,a:"sc-float"},{e:"🌱",x:50,y:60,s:36,a:""},{e:"🌍",x:72,y:54,s:50,a:"sc-pulse"},{e:"🌱",x:62,y:64,s:28,a:""}],
+        t:"Little Sara held a tiny seed in her palm. 🌱 'Will THIS little thing really grow into a beautiful flower?' she wondered with wide, hopeful eyes. 🤔✨ She knelt down and gently planted it in the warm soil." },
+      { bg:"linear-gradient(160deg,#37474F,#546E7A,#455A64)",
+        ch:[{e:"🌧️",x:18,y:6,s:50,a:"sc-bounce"},{e:"🌧️",x:55,y:4,s:44,a:"sc-bounce"},{e:"☂️",x:22,y:20,s:50,a:""},{e:"👧",x:20,y:32,s:64,a:"sc-float"},{e:"💧",x:44,y:16,s:22,a:"sc-fall"},{e:"💧",x:60,y:18,s:20,a:"sc-fall"},{e:"💧",x:74,y:20,s:22,a:"sc-fall"},{e:"🌱",x:58,y:60,s:42,a:"sc-pulse"}],
+        t:"Sara watered her seed every single day. The rain helped too — drip, drip, drip! 🌧️💧 She whispered to it each morning: 'Grow strong, little seed! I believe in you!' 🙏💚" },
+      { bg:"linear-gradient(160deg,#F9A825,#FDD835,#81C784)",
+        ch:[{e:"☀️",x:70,y:6,s:56,a:"sc-glow"},{e:"👧",x:14,y:26,s:72,a:"sc-float"},{e:"🌿",x:44,y:44,s:44,a:"sc-sway"},{e:"🌷",x:55,y:36,s:54,a:"sc-sway"},{e:"🦋",x:68,y:22,s:36,a:"sc-fly"},{e:"🐝",x:38,y:18,s:30,a:"sc-walk"}],
+        t:"One bright morning Sara gasped — a gorgeous pink flower had bloomed overnight! 🌷😲 Its petals opened wide to greet the sunshine. A butterfly landed softly on it. 🦋 Sara's heart danced with joy! 💃✨" },
+      { bg:"linear-gradient(160deg,#1B5E20,#388E3C,#66BB6A)",
+        ch:[{e:"🌷",x:10,y:38,s:58,a:"sc-sway"},{e:"🌻",x:26,y:30,s:64,a:"sc-sway"},{e:"🌸",x:44,y:40,s:52,a:"sc-sway"},{e:"🌼",x:61,y:36,s:56,a:"sc-sway"},{e:"🌺",x:77,y:40,s:50,a:"sc-sway"},{e:"🦋",x:36,y:14,s:36,a:"sc-fly"},{e:"🐝",x:60,y:18,s:28,a:"sc-fly"},{e:"👧",x:44,y:58,s:66,a:"sc-bounce"}],
+        t:"Her tiny garden became a magical wonderland! 🌷🌻🌸🌼🌺 Butterflies danced, bees hummed happily! 🦋🐝\n\n💡 Moral: Great things take time. Be patient and keep caring!" }
+    ]
+  },
+  {
+    title:"Ali's Star Journey", cover:"🚀", tag:"Curiosity lights the way!",
+    col:"str-c3",
+    scenes:[
+      { bg:"linear-gradient(160deg,#0D1B4B,#1A237E,#283593)",
+        ch:[{e:"🌙",x:72,y:8,s:48,a:"sc-float"},{e:"⭐",x:14,y:12,s:30,a:"sc-pulse"},{e:"⭐",x:38,y:8,s:22,a:"sc-pulse"},{e:"⭐",x:55,y:14,s:26,a:"sc-pulse"},{e:"🌟",x:82,y:30,s:28,a:"sc-spin"},{e:"🪟",x:40,y:30,s:64,a:""},{e:"👦",x:38,y:36,s:58,a:"sc-float"}],
+        t:"Every night, young Ali gazed at the stars from his window. 👦✨ 'I want to visit them someday!' he dreamed. Suddenly a shooting star blazed across the sky! 🌠 'MAKE A WISH, ALI!' the universe seemed to say! 💫" },
+      { bg:"linear-gradient(160deg,#050A20,#0D1B4B,#212121)",
+        ch:[{e:"⭐",x:8,y:8,s:26,a:"sc-pulse"},{e:"⭐",x:30,y:5,s:20,a:"sc-pulse"},{e:"⭐",x:68,y:7,s:24,a:"sc-pulse"},{e:"⭐",x:84,y:16,s:18,a:"sc-pulse"},{e:"🚀",x:35,y:16,s:82,a:"sc-bounce"},{e:"🔥",x:46,y:62,s:46,a:"sc-shake"},{e:"🌍",x:62,y:58,s:54,a:"sc-pulse"}],
+        t:"Ali climbed into his IMAGINATION ROCKET! 🚀🔥 3… 2… 1… BLAST OFF! He zoomed past clouds, past birds, straight into the sparkling darkness of outer SPACE! 🌌 The Earth looked tiny and beautiful below! 🌍" },
+      { bg:"linear-gradient(160deg,#4A148C,#7B1FA2,#AB47BC)",
+        ch:[{e:"🪐",x:58,y:8,s:72,a:"sc-spin"},{e:"👦",x:16,y:30,s:64,a:"sc-float"},{e:"👽",x:46,y:32,s:62,a:"sc-bounce"},{e:"👽",x:62,y:36,s:50,a:"sc-float"},{e:"💜",x:34,y:58,s:30,a:"sc-pulse"},{e:"⭐",x:82,y:56,s:28,a:"sc-glow"}],
+        t:"Ali landed on a dazzling purple planet! 🪐 Friendly aliens with big curious eyes waved at him! 👽👽 They showed him glowing rings, rainbow nebulas, and flying moons! 🌈 Ali made amazing space friends! 🤝💜" },
+      { bg:"linear-gradient(160deg,#1B5E20,#1A237E,#0D1B4B)",
+        ch:[{e:"🚀",x:36,y:14,s:64,a:"sc-fly"},{e:"🌍",x:14,y:40,s:60,a:"sc-pulse"},{e:"⭐",x:56,y:12,s:30,a:"sc-glow"},{e:"📚",x:56,y:50,s:46,a:"sc-bounce"},{e:"👦",x:66,y:36,s:64,a:"sc-float"},{e:"🌟",x:22,y:14,s:26,a:"sc-spin"}],
+        t:"Ali zoomed home, eyes wide with wonder! He grabbed every book about space and read them all! 📚🌌 Now he KNEW the universe was more amazing than any dream!\n\n💡 Moral: Curiosity leads to the greatest adventures! 🚀📚" }
+    ]
+  },
+  {
+    title:"Roomi Saves the Day", cover:"🤖", tag:"Kindness is a superpower!",
+    col:"str-c4",
+    scenes:[
+      { bg:"linear-gradient(160deg,#1A237E,#0D3B5F,#0D1B4B)",
+        ch:[{e:"🌙",x:74,y:8,s:44,a:"sc-float"},{e:"🌲",x:6,y:42,s:60,a:""},{e:"🌲",x:20,y:46,s:50,a:""},{e:"🌲",x:66,y:40,s:56,a:""},{e:"🌲",x:80,y:44,s:48,a:""},{e:"🤖",x:34,y:26,s:72,a:"sc-walk"},{e:"😿",x:54,y:52,s:50,a:"sc-shake"}],
+        t:"One dark night, Roomi the robot 🤖 was walking through the forest when it heard a tiny cry. 😿 Behind a tall tree sat a little lost kitten — all alone, shivering and scared in the cold dark night! 🌲🌙" },
+      { bg:"linear-gradient(160deg,#1565C0,#0D47A1,#0A2A6E)",
+        ch:[{e:"🌙",x:74,y:6,s:40,a:"sc-float"},{e:"⭐",x:20,y:10,s:22,a:"sc-pulse"},{e:"🤖",x:22,y:26,s:72,a:"sc-float"},{e:"😺",x:38,y:38,s:54,a:"sc-bounce"},{e:"❤️",x:34,y:16,s:38,a:"sc-pulse"},{e:"🗺️",x:56,y:30,s:46,a:"sc-float"}],
+        t:"Roomi gently picked up the tiny kitten and held it close and warm. 🤖❤️😺 'Don't worry, little one — I'll take you home!' it said softly. Roomi checked its memory map — Sunshine Street, not far away! 🗺️✨" },
+      { bg:"linear-gradient(160deg,#2E7D32,#388E3C,#1565C0)",
+        ch:[{e:"🌙",x:70,y:8,s:44,a:"sc-float"},{e:"⭐",x:14,y:12,s:26,a:"sc-glow"},{e:"🌲",x:4,y:48,s:52,a:""},{e:"🌲",x:76,y:44,s:58,a:""},{e:"🤖",x:26,y:28,s:70,a:"sc-walk"},{e:"😺",x:37,y:36,s:46,a:"sc-float"},{e:"🏡",x:59,y:36,s:66,a:"sc-pulse"}],
+        t:"Roomi walked bravely through the dark twisting forest, shielding the kitten from the cold wind. 🌬️ Step by step — until a warm glowing house appeared ahead! 🏡✨ 'We made it!' Roomi cheered! 🎊" },
+      { bg:"linear-gradient(160deg,#F57F17,#FF8F00,#FDD835)",
+        ch:[{e:"🌟",x:8,y:10,s:36,a:"sc-spin"},{e:"🌟",x:78,y:8,s:30,a:"sc-spin"},{e:"✨",x:48,y:6,s:26,a:"sc-pulse"},{e:"🏡",x:10,y:38,s:60,a:""},{e:"👩",x:24,y:28,s:66,a:"sc-bounce"},{e:"😸",x:40,y:40,s:54,a:"sc-bounce"},{e:"🤖",x:60,y:26,s:70,a:"sc-float"},{e:"💛",x:50,y:14,s:38,a:"sc-pulse"}],
+        t:"The owner ran out crying with joy! 👩💛 The kitten leapt into her arms, purring loudly! 😸 'Thank you, Roomi — you are a TRUE HERO!' 🤖✨ Roomi's lights blinked happily.\n\n💡 Moral: One small act of kindness can light up someone's whole world! ❤️" }
+    ]
+  }
+];
+
+/* ===== STATE ===== */
+let cIdx = 0, cScene = 0, talking = false;
+
+/* ===== BUILD SELECT ===== */
+function buildGrid() {
+  document.getElementById('storyGrid').innerHTML = S.map((s,i) =>
+    `<div class="str-card ${s.col}" onclick="openStory(${i})">
+      <div class="sc-cover" style="animation-delay:${i*.18}s">${s.cover}</div>
+      <div class="sc-title">${s.title}</div>
+      <div class="sc-tag">${s.tag}</div>
+      <div class="sc-badge">Ages 5–10 ⭐</div>
+    </div>`
+  ).join('');
+}
+
+/* ===== OPEN STORY ===== */
+function openStory(i) {
+  cIdx = i; cScene = 0;
+  document.getElementById('vSelect').classList.add('hidden');
+  document.getElementById('vReader').classList.remove('hidden');
+  document.getElementById('readerTitle').textContent = S[i].title;
+  render();
+}
+
+function closeReader() {
+  stopSpeak();
+  document.getElementById('vReader').classList.add('hidden');
+  document.getElementById('vSelect').classList.remove('hidden');
+}
+
+/* ===== RENDER SCENE ===== */
+function render() {
+  const st = S[cIdx], sc = st.scenes[cScene], total = st.scenes.length;
+
+  /* progress */
+  document.getElementById('progFill').style.width = ((cScene+1)/total*100)+'%';
+
+  /* dots */
+  document.getElementById('dotRow').innerHTML =
+    st.scenes.map((_,i)=>`<div class="str-dot${i===cScene?' on':''}" onclick="goScene(${i})"></div>`).join('');
+
+  /* buttons */
+  document.getElementById('btnPrev').disabled = cScene===0;
+  document.getElementById('btnNext').textContent = cScene===total-1 ? '🎉 Finish' : 'Next →';
+
+  /* scene */
+  const box = document.getElementById('sceneBox');
+  box.style.background = sc.bg;
+  box.innerHTML = sc.ch.map(c =>
+    `<span class="sc-ch ${c.a}" style="left:${c.x}%;top:${c.y}%;font-size:${c.s}px;${c.d?'animation-delay:'+c.d+'s':''}">${c.e}</span>`
+  ).join('');
+
+  /* text animate */
+  const el = document.getElementById('str-text');
+  el.style.animation='none'; el.offsetHeight; el.style.animation='';
+  el.textContent = sc.t;
+
+  setTimeout(()=>speak(sc.t), 500);
+}
+
+function goScene(i){ stopSpeak(); cScene=i; render(); }
+
+document.getElementById('btnNext').addEventListener('click',()=>{
+  stopSpeak();
+  if(cScene < S[cIdx].scenes.length-1){ cScene++; render(); }
+  else finish();
+});
+document.getElementById('btnPrev').addEventListener('click',()=>{ stopSpeak(); cScene--; render(); });
+document.getElementById('btnBack').addEventListener('click', closeReader);
+
+/* ===== FINISH ===== */
+function finish(){
+  stopSpeak();
+  const d = document.createElement('div');
+  d.className='str-finish';
+  d.innerHTML=`
+    <div class="big-em">🎊</div>
+    <h2>Story Complete! 🌟</h2>
+    <p>You finished <strong>"${S[cIdx].title}"</strong>!<br>Amazing reading, superstar! ⭐</p>
+    <button class="btn btn-primary" style="min-width:180px" onclick="this.closest('.str-finish').remove();closeReader()">More Stories 📖</button>
+    <button class="btn btn-secondary" style="min-width:180px;color:#3949AB" onclick="this.closest('.str-finish').remove();cScene=0;render()">Read Again 🔄</button>`;
+  document.body.appendChild(d);
+}
+
+/* ===== SPEECH ===== */
+function speak(raw){
+  if(!window.speechSynthesis) return;
+  const txt = raw.replace(/\p{Emoji_Presentation}/gu,'').replace(/\n/g,' ').replace(/\s+/g,' ').trim();
+  stopSpeak();
+  const u = new SpeechSynthesisUtterance(txt);
+  u.rate=0.88; u.pitch=1.06; u.volume=1;
+  const vs = speechSynthesis.getVoices();
+  const v = vs.find(x=>x.lang.startsWith('en-GB'))||vs.find(x=>x.lang.startsWith('en-US'))||vs.find(x=>x.lang.startsWith('en'));
+  if(v) u.voice=v;
+  u.onstart=()=>{ talking=true; document.getElementById('btnSpeak').classList.add('talking'); document.getElementById('btnSpeak').textContent='⏸️'; };
+  u.onend=u.onerror=()=>{ talking=false; const b=document.getElementById('btnSpeak'); if(b){b.classList.remove('talking');b.textContent='🔊';} };
+  speechSynthesis.speak(u);
+}
+function stopSpeak(){ if(window.speechSynthesis)speechSynthesis.cancel(); talking=false; const b=document.getElementById('btnSpeak'); if(b){b.classList.remove('talking');b.textContent='🔊';} }
+
+document.getElementById('btnSpeak').addEventListener('click',()=>{
+  talking ? stopSpeak() : speak(S[cIdx].scenes[cScene].t);
+});
+
+buildGrid();
+</script>
+</body>
+</html>

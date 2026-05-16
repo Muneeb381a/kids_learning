@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#4FC3F7">
+  <meta name="theme-color" content="#1a237e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Sikho Star">
@@ -27,17 +27,17 @@
     <div class="splash-content">
       <div class="mascot-container">
         <span class="mascot" id="splash-mascot">🤖</span>
-        <div class="speech-bubble" id="splash-bubble">Assalamu Alaikum! 👋</div>
+        <div class="speech-bubble" id="splash-bubble">Welcome! Let's learn! 👋</div>
       </div>
 
       <div class="logo">
         <span class="logo-star">⭐</span>
         <h1>Sikho Star</h1>
-        <p class="tagline">Seekhna, Khelna, Barhna!</p>
+        <p class="tagline">Learn. Play. Grow!</p>
       </div>
 
       <button id="btn-start" class="btn btn-primary btn-huge">
-        Shuru Karein! 🚀
+        Start! 🚀
       </button>
     </div>
   </div>
@@ -48,14 +48,17 @@
       <span class="mascot small float-anim">🤖</span>
     </div>
 
-    <div class="card profile-card slide-in-up">
-      <h2>Apna naam batao! 😊</h2>
+    <div class="card profile-card slide-in-up" style="background:white;border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,0.25);">
+      <div style="text-align:center;">
+        <div style="font-size:13px;font-weight:700;letter-spacing:1px;color:#5C6BC0;text-transform:uppercase;margin-bottom:4px;">Create Your Profile</div>
+        <h2 style="font-size:24px;">What's your name? 😊</h2>
+      </div>
 
       <input
         type="text"
         id="input-name"
         class="big-input"
-        placeholder="Mera naam hai..."
+        placeholder="My name is..."
         maxlength="20"
         autocomplete="off"
         autocorrect="off"
@@ -64,7 +67,7 @@
       >
 
       <div>
-        <h3>Apni umr chunain:</h3>
+        <h3 style="margin-bottom:10px;">How old are you?</h3>
         <div class="age-buttons" id="age-buttons">
           <button class="age-btn" data-age="5">5</button>
           <button class="age-btn" data-age="6">6</button>
@@ -76,7 +79,7 @@
       </div>
 
       <div>
-        <h3>Apna avatar chunain:</h3>
+        <h3 style="margin-bottom:10px;">Pick your avatar:</h3>
         <div class="avatar-grid" id="avatar-grid">
           <div class="avatar-option" data-avatar="boy1">
             <span class="avatar-emoji">👦</span>
@@ -98,7 +101,7 @@
       </div>
 
       <button id="btn-create-profile" class="btn btn-primary btn-large" disabled>
-        Chalein! ✨
+        Let's Go! ✨
       </button>
     </div>
   </div>

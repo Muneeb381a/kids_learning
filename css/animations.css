@@ -100,6 +100,48 @@
   to { stroke-dashoffset: 0; }
 }
 
+@keyframes particle-out {
+  0%   { transform: translate(0,0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+}
+
+@keyframes bubble-rise {
+  0%   { transform: translateY(0) scale(1); opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateY(var(--rise)) scale(0.9); opacity: 0; }
+}
+
+@keyframes bubble-pop {
+  0%   { transform: scale(1); opacity: 1; }
+  40%  { transform: scale(1.5); opacity: 0.8; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,213,79,0); }
+  50%       { box-shadow: 0 0 0 12px rgba(255,213,79,0.35); }
+}
+
+@keyframes speed-drain {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+@keyframes wiggle {
+  0%,100% { transform: rotate(0deg); }
+  20%      { transform: rotate(-12deg); }
+  40%      { transform: rotate(12deg); }
+  60%      { transform: rotate(-8deg); }
+  80%      { transform: rotate(8deg); }
+}
+
+@keyframes bg-drift {
+  0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 0.7; }
+  100% { transform: translateY(-120px) rotate(360deg); opacity: 0; }
+}
+
 /* ===== ANIMATION CLASSES ===== */
 
 .bounce-in {

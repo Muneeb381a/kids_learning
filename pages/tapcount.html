@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Sikho Star — Count & Tap</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔢</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .tc-page {
+      min-height: 100vh; display: flex; flex-direction: column;
+      background: linear-gradient(160deg,#FCE4EC,#E3F2FD,#F3E5F5);
+    }
+
+    .tc-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; background: white;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .tc-header .back-btn { background: #F5F5F5; border: none; border-radius: 50%;
+      width: 42px; height: 42px; font-size: 20px; cursor: pointer; }
+    .tc-title { font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: #AD1457; }
+    .tc-progress-text { font-family: var(--font-heading); font-size: 15px; font-weight: 600; color: var(--text-medium); }
+
+    .tc-progress-bar { height: 6px; background: #F8BBD0; }
+    .tc-progress-fill { height: 100%; background: linear-gradient(90deg,#E91E63,#AD1457);
+      border-radius: 0 3px 3px 0; transition: width 0.4s ease; }
+
+    .tc-body { flex: 1; display: flex; flex-direction: column; align-items: center;
+      padding: 20px 16px; gap: 20px; max-width: 480px; margin: 0 auto; width: 100%; }
+
+    .tc-question-label {
+      font-family: var(--font-heading); font-size: 22px; font-weight: 700;
+      color: #AD1457; text-align: center;
+    }
+
+    .tc-emoji-grid {
+      background: white; border-radius: 24px; padding: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+      min-height: 120px; width: 100%;
+    }
+
+    .tc-emoji-item {
+      font-size: clamp(30px, 8vw, 44px);
+      cursor: pointer; user-select: none;
+      transition: transform 0.15s ease;
+      animation: pop 0.3s ease both;
+    }
+    .tc-emoji-item:active { transform: scale(0.85); }
+    .tc-emoji-item.counted { filter: brightness(0.5) grayscale(0.4); transform: scale(0.88); }
+
+    .tc-tap-prompt {
+      font-family: var(--font-heading); font-size: 16px; color: var(--text-medium);
+      text-align: center; animation: pulse 2s ease-in-out infinite;
+    }
+
+    .tc-tap-counter {
+      font-family: var(--font-heading); font-size: 64px; font-weight: 700;
+      color: #E91E63; text-align: center; min-height: 80px;
+      animation: bounce-in 0.3s ease both;
+    }
+
+    .tc-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+
+    .tc-choice-btn {
+      background: white; border: 3px solid #F8BBD0; border-radius: 16px;
+      padding: 18px 12px; font-family: var(--font-heading); font-size: 28px;
+      font-weight: 700; color: #AD1457; cursor: pointer;
+      transition: all 0.2s ease; text-align: center;
+    }
+    .tc-choice-btn:hover:not(:disabled) {
+      border-color: #E91E63; background: #FCE4EC; transform: scale(1.04);
+    }
+    .tc-choice-btn.correct { border-color: #4CAF50; background: #E8F5E9; color: #2E7D32;
+      animation: pop 0.4s ease both; }
+    .tc-choice-btn.wrong { border-color: #EF5350; background: #FFEBEE; color: #C62828;
+      animation: shake 0.4s ease both; }
+    .tc-choice-btn:disabled { cursor: not-allowed; }
+
+    .tc-feedback {
+      font-family: var(--font-heading); font-size: 20px; font-weight: 700;
+      text-align: center; min-height: 30px; transition: all 0.3s ease;
+    }
+
+    .tc-btn-next { width: 100%; }
+
+    /* Modes */
+    .mode-count { }   /* show items, count by tapping */
+    .mode-choose { }  /* show items, pick from choices */
+
+    /* Result overlay */
+    #tc-result {
+      position: fixed; inset: 0; background: linear-gradient(135deg,#880E4F,#AD1457);
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      gap: 20px; padding: 32px; text-align: center; z-index: 200;
+    }
+    #tc-result.show { display: flex; }
+    .tc-res-mascot { font-size: 80px; animation: bounce-in 0.6s ease both; }
+    .tc-res-title { font-family: var(--font-heading); font-size: clamp(28px,7vw,44px);
+      font-weight: 700; color: #FFD54F; }
+    .tc-res-stars { font-size: 52px; letter-spacing: 8px; animation: star-pop 0.5s 0.3s both; }
+    .tc-res-score { font-family: var(--font-heading); font-size: 20px; color: rgba(255,255,255,0.9); }
+    .tc-res-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+  </style>
+</head>
+<body>
+<div class="tc-page fade-in">
+
+  <header class="tc-header">
+    <button class="back-btn" onclick="window.location.href='dashboard.html'">←</button>
+    <div class="tc-title">🔢 Count & Tap</div>
+    <div class="tc-progress-text" id="tc-qcounter">1 / 10</div>
+  </header>
+
+  <div class="tc-progress-bar">
+    <div class="tc-progress-fill" id="tc-prog" style="width:0%"></div>
+  </div>
+
+  <div class="tc-body">
+
+    <div class="tc-question-label" id="tc-qlabel">How many are there?</div>
+
+    <div class="tc-emoji-grid" id="tc-emoji-grid"></div>
+
+    <!-- Mode A: tap to count -->
+    <div id="tc-count-mode">
+      <div class="tc-tap-prompt">Tap each one to count! 👆</div>
+      <div class="tc-tap-counter" id="tc-tap-num">0</div>
+      <button class="btn btn-primary btn-large tc-btn-next" id="tc-count-submit" onclick="submitCount()" style="opacity:0.5;pointer-events:none;">
+        That's my answer! ✅
+      </button>
+    </div>
+
+    <!-- Mode B: choose answer -->
+    <div id="tc-choose-mode" style="display:none; width:100%;">
+      <div class="tc-choices" id="tc-choices-grid"></div>
+    </div>
+
+    <div class="tc-feedback" id="tc-feedback"></div>
+
+    <button id="tc-btn-next" class="btn btn-primary btn-large tc-btn-next hidden" onclick="nextQuestion()">
+      Next ➡️
+    </button>
+
+  </div>
+</div>
+
+<div id="tc-result">
+  <div class="tc-res-mascot" id="tc-res-mascot">🏆</div>
+  <div class="tc-res-title" id="tc-res-title">Well Done!</div>
+  <div class="tc-res-stars" id="tc-res-stars">⭐⭐⭐</div>
+  <div class="tc-res-score" id="tc-res-score"></div>
+  <div class="tc-res-btns">
+    <button class="btn btn-primary" onclick="initGame()">🔄 Play Again</button>
+    <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">🏠 Home</button>
+  </div>
+</div>
+
+<script src="../js/progress.js"></script>
+<script src="../js/audio.js"></script>
+<script>
+
+/* ---- Config ---- */
+const EMOJIS_BY_THEME = [
+  { label: 'Animals',  items: ['🐶','🐱','🐸','🐻','🐼','🐨','🦊','🐯','🦁','🐮','🐧','🦋'] },
+  { label: 'Fruits',   items: ['🍎','🍊','🍋','🍇','🍓','🍑','🍒','🍌','🍍','🥭','🍉','🍈'] },
+  { label: 'Vehicles', items: ['🚗','✈️','🚀','🚂','🚢','🚁','🛵','🚲','🚜','🏎️','🛸','🚛'] },
+  { label: 'Stars',    items: ['⭐','🌟','💫','✨','🌙','☀️','🌈','💎','🎈','🎉','🎊','🎁'] },
+];
+
+let age = 7;
+let questions = [];
+let qIndex = 0;
+let score = 0;
+let tapCount = 0;
+let answered = false;
+let mode = 'choose'; // 'tap' | 'choose'
+
+function buildQuestions(a) {
+  let maxN, count;
+  if (a <= 6)      { maxN = 5;  count = 8;  }
+  else if (a <= 8) { maxN = 10; count = 10; }
+  else             { maxN = 15; count = 10; }
+
+  const qs = [];
+  for (let i = 0; i < count; i++) {
+    const theme = EMOJIS_BY_THEME[i % EMOJIS_BY_THEME.length];
+    const n = 1 + Math.floor(Math.random() * maxN);
+    const emoji = theme.items[Math.floor(Math.random() * theme.items.length)];
+    /* Generate wrong choices around n */
+    const choiceSet = new Set([n]);
+    while (choiceSet.size < 4) {
+      let w = n + (Math.floor(Math.random() * 5) - 2);
+      if (w < 1) w = n + 1 + Math.floor(Math.random() * 3);
+      if (w !== n && w > 0) choiceSet.add(w);
+    }
+    const choices = [...choiceSet].sort((a,b) => a-b);
+    qs.push({ n, emoji, choices, theme: theme.label });
+  }
+  return qs;
+}
+
+function initGame() {
+  Progress.load();
+  Audio.init(Progress.data?.settings || {});
+  age = parseInt(Progress.data?.profile?.age) || 7;
+  questions = buildQuestions(age);
+  qIndex = 0; score = 0;
+
+  document.getElementById('tc-result').classList.remove('show');
+  nextQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[qIndex];
+  answered = false;
+  tapCount = 0;
+
+  /* Use tap mode for younger kids, choose mode for older — mix it up */
+  mode = (age <= 7 || qIndex % 2 === 0) ? 'tap' : 'choose';
+  /* For large numbers always use choose mode */
+  if (q.n > 10) mode = 'choose';
+
+  const total = questions.length;
+  document.getElementById('tc-qcounter').textContent = `${qIndex + 1} / ${total}`;
+  document.getElementById('tc-prog').style.width = ((qIndex / total) * 100) + '%';
+  document.getElementById('tc-qlabel').textContent =
+    mode === 'tap' ? 'Tap each one to count! 👆' : 'How many are there?';
+  document.getElementById('tc-feedback').textContent = '';
+  document.getElementById('tc-btn-next').classList.add('hidden');
+
+  /* Build emoji grid */
+  const grid = document.getElementById('tc-emoji-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < q.n; i++) {
+    const span = document.createElement('span');
+    span.className = 'tc-emoji-item';
+    span.style.animationDelay = (i * 0.04) + 's';
+    span.textContent = q.emoji;
+    if (mode === 'tap') {
+      span.addEventListener('click', () => tapItem(span));
+    }
+    grid.appendChild(span);
+  }
+
+  if (mode === 'tap') {
+    document.getElementById('tc-count-mode').style.display = 'block';
+    document.getElementById('tc-choose-mode').style.display = 'none';
+    document.getElementById('tc-tap-num').textContent = '0';
+    const submitBtn = document.getElementById('tc-count-submit');
+    submitBtn.style.opacity = '0.5';
+    submitBtn.style.pointerEvents = 'none';
+  } else {
+    document.getElementById('tc-count-mode').style.display = 'none';
+    document.getElementById('tc-choose-mode').style.display = 'block';
+    buildChoices(q);
+  }
+}
+
+function tapItem(span) {
+  if (answered) return;
+  if (span.classList.contains('counted')) return;
+  span.classList.add('counted');
+  tapCount++;
+  Audio.play('tick');
+  const num = document.getElementById('tc-tap-num');
+  num.style.animation = 'none';
+  void num.offsetWidth;
+  num.style.animation = 'bounce-in 0.25s ease both';
+  num.textContent = tapCount;
+
+  const submitBtn = document.getElementById('tc-count-submit');
+  submitBtn.style.opacity = '1';
+  submitBtn.style.pointerEvents = 'auto';
+}
+
+function submitCount() {
+  if (answered) return;
+  const q = questions[qIndex];
+  handleResult(tapCount === q.n);
+}
+
+function buildChoices(q) {
+  const grid = document.getElementById('tc-choices-grid');
+  grid.innerHTML = '';
+  q.choices.forEach(val => {
+    const btn = document.createElement('button');
+    btn.className = 'tc-choice-btn';
+    btn.textContent = val;
+    btn.addEventListener('click', () => {
+      if (answered) return;
+      document.querySelectorAll('.tc-choice-btn').forEach(b => b.disabled = true);
+      btn.classList.add(val === q.n ? 'correct' : 'wrong');
+      if (val !== q.n) {
+        document.querySelectorAll('.tc-choice-btn').forEach(b => {
+          if (parseInt(b.textContent) === q.n) b.classList.add('correct');
+        });
+      }
+      handleResult(val === q.n);
+    });
+    grid.appendChild(btn);
+  });
+}
+
+function handleResult(correct) {
+  answered = true;
+  const q = questions[qIndex];
+
+  if (correct) {
+    score++;
+    Audio.play('correct');
+    document.getElementById('tc-feedback').innerHTML = `<span style="color:#2E7D32;">✅ Correct! That's ${q.n}! 🎉</span>`;
+    burstEmojis();
+  } else {
+    Audio.play('wrong');
+    document.getElementById('tc-feedback').innerHTML = `<span style="color:#C62828;">❌ The answer is ${q.n}!</span>`;
+  }
+
+  document.getElementById('tc-btn-next').classList.remove('hidden');
+  if (qIndex + 1 >= questions.length) {
+    document.getElementById('tc-btn-next').textContent = '🏆 See Results!';
+  } else {
+    document.getElementById('tc-btn-next').textContent = 'Next ➡️';
+  }
+}
+
+function nextQuestion() {
+  Audio.play('click');
+  if (qIndex + 1 >= questions.length && answered) {
+    showResult();
+    return;
+  }
+  if (answered) qIndex++;
+  renderQuestion();
+}
+
+function burstEmojis() {
+  const grid = document.getElementById('tc-emoji-grid');
+  const rect = grid.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const q = questions[qIndex];
+  for (let i = 0; i < 10; i++) {
+    const el = document.createElement('div');
+    const angle = (i / 10) * Math.PI * 2;
+    const dist = 60 + Math.random() * 50;
+    el.style.cssText = `
+      position:fixed;left:${cx}px;top:${cy}px;font-size:${20+Math.random()*14}px;
+      pointer-events:none;z-index:999;
+      --dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;
+      animation:particle-out 0.7s ease-out forwards;
+    `;
+    el.textContent = q.emoji;
+    document.body.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
+  }
+}
+
+function showResult() {
+  const total = questions.length;
+  const pct = Math.round((score / total) * 100);
+  const stars = pct >= 80 ? 3 : pct >= 60 ? 2 : 1;
+  const overlay = document.getElementById('tc-result');
+  overlay.classList.add('show');
+
+  let mascot = '💪', title = "Keep trying!";
+  if (pct === 100) { mascot = '🏆'; title = 'Perfect! Outstanding! 🎊'; }
+  else if (pct >= 80) { mascot = '⭐'; title = 'Excellent! Well Done! 🌟'; }
+  else if (pct >= 60) { mascot = '😊'; title = 'Good Job! Keep it up! 👍'; }
+
+  document.getElementById('tc-res-mascot').textContent = mascot;
+  document.getElementById('tc-res-title').textContent = title;
+  document.getElementById('tc-res-stars').textContent =
+    Array.from({length:3}, (_,i) => i < stars ? '⭐' : '☆').join('');
+  document.getElementById('tc-res-score').textContent =
+    `${score}/${total} correct answers! (${pct}%)`;
+
+  Audio.play(pct === 100 ? 'win' : 'levelup');
+  launchConfetti(pct >= 80 ? 50 : 20);
+}
+
+function launchConfetti(count) {
+  const colors = ['#FFD54F','#F06292','#66BB6A','#4FC3F7','#FF9800','#CE93D8'];
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `
+        left:${Math.random()*100}vw; top:-20px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        width:${8+Math.random()*10}px; height:${8+Math.random()*10}px;
+        border-radius:${Math.random()>0.5?'50%':'2px'};
+        animation-duration:${1.5+Math.random()*2}s;
+      `;
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }, i * 30);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initGame);
+</script>
+</body>
+</html>

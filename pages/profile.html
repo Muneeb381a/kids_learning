@@ -138,10 +138,10 @@
       🏆 Trophy Room
     </a>
     <a href="avatar.html" class="btn btn-green btn-large slide-in-up delay-3">
-      👤 Avatar Customize karo
+      👤 Customise Avatar
     </a>
     <a href="dashboard.html" class="btn btn-secondary btn-large slide-in-up delay-4">
-      🏠 Home par Wapas
+      🏠 Back to Home
     </a>
   </div>
 
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   const earned = badges.filter(b => b.cond);
   if (earned.length === 0) {
-    ach.innerHTML = '<p style="color:var(--text-medium);font-size:14px;">Khelein aur badges kamaein! 🎮</p>';
+    ach.innerHTML = '<p style="color:var(--text-medium);font-size:14px;">Play and earn badges! 🎮</p>';
   } else {
     earned.forEach(b => {
       ach.innerHTML += `<div style="text-align:center; padding:10px; background:var(--bg-cream); border-radius:12px; font-size:13px; font-family:var(--font-heading); font-weight:600;">

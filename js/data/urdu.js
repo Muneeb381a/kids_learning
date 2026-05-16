@@ -9,7 +9,7 @@ const URDU_DATA = {
   levels: [
     {
       id: 1,
-      title: 'Haroof ا – ر',
+      title: 'حروف ا – ر',
       icon: '✍️',
       questions: [
         { type: 'mcq', q: 'اردو حروف تہجی کا پہلا حرف کون سا ہے؟', choices: ['ب', 'ا', 'پ', 'ت'], answer: 1 },
@@ -21,7 +21,7 @@ const URDU_DATA = {
     },
     {
       id: 2,
-      title: 'Haroof ز – ی',
+      title: 'حروف ز – ی',
       icon: '✏️',
       questions: [
         { type: 'mcq', q: '"زبان" میں پہلا حرف کون سا ہے؟', choices: ['ر', 'ز', 'س', 'ش'], answer: 1 },
@@ -33,7 +33,7 @@ const URDU_DATA = {
     },
     {
       id: 3,
-      title: 'Awaazein (آ، اِ، اُ)',
+      title: 'آوازیں (آ، اِ، اُ)',
       icon: '🔈',
       questions: [
         { type: 'mcq', q: '"آم" میں کون سی آواز ہے؟', choices: ['اِ', 'اُ', 'آ', 'اے'], answer: 2 },
@@ -45,7 +45,7 @@ const URDU_DATA = {
     },
     {
       id: 4,
-      title: '2-Harf wale Alfaaz',
+      title: 'دو حرفی الفاظ',
       icon: '📖',
       questions: [
         { type: 'mcq', q: '"گھر" میں کتنے حروف ہیں؟', choices: ['1', '2', '3', '4'], answer: 2 },
@@ -57,19 +57,19 @@ const URDU_DATA = {
     },
     {
       id: 5,
-      title: 'Rang (Colors)',
+      title: 'رنگ (Colours)',
       icon: '🌈',
       questions: [
         { type: 'mcq', q: 'آسمان کا رنگ؟', choices: ['لال', 'سبز', 'نیلا', 'پیلا'], answer: 2 },
         { type: 'mcq', q: '"سبز" کا مطلب؟', choices: ['Red', 'Blue', 'Green', 'Yellow'], answer: 2 },
         { type: 'mcq', q: 'سورج کا رنگ؟', choices: ['نیلا', 'سرخ', 'پیلا', 'سفید'], answer: 2 },
-        { type: 'mcq', q: '"لال" کا مطلب?', choices: ['Blue', 'Red', 'Green', 'White'], answer: 1 },
+        { type: 'mcq', q: '"لال" کا مطلب؟', choices: ['Blue', 'Red', 'Green', 'White'], answer: 1 },
         { type: 'mcq', q: 'گھاس کا رنگ؟', choices: ['پیلا', 'سبز', 'لال', 'نارنجی'], answer: 1 }
       ]
     },
     {
       id: 6,
-      title: 'Ginti 1–10',
+      title: 'گنتی ۱–۱۰',
       icon: '🔢',
       questions: [
         { type: 'mcq', q: '"پانچ" کو ہندسے میں لکھیں؟', choices: ['3', '4', '5', '6'], answer: 2 },
@@ -81,7 +81,7 @@ const URDU_DATA = {
     },
     {
       id: 7,
-      title: 'Ghar k Afraad (Family)',
+      title: 'گھر کے افراد',
       icon: '👨‍👩‍👧',
       questions: [
         { type: 'mcq', q: '"ابو" کا مطلب؟', choices: ['Mother', 'Father', 'Brother', 'Uncle'], answer: 1 },
@@ -93,11 +93,11 @@ const URDU_DATA = {
     },
     {
       id: 8,
-      title: 'Hafte k Din',
+      title: 'ہفتے کے دن',
       icon: '📅',
       questions: [
         { type: 'mcq', q: 'ہفتے کا پہلا دن؟', choices: ['منگل', 'پیر', 'اتوار', 'جمعہ'], answer: 2 },
-        { type: 'mcq', q: '"جمعہ" کو English میں؟', choices: ['Thursday', 'Friday', 'Saturday', 'Sunday'], answer: 1 },
+        { type: 'mcq', q: '"جمعہ" کو انگریزی میں؟', choices: ['Thursday', 'Friday', 'Saturday', 'Sunday'], answer: 1 },
         { type: 'mcq', q: 'ہفتے میں کتنے دن ہوتے ہیں؟', choices: ['5', '6', '7', '8'], answer: 2 },
         { type: 'mcq', q: 'پیر کے بعد کون سا دن آتا ہے؟', choices: ['اتوار', 'بدھ', 'منگل', 'جمعہ'], answer: 2 },
         { type: 'mcq', q: '"اتوار" کو انگریزی میں؟', choices: ['Monday', 'Saturday', 'Sunday', 'Friday'], answer: 2 }
@@ -105,7 +105,7 @@ const URDU_DATA = {
     },
     {
       id: 9,
-      title: 'Mahine',
+      title: 'مہینے',
       icon: '🗓️',
       questions: [
         { type: 'mcq', q: 'سال کا پہلا مہینہ؟', choices: ['فروری', 'مارچ', 'جنوری', 'دسمبر'], answer: 2 },
@@ -117,15 +117,15 @@ const URDU_DATA = {
     },
     {
       id: 10,
-      title: '🏆 Boss Level — Chhoti Kahani',
+      title: '🏆 Boss Level — چھوٹی کہانی',
       icon: '🏆',
       isBoss: true,
       questions: [
         { type: 'mcq', q: 'مکمل جملہ کون سا ہے؟', choices: ['علی گیا', 'گیا علی اسکول', 'علی اسکول گیا', 'اسکول گیا'], answer: 2 },
         { type: 'mcq', q: '"بلی نے ___ کھایا" — خالی جگہ؟', choices: ['اُڑنا', 'دودھ', 'کتاب', 'پہاڑ'], answer: 1 },
         { type: 'mcq', q: 'کہانی میں "خوشی" سے کیا مراد ہے؟', choices: ['دکھ', 'خوف', 'مسرت', 'غصہ'], answer: 2 },
-        { type: 'mcq', q: '"سارہ نے کتاب ___" — سہی لفظ؟', choices: ['کھائی', 'پڑھی', 'پی', 'اُڑائی'], answer: 1 },
-        { type: 'mcq', q: '"آج موسم ___ ہے" — سہی لفظ؟', choices: ['لال', 'اچھا', 'لمبا', 'چھوٹا'], answer: 1 }
+        { type: 'mcq', q: '"سارہ نے کتاب ___" — صحیح لفظ؟', choices: ['کھائی', 'پڑھی', 'پی', 'اُڑائی'], answer: 1 },
+        { type: 'mcq', q: '"آج موسم ___ ہے" — صحیح لفظ؟', choices: ['لال', 'اچھا', 'لمبا', 'چھوٹا'], answer: 1 }
       ]
     }
   ]

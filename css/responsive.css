@@ -49,23 +49,25 @@
 
 /* Desktop (768px+) */
 @media (min-width: 768px) {
-  body { background: #BBDEFB; }
+  body { background: #0D1B4B; }
 
   .dashboard-page {
-    max-width: 760px;
+    max-width: 420px;
     margin-inline: auto;
     min-height: 100vh;
-    box-shadow: 0 0 48px rgba(0, 0, 0, 0.18);
-    background: linear-gradient(160deg, #E3F2FD 0%, var(--bg-cream) 55%, #E8F5E9 100%);
+    box-shadow: 0 0 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  }
+
+  /* Floating nav: cap width inside phone frame */
+  .bottom-bar {
+    max-width: 388px;
   }
 
   .subject-card { min-height: 190px; }
-
   .subjects-grid { gap: 16px; }
-
   .card { max-width: 520px; }
-
-  .coming-soon-page { max-width: 760px; margin-inline: auto; }
+  .coming-soon-page { max-width: 420px; margin-inline: auto; }
+  #screen-splash .splash-content { max-width: 420px; }
 }
 
 /* Landscape phones (short screens) */
