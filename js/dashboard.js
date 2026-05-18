@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* Progress bars — animate after paint */
   requestAnimationFrame(() => {
     setTimeout(() => {
-      ['maths', 'science', 'english', 'urdu'].forEach(subject => {
+      ['maths', 'science', 'english', 'urdu', 'islamic'].forEach(subject => {
         const completed = Progress.getSubjectProgress(subject).completed.length;
         setProgress(subject, completed);
       });

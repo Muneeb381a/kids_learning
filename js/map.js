@@ -4,7 +4,8 @@ const SUBJECT_META = {
   maths:   { data: typeof MATHS_DATA   !== 'undefined' ? MATHS_DATA   : null, color: '#5C6BC0', bg: 'linear-gradient(135deg,#5C6BC0,#3949AB)' },
   science: { data: typeof SCIENCE_DATA !== 'undefined' ? SCIENCE_DATA : null, color: '#26A69A', bg: 'linear-gradient(135deg,#26A69A,#00796B)' },
   english: { data: typeof ENGLISH_DATA !== 'undefined' ? ENGLISH_DATA : null, color: '#EF5350', bg: 'linear-gradient(135deg,#EF5350,#C62828)' },
-  urdu:    { data: typeof URDU_DATA    !== 'undefined' ? URDU_DATA    : null, color: '#AB47BC', bg: 'linear-gradient(135deg,#AB47BC,#7B1FA2)' }
+  urdu:    { data: typeof URDU_DATA    !== 'undefined' ? URDU_DATA    : null, color: '#AB47BC', bg: 'linear-gradient(135deg,#AB47BC,#7B1FA2)' },
+  islamic: { data: typeof ISLAMIC_DATA !== 'undefined' ? ISLAMIC_DATA : null, color: '#2E7D32', bg: 'linear-gradient(135deg,#43A047,#2E7D32,#1B5E20)' }
 };
 
 function starsHTML(count, max = 3) {

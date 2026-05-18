@@ -154,6 +154,7 @@
 <script src="../js/data/science.js"></script>
 <script src="../js/data/english.js"></script>
 <script src="../js/data/urdu.js"></script>
+<script src="../js/data/islamic.js"></script>
 <script>
 
 const BALLOON_COLORS = [
@@ -178,6 +179,7 @@ function buildPool() {
     typeof SCIENCE_DATA !== 'undefined' ? SCIENCE_DATA : null,
     typeof ENGLISH_DATA !== 'undefined' ? ENGLISH_DATA : null,
     typeof URDU_DATA    !== 'undefined' ? URDU_DATA    : null,
+    typeof ISLAMIC_DATA !== 'undefined' ? ISLAMIC_DATA : null,
   ].filter(Boolean);
 
   const qs = [];

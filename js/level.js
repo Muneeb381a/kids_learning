@@ -4,14 +4,16 @@ const ALL_DATA = {
   maths:   typeof MATHS_DATA   !== 'undefined' ? MATHS_DATA   : null,
   science: typeof SCIENCE_DATA !== 'undefined' ? SCIENCE_DATA : null,
   english: typeof ENGLISH_DATA !== 'undefined' ? ENGLISH_DATA : null,
-  urdu:    typeof URDU_DATA    !== 'undefined' ? URDU_DATA    : null
+  urdu:    typeof URDU_DATA    !== 'undefined' ? URDU_DATA    : null,
+  islamic: typeof ISLAMIC_DATA !== 'undefined' ? ISLAMIC_DATA : null
 };
 
 const SUBJECT_COLORS = {
   maths:   { fill: '#5C6BC0', bg: 'linear-gradient(135deg,#5C6BC0,#3949AB)' },
   science: { fill: '#26A69A', bg: 'linear-gradient(135deg,#26A69A,#00796B)' },
   english: { fill: '#EF5350', bg: 'linear-gradient(135deg,#EF5350,#C62828)' },
-  urdu:    { fill: '#AB47BC', bg: 'linear-gradient(135deg,#AB47BC,#7B1FA2)' }
+  urdu:    { fill: '#AB47BC', bg: 'linear-gradient(135deg,#AB47BC,#7B1FA2)' },
+  islamic: { fill: '#2E7D32', bg: 'linear-gradient(135deg,#43A047,#1B5E20)' }
 };
 
 const CORRECT_MSGS = ['Excellent! 🌟', 'Amazing! Well done! ⭐', 'Perfect! 🎉', 'Brilliant! 💯', 'Outstanding! 🏆'];
@@ -104,8 +106,8 @@ function renderQuestion() {
 
   const qText = document.getElementById('q-text');
   qText.textContent = q.q;
-  /* RTL for Urdu */
-  qText.dir = subject === 'urdu' ? 'rtl' : 'ltr';
+  /* RTL for Urdu / Islamic */
+  qText.dir = (subject === 'urdu' || subject === 'islamic') ? 'rtl' : 'ltr';
 
   const grid = document.getElementById('choices-grid');
   grid.innerHTML = '';
@@ -124,7 +126,7 @@ function renderQuestion() {
     const btn = document.createElement('button');
     btn.className   = 'choice-btn';
     btn.textContent = text;
-    btn.dir         = subject === 'urdu' ? 'rtl' : 'ltr';
+    btn.dir         = (subject === 'urdu' || subject === 'islamic') ? 'rtl' : 'ltr';
     btn.addEventListener('click', () => handleAnswer(idx, q.answer));
     grid.appendChild(btn);
   });

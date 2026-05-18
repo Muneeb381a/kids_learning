@@ -1,6 +1,6 @@
 /* Sikho Star Service Worker — offline cache */
 
-const CACHE  = 'sikho-star-v4';
+const CACHE  = 'sikho-star-v5';
 const ASSETS = [
   '/',
   '/index.html',
@@ -19,6 +19,8 @@ const ASSETS = [
   '/js/data/science.js',
   '/js/data/english.js',
   '/js/data/urdu.js',
+  '/js/data/islamic.js',
+  '/pages/stories.html',
   '/pages/dashboard.html',
   '/pages/map.html',
   '/pages/level.html',
